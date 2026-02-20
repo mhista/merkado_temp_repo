@@ -1,0 +1,59 @@
+name: merkado_monorepo
+description: Merkado Design System Monorepo
+publish_to: none
+
+environment:
+  sdk: "^3.10.0"
+
+workspace:
+  - packages/merkado_design_system
+
+dev_dependencies:
+  melos: ^7.4.0
+
+
+melos:
+  # Scripts that generate design token  
+  scripts:
+    # Token pipeline
+    tokens:transform:
+      description: "Transform Figma tokens to Dart"
+      run: node packages/merkado_design_system/scripts/figma_to_tokens.js
+      
+    tokens:validate:
+      description: "Validate token consistency"
+      run: dart packages/merkado_design_system/scripts/token_validator.dart
+      
+    tokens:pipeline:
+      description: "Complete token pipeline"
+      run: |
+        echo "🎨 Running Merkado token pipeline..."
+        melos run tokens:transform
+        echo "✅ Token pipeline complete!"
+        
+    # Development
+    analyze:
+      run: melos exec -- flutter analyze
+      
+    test:
+      run: melos exec -- flutter test
+      
+    format:
+      run: melos exec -- dart format .
+      
+    build:
+      run: melos exec -- flutter pub run build_runner build --delete-conflicting-outputs
+      
+    clean:
+      run: melos exec -- flutter clean
+      
+    get:
+      run: melos exec -- flutter pub get
+      
+    # Pre-commit
+    pre-commit:
+      description: "Run before committing"
+      run: |
+        melos run format
+        melos run analyze
+        melos run test

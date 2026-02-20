@@ -1,0 +1,155 @@
+{
+  "Primary color": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#103128"
+  },
+  "Primay-BG": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#f5ffff"
+  },
+  "My cut logo blue": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#0504aa"
+  },
+  "Inactive Grey": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#737373"
+  },
+  "Inactive Grey 2": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#737373"
+  },
+  "Primary text": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#000000"
+  },
+  "container color": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#f8edd9"
+  },
+  "White accent": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#ffffff"
+  },
+  "Pending  yellow": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#d18902"
+  },
+  "Pending Red": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#d10202"
+  },
+  "Negotiating Purple": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#d1028c"
+  },
+  "accent green": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#02d121"
+  },
+  "Completed blue": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#0224d1"
+  },
+  "Blue accent": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#e9e9f1"
+  },
+  "Draft blue": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#02c3d1"
+  },
+  "My cut white": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#f8edd9"
+  },
+  "green accent": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#c8d9d4"
+  }
+}

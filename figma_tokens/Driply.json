@@ -1,0 +1,125 @@
+{
+  "color": {
+    "light": {
+      "bg": {
+        "primary bg": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#ffffff"
+        },
+        "Support color- blue": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#2563eb"
+        },
+        "Commerce success": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#10b981"
+        },
+        "Energy accent": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#f59e0b"
+        },
+        "Primary color": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#e11d48"
+        },
+        "Text primary": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#0f172a"
+        },
+        "Secondary text": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#64748b"
+        }
+      }
+    }
+  },
+  "Primary color": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#e11d48"
+  },
+  "Support color- blue": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#2563eb"
+  },
+  "Commerce success": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#10b981"
+  },
+  "Energy accent": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#f59e0b"
+  },
+  "primary bg": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "color",
+    "$value": "#ffffff"
+  },
+  "Driply": {
+    "$extensions": {
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    },
+    "$type": "text",
+    "$value": "Driply"
+  }
+}

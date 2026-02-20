@@ -1,0 +1,40 @@
+name: merkado_design_system
+description: Merkado Design System - Centralized design system for all Merkado projects
+version: 1.0.0
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.10.4
+  flutter: ">=3.13.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Mix Framework - Core styling engine
+  mix: ^1.0.0
+  
+  # Utilities
+  equatable: ^2.0.5
+  json_annotation: ^4.8.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  # Monorepo management
+  melos: ^7.4.0
+  
+  # Code generation
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
+  
+  # Linting
+  flutter_lints: ^3.0.0
+  
+  # Testing
+  mocktail: ^1.0.0
+
+flutter:
+  uses-material-design: true
