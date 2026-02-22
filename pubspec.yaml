@@ -7,6 +7,7 @@ environment:
 
 workspace:
   - packages/merkado_design_system
+  - packages/merkado_auth
 
 dev_dependencies:
   melos: ^7.4.0

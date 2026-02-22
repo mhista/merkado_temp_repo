@@ -1,1 +1,1 @@
-{"version":2,"entries":[{"package":"merkado_monorepo","rootUri":"../","packageUri":"lib/"}]}
+{"version":2,"entries":[{"package":"common_utils2","rootUri":"../../packages/common_utils/","packageUri":"lib/"},{"package":"merkado_monorepo","rootUri":"../","packageUri":"lib/"},{"package":"merkado_design_system","rootUri":"../packages/merkado_design_system/","packageUri":"lib/"},{"package":"global_auth_system","rootUri":"../packages/global_auth_system/","packageUri":"lib/"}]}
