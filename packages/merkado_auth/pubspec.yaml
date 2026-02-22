@@ -12,8 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  common_utils2: #1.0.1
-    path: ../../../packages/common_utils
+  common_utils2: 1.0.1
+    # path: ../../../packages/common_utils
   bloc: ^9.2.0
   flutter_bloc: ^9.1.1
   freezed_annotation: ^3.1.0
