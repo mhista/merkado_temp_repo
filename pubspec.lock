@@ -204,10 +204,9 @@ packages:
   common_utils2:
     dependency: transitive
     description:
-      name: common_utils2
-      sha256: b020373aaf748d676e0c4c62400baded2b44d2334518a7020630494678440d7c
-      url: "https://pub.dev"
-    source: hosted
+      path: "../packages/common_utils"
+      relative: true
+    source: path
     version: "1.0.1"
   connectivity_plus:
     dependency: transitive

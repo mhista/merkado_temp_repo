@@ -86,18 +86,10 @@ class _OtpScreenState extends State<OtpScreen> {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (_otpController.text.trim().length != 6) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please enter a valid 6-digit code')),
-                      );
-                      return;
-                    }
-                    cubit.verifyEmail(
+                  onPressed: () => cubit.verifyEmail(
                     email: widget.email,
                     otp: _otpController.text.trim(),
-                  );
-                  },
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: widget.config.primaryColor,
                   ),

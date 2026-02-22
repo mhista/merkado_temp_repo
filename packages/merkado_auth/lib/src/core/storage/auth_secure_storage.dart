@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:common_utils2/common_utils2.dart';
-import '../../../merkado_auth.dart';
+import 'package:merkado_auth/merkado_auth.dart';
+import 'auth_storage_keys.dart';
 
 /// AuthSecureStorageService
 /// ========================
@@ -32,6 +33,7 @@ class AuthSecureStorageService {
   AuthSecureStorageService._();
 
   static AuthSecureStorageService? _instance;
+  static LoggerService? _log;
 
   static AuthSecureStorageService get instance {
     assert(
@@ -54,7 +56,9 @@ class AuthSecureStorageService {
   /// iOS keychain group (com.grascope.sharedauth) AND Android signing keystore.
   /// Safe to leave false — SSO still works via token exchange; the shared
   /// account list just won't persist across apps until this is enabled.
-  static Future<void> init({bool enableSharedKeychain = false}) async {
+  static Future<void> init({bool enableSharedKeychain = false, LoggerService? logger}) async {
+    _log = logger;
+    _log?.info('[AuthStorage] Initializing (sharedKeychain=$enableSharedKeychain)');
     _instance = AuthSecureStorageService._();
 
     // Shared scope — cross-app account list lives here
@@ -74,7 +78,7 @@ class AuthSecureStorageService {
               accessibility: KeychainAccessibility.first_unlock,
             ),
       androidOptions: AndroidOptions(
-        // encryptedSharedPreferences: true,
+        encryptedSharedPreferences: true,
         sharedPreferencesName: enableSharedKeychain
             ? 'grascope_shared_secure'    // same name across ALL Grascope apps
             : 'grascope_shared_local',
@@ -88,7 +92,7 @@ class AuthSecureStorageService {
         accessibility: KeychainAccessibility.first_unlock_this_device,
       ),
       androidOptions: const AndroidOptions(
-        // encryptedSharedPreferences: true,
+        encryptedSharedPreferences: true,
         // Unique per-app name — no prefix needed since it's not shared
       ),
     );
@@ -102,6 +106,7 @@ class AuthSecureStorageService {
   /// Sorted by most recently used first.
   /// Returns an empty list if none found or on parse error.
   Future<List<GrascopeSessionHint>> getKnownAccounts() async {
+    _log?.debug('[AuthStorage] getKnownAccounts');
     try {
       final raw = await _shared.getString(AuthStorageKeys.knownAccounts);
       if (raw == null || raw.isEmpty) return [];
@@ -120,6 +125,7 @@ class AuthSecureStorageService {
   /// Matches on [GrascopeSessionHint.userId] — updates in place if found.
   /// Always call after a successful login or refresh token rotation.
   Future<void> upsertKnownAccount(GrascopeSessionHint account) async {
+    _log?.debug('[AuthStorage] upsertKnownAccount — ${account.userId} (${account.displayName})');
     final existing = await getKnownAccounts();
     final updated = [
       ...existing.where((a) => a.userId != account.userId),
@@ -134,6 +140,7 @@ class AuthSecureStorageService {
   /// Removes one account from the known list.
   /// Call on single-account logout. Does not affect other accounts.
   Future<void> removeKnownAccount(String userId) async {
+    _log?.debug('[AuthStorage] removeKnownAccount — $userId');
     final existing = await getKnownAccounts();
     final updated = existing.where((a) => a.userId != userId).toList();
     await _shared.setString(
@@ -144,6 +151,7 @@ class AuthSecureStorageService {
 
   /// Removes ALL known accounts. Use only for full device logout.
   Future<void> clearAllKnownAccounts() async {
+    _log?.debug('[AuthStorage] clearAllKnownAccounts');
     await _shared.remove(AuthStorageKeys.knownAccounts);
     await _shared.remove(AuthStorageKeys.activeUserId);
   }
@@ -156,6 +164,7 @@ class AuthSecureStorageService {
   /// [expiresIn] is seconds from now (typically 900 = 15 min).
   /// Storing the timestamp avoids JWT decoding on every startup.
   Future<void> saveAccessToken(String token, {required int expiresIn}) async {
+    _log?.debug('[AuthStorage] saveAccessToken — expiresIn: ${expiresIn}s');
     final expiresAt = DateTime.now()
         .add(Duration(seconds: expiresIn))
         .millisecondsSinceEpoch;
@@ -165,6 +174,7 @@ class AuthSecureStorageService {
       AuthStorageKeys.accessTokenExpiresAt,
       expiresAt.toString(),
     );
+    _log?.debug('[AuthStorage] Access token saved (expiresIn: ${expiresIn}s)');
   }
 
   Future<String?> getAccessToken() => _local.getString(AuthStorageKeys.accessToken);
@@ -175,10 +185,20 @@ class AuthSecureStorageService {
   /// Uses a 30-second buffer to prevent sending a token that's about to die.
   Future<bool> isAccessTokenValid() async {
     final raw = await _local.getString(AuthStorageKeys.accessTokenExpiresAt);
-    if (raw == null) return false;
+    if (raw == null) {
+      _log?.debug('[AuthStorage] isAccessTokenValid: no expiry stored → false');
+      return false;
+    }
     final expiresAt = int.tryParse(raw);
-    if (expiresAt == null) return false;
-    return DateTime.now().millisecondsSinceEpoch < (expiresAt - 30000);
+    if (expiresAt == null) {
+      _log?.debug('[AuthStorage] isAccessTokenValid: corrupt expiry → false');
+      return false;
+    }
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final valid = now < (expiresAt - 30000);
+    final remaining = Duration(milliseconds: expiresAt - now);
+    _log?.debug('[AuthStorage] isAccessTokenValid: $valid (${remaining.inSeconds}s remaining)');
+    return valid;
   }
 
   // ══════════════════════════════════════════════════════════════
@@ -191,8 +211,8 @@ class AuthSecureStorageService {
   Future<String?> getSessionId() => _local.getString(AuthStorageKeys.sessionId);
 
   Future<void> saveUserId(String id) async {
+    _log?.debug('[AuthStorage] saveUserId: $id');
     await _local.setString(AuthStorageKeys.activeUserId, id);
-    // Mirror active user ID to shared scope so other apps know who's active
     await _shared.setString(AuthStorageKeys.activeUserId, id);
   }
 
@@ -216,32 +236,118 @@ class AuthSecureStorageService {
 
   /// Save the email pending OTP verification.
   /// Allows OTP screen to be resumed with pre-filled email after app kill.
-  Future<void> savePendingVerificationEmail(String email) =>
-      _local.setString(AuthStorageKeys.pendingVerificationEmail, email);
+  Future<void> savePendingVerificationEmail(String email) async {
+    _log?.debug('[AuthStorage] savePendingVerificationEmail: $email');
+    await _local.setString(AuthStorageKeys.pendingVerificationEmail, email);
+  }
 
   Future<String?> getPendingVerificationEmail() =>
       _local.getString(AuthStorageKeys.pendingVerificationEmail);
 
-  Future<void> clearPendingVerificationEmail() =>
-      _local.remove(AuthStorageKeys.pendingVerificationEmail);
+  Future<void> clearPendingVerificationEmail() async {
+    _log?.debug('[AuthStorage] clearPendingVerificationEmail');
+    await _local.remove(AuthStorageKeys.pendingVerificationEmail);
+  }
 
-  Future<void> saveEmailVerified(bool verified) =>
-      _local.setBool(AuthStorageKeys.isEmailVerified, verified);
+  Future<void> saveEmailVerified(bool verified) async {
+    _log?.debug('[AuthStorage] saveEmailVerified: $verified');
+    await _local.setBool(AuthStorageKeys.isEmailVerified, verified);
+  }
 
-  Future<bool> isEmailVerified() =>
-      _local.getBoolOrDefault(AuthStorageKeys.isEmailVerified, false);
+  Future<bool> isEmailVerified() async {
+    final v = await _local.getBoolOrDefault(AuthStorageKeys.isEmailVerified, false);
+    _log?.debug('[AuthStorage] isEmailVerified: $v');
+    return v;
+  }
 
-  Future<void> saveOnboardingCompleted(bool completed) =>
-      _local.setBool(AuthStorageKeys.isOnboardingCompleted, completed);
+  Future<void> saveOnboardingCompleted(bool completed) async {
+    _log?.debug('[AuthStorage] saveOnboardingCompleted: $completed');
+    await _local.setBool(AuthStorageKeys.isOnboardingCompleted, completed);
+  }
 
-  Future<bool> isOnboardingCompleted() =>
-      _local.getBoolOrDefault(AuthStorageKeys.isOnboardingCompleted, false);
+  Future<bool> isOnboardingCompleted() async {
+    final v = await _local.getBoolOrDefault(AuthStorageKeys.isOnboardingCompleted, false);
+    _log?.debug('[AuthStorage] isOnboardingCompleted: $v');
+    return v;
+  }
+
+  // ══════════════════════════════════════════════════════════════
+  // FLOW TIMEOUT (local scope)
+  // ══════════════════════════════════════════════════════════════
+
+  /// Save the timestamp when OTP verification started.
+  /// Called in [saveInitialSession] automatically after signup/login that
+  /// returns verified=false. Used by startup check to enforce timeout.
+  Future<void> saveOtpStartedAt() async {
+    final now = DateTime.now().millisecondsSinceEpoch.toString();
+    await _local.setString(AuthStorageKeys.otpStartedAt, now);
+    _log?.debug('[AuthStorage] OTP started at: $now');
+  }
+
+  Future<void> saveOnboardingStartedAt() async {
+    final now = DateTime.now().millisecondsSinceEpoch.toString();
+    await _local.setString(AuthStorageKeys.onboardingStartedAt, now);
+    _log?.debug('[AuthStorage] Onboarding started at: $now');
+  }
+
+  Future<int?> getOtpStartedAt() async {
+    final raw = await _local.getString(AuthStorageKeys.otpStartedAt);
+    final val = raw != null ? int.tryParse(raw) : null;
+    _log?.debug('[AuthStorage] getOtpStartedAt: ${val != null ? DateTime.fromMillisecondsSinceEpoch(val).toIso8601String() : "null"}');
+    return val;
+  }
+
+  Future<int?> getOnboardingStartedAt() async {
+    final raw = await _local.getString(AuthStorageKeys.onboardingStartedAt);
+    final val = raw != null ? int.tryParse(raw) : null;
+    _log?.debug('[AuthStorage] getOnboardingStartedAt: ${val != null ? DateTime.fromMillisecondsSinceEpoch(val).toIso8601String() : "null"}');
+    return val;
+  }
+
+  Future<void> clearOtpStartedAt() =>
+      _local.remove(AuthStorageKeys.otpStartedAt);
+
+  Future<void> clearOnboardingStartedAt() =>
+      _local.remove(AuthStorageKeys.onboardingStartedAt);
+
+  /// Returns true if the OTP verification window has expired.
+  /// [timeout] defaults to 15 minutes — matching the access token lifetime.
+  ///
+  /// If expired: caller should clear the unverified session and route to login.
+  /// If not expired: caller should resume the OTP screen as normal.
+  Future<bool> isOtpWindowExpired({Duration timeout = const Duration(minutes: 15)}) async {
+    final startedAt = await getOtpStartedAt();
+    if (startedAt == null) {
+      // No timestamp saved — treat as expired (safe default)
+      _log?.debug('[AuthStorage] isOtpWindowExpired: no timestamp → treating as expired');
+      return true;
+    }
+    final elapsed = DateTime.now().millisecondsSinceEpoch - startedAt;
+    final expired = elapsed > timeout.inMilliseconds;
+    _log?.debug('[AuthStorage] isOtpWindowExpired: $expired (elapsed: ${elapsed ~/ 1000}s, timeout: ${timeout.inSeconds}s)');
+    return expired;
+  }
+
+  /// Returns true if the onboarding window has expired.
+  /// [timeout] defaults to 30 minutes — onboarding takes longer than OTP.
+  Future<bool> isOnboardingWindowExpired({Duration timeout = const Duration(minutes: 30)}) async {
+    final startedAt = await getOnboardingStartedAt();
+    if (startedAt == null) {
+      _log?.debug('[AuthStorage] isOnboardingWindowExpired: no timestamp → treating as expired');
+      return true;
+    }
+    final elapsed = DateTime.now().millisecondsSinceEpoch - startedAt;
+    final expired = elapsed > timeout.inMilliseconds;
+    _log?.debug('[AuthStorage] isOnboardingWindowExpired: $expired (elapsed: ${elapsed ~/ 1000}s)');
+    return expired;
+  }
 
   // ══════════════════════════════════════════════════════════════
   // BIOMETRICS (local scope)
   // ══════════════════════════════════════════════════════════════
 
   Future<void> setBiometricsEnrolled(bool enrolled, {required String userId}) async {
+    _log?.debug('[AuthStorage] setBiometricsEnrolled: $enrolled — userId: $userId');
     await _local.setBool(AuthStorageKeys.biometricsEnrolled, enrolled);
     if (enrolled) {
       await _local.setString(AuthStorageKeys.biometricUserId, userId);
@@ -280,6 +386,7 @@ class AuthSecureStorageService {
     String displayName = '',
     String avatarUrl = '',
   }) async {
+    _log?.info('[AuthStorage] saveInitialSession — userId: $userId, verified: $verified, onboardingCompleted: $onboardingCompleted');
     // Local scope
     await saveAccessToken(accessToken, expiresIn: expiresIn);
     await _local.setString(AuthStorageKeys.refreshToken, refreshToken);
@@ -288,6 +395,16 @@ class AuthSecureStorageService {
     await _local.setString(AuthStorageKeys.pendingVerificationEmail, email);
     await saveEmailVerified(verified);
     await saveOnboardingCompleted(onboardingCompleted);
+
+    // Save flow start timestamps for timeout enforcement.
+    // These gate how long the user can leave and return to mid-flow screens.
+    if (!verified) {
+      await saveOtpStartedAt();
+      _log?.debug('[AuthStorage] OTP timeout window started');
+    } else if (!onboardingCompleted) {
+      await saveOnboardingStartedAt();
+      _log?.debug('[AuthStorage] Onboarding timeout window started');
+    }
 
     // Shared scope — SSO hint
     // Use email as display name placeholder until onboarding provides the real name
@@ -313,6 +430,7 @@ class AuthSecureStorageService {
     required String avatarUrl,
     required String refreshToken,
   }) async {
+    _log?.info('[AuthStorage] updateSharedAccountHint — $userId ($displayName)');
     // Update the SSO account list entry
     final existing = await getKnownAccounts();
     final hint = existing.where((a) => a.userId == userId).firstOrNull;
@@ -334,13 +452,18 @@ class AuthSecureStorageService {
   /// Clears only local session data. Shared SSO hint is preserved so other
   /// Grascope apps (and future relaunches of this app) can still detect
   /// and offer "Continue as [name]" without the user re-entering credentials.
-  Future<void> clearLocalSession() => _local.clear();
+  Future<void> clearLocalSession() async {
+    _log?.info('[AuthStorage] Clearing local session');
+    await _local.clear();
+  }
 
   /// Full logout — clears local session AND removes this account from
   /// the shared SSO list. Other accounts in the list are unaffected.
   Future<void> fullLogout(String userId) async {
+    _log?.info('[AuthStorage] Full logout — userId: $userId');
     await clearLocalSession();
     await removeKnownAccount(userId);
     await _shared.remove(AuthStorageKeys.activeUserId);
+    _log?.info('[AuthStorage] Full logout complete');
   }
 }

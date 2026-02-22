@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:common_utils2/common_utils2.dart';
 
 /// ReLoginEventBus
 /// ===============
@@ -17,6 +18,10 @@ class ReLoginEventBus {
   /// Singleton instance.
   static ReLoginEventBus get instance => _instance ??= ReLoginEventBus._();
 
+  static LoggerService? _log;
+
+  static void setLogger(LoggerService? logger) => _log = logger;
+
   final StreamController<String?> _controller =
       StreamController<String?>.broadcast();
 
@@ -29,13 +34,16 @@ class ReLoginEventBus {
   /// for [name]" message rather than a generic one.
   void emit({String? userId}) {
     if (!_controller.isClosed) {
+      _log?.warning('[ReLoginEventBus] Session expired signal — userId: ${userId ?? 'unknown'}');
       _controller.add(userId);
     }
   }
 
   /// Dispose the stream. Called by [MerkadoAuth.dispose()].
   void dispose() {
+    _log?.debug('[ReLoginEventBus] Disposed');
     _controller.close();
     _instance = null;
+    _log = null;
   }
 }

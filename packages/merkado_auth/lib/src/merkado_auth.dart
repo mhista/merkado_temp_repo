@@ -2,8 +2,7 @@ import 'package:common_utils2/common_utils2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:merkado_auth/merkado_auth.dart';
-
-
+import 'package:merkado_auth/src/core/interceptors/merkado_auth_interceptor.dart';
 import 'features/auth/data/auth_repo_impl/auth_repository_implementation.dart';
 import 'features/auth/data/datasource/auth_remote_datasource.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
@@ -32,11 +31,14 @@ class MerkadoAuth {
     _instance = MerkadoAuth._();
     _instance!._config = config;
     _log = logger;
+    AuthEventBus.setLogger(logger);
+    ReLoginEventBus.setLogger(logger);
 
     _log?.info('[MerkadoAuth] Initializing — platform: ${config.platformName}');
 
     await AuthSecureStorageService.init(
       enableSharedKeychain: config.enableSharedKeychain,
+      logger: logger,
     );
     _log?.debug('[MerkadoAuth] Storage initialized');
 
@@ -46,6 +48,12 @@ class MerkadoAuth {
     _instance!._cubit = GetIt.instance<AuthCubit>();
     await _instance!._cubit.init(config);
     _log?.info('[MerkadoAuth] Initialization complete');
+
+    if (!HttpClient.isInitialized) {
+      HttpClient.init(baseUrl: 'https://auth-api.merkado.site');
+    }
+
+    HttpClient.instance.addInterceptor(MerkadoAuthInterceptor(logger: logger));
   }
 
   Future<void> _setupDependencies() async {
@@ -66,6 +74,7 @@ class MerkadoAuth {
     getIt.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(
         authRemoteDatasource: getIt<AuthRemoteDatasource>(),
+        logger: _log,
       ),
     );
 
@@ -76,13 +85,27 @@ class MerkadoAuth {
       ..registerLazySingleton(() => LogoutUseCase(getIt<AuthRepository>()))
       ..registerLazySingleton(() => ResendOtpUseCase(getIt<AuthRepository>()))
       ..registerLazySingleton(() => VerifyEmailUseCase(getIt<AuthRepository>()))
-      ..registerLazySingleton(() => CompleteOnboardingUseCase(getIt<AuthRepository>()))
-      ..registerLazySingleton(() => ForgotPasswordUseCase(getIt<AuthRepository>()))
-      ..registerLazySingleton(() => ResetPasswordUseCase(getIt<AuthRepository>()))
-      ..registerLazySingleton(() => VerifyTwoFactorUseCase(getIt<AuthRepository>()))
-      ..registerLazySingleton(() => ExchangeRefreshTokenUseCase(getIt<AuthRepository>()))
-      ..registerLazySingleton(() => SignInWithGoogleUseCase(getIt<AuthRepository>()))
-      ..registerLazySingleton(() => SignInWithAppleUseCase(getIt<AuthRepository>()));
+      ..registerLazySingleton(
+        () => CompleteOnboardingUseCase(getIt<AuthRepository>()),
+      )
+      ..registerLazySingleton(
+        () => ForgotPasswordUseCase(getIt<AuthRepository>()),
+      )
+      ..registerLazySingleton(
+        () => ResetPasswordUseCase(getIt<AuthRepository>()),
+      )
+      ..registerLazySingleton(
+        () => VerifyTwoFactorUseCase(getIt<AuthRepository>()),
+      )
+      ..registerLazySingleton(
+        () => ExchangeRefreshTokenUseCase(getIt<AuthRepository>()),
+      )
+      ..registerLazySingleton(
+        () => SignInWithGoogleUseCase(getIt<AuthRepository>()),
+      )
+      ..registerLazySingleton(
+        () => SignInWithAppleUseCase(getIt<AuthRepository>()),
+      );
 
     // ── 4. Cubit (top of chain, depends on all use cases) ─────────────────────
     getIt.registerLazySingleton<AuthCubit>(
@@ -99,7 +122,7 @@ class MerkadoAuth {
         exchangeRefreshTokenUseCase: getIt(),
         signInWithGoogleUseCase: getIt(),
         signInWithAppleUseCase: getIt(),
-        // logger: _log,
+        logger: _log,
       ),
     );
   }

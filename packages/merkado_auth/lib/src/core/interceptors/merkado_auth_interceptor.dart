@@ -1,3 +1,4 @@
+import 'package:common_utils2/common_utils2.dart';
 import 'package:dio/dio.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 
@@ -20,26 +21,38 @@ class MerkadoAuthInterceptor extends Interceptor {
   /// Uses [AuthSecureStorageService] — the auth package's own storage layer.
   /// Never touches [SecureStorageService] from common_utils directly.
   final AuthSecureStorageService _storage = AuthSecureStorageService.instance;
-
+  final LoggerService? _log;
   final String _refreshEndpoint;
 
-  MerkadoAuthInterceptor({String refreshEndpoint = '/auth/refresh'})
-      : _refreshEndpoint = refreshEndpoint;
+  MerkadoAuthInterceptor({
+    String refreshEndpoint = '/auth/refresh',
+    LoggerService? logger,
+  })  : _refreshEndpoint = refreshEndpoint,
+        _log = logger;
 
   /// Paths that never receive an Authorization header.
   /// Matches by substring so path prefixes like '/api/v1/auth/login' also match.
+  /// Paths that NEVER receive an Authorization header.
+  ///
+  /// Rules:
+  /// — Only include paths the backend explicitly accepts WITHOUT a token.
+  /// — /auth/verify-email, /auth/resend-otp, /onboarding/complete all require
+  ///   the access token issued at signup — do NOT list them here.
+  /// — /auth/login, /auth/register, /auth/forgot-password, /auth/reset-password
+  ///   are the only truly public endpoints in the Merkado identity service.
+  ///
+  /// Matched by substring so /api/v1/auth/login also matches.
   static const _publicPaths = [
     '/auth/login',
     '/auth/register',
-    '/auth/refresh',
-    '/auth/verify-email',
-    '/auth/resend-otp',
     '/auth/forgot-password',
     '/auth/reset-password',
     '/auth/social/google',
     '/auth/social/apple',
-    '/onboarding/complete',
     '/.well-known/jwks.json',
+    // NOTE: /auth/refresh is handled separately by _attemptRefresh()
+    // on a fresh Dio instance — it must NOT be in this list or the
+    // interceptor will skip token attachment on retry calls.
   ];
 
   @override
@@ -48,12 +61,16 @@ class MerkadoAuthInterceptor extends Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     if (_isPublicPath(options.path)) {
+      _log?.debug('[Interceptor] Public path — no token attached: \${options.path}');
       return handler.next(options);
     }
 
     final token = await _storage.getAccessToken();
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
+      _log?.debug('[Interceptor] Token attached: ${options.path}');
+    } else {
+      _log?.warning('[Interceptor] No token available for protected path: ${options.path}');
     }
 
     handler.next(options);
@@ -68,23 +85,24 @@ class MerkadoAuthInterceptor extends Interceptor {
       return handler.next(err);
     }
 
+    _log?.warning('[Interceptor] 401 on \${err.requestOptions.path} — attempting refresh');
+
     // 401 received — attempt a token refresh before giving up
     final refreshed = await _attemptRefresh(err.requestOptions);
 
     if (refreshed) {
-      // Refresh succeeded — retry the original request with the new token
+      _log?.info('[Interceptor] Refresh succeeded — retrying \${err.requestOptions.path}');
       try {
         final newToken = await _storage.getAccessToken();
         err.requestOptions.headers['Authorization'] = 'Bearer $newToken';
         final response = await Dio().fetch(err.requestOptions);
         return handler.resolve(response);
-      } catch (_) {
+      } catch (e) {
+        _log?.error('[Interceptor] Retry failed after refresh', e);
         return handler.next(err);
       }
     } else {
-      // Refresh failed — session is truly dead.
-      // Emit on [ReLoginEventBus] so [AuthCubit] clears storage and
-      // navigates the user back to the login screen.
+      _log?.error('[Interceptor] Refresh failed — session dead, emitting re-login');
       ReLoginEventBus.instance.emit();
       return handler.next(err);
     }

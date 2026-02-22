@@ -106,9 +106,10 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   }) async {
     _log?.info('[AuthDatasource] POST /auth/verify-email — $email');
     try {
+      // _http.
       final result = await _http.post('/auth/verify-email', data: {
-        'email': email,
-        'otp': otp,
+        // 'email': email,
+        'code': otp,
       });
 
       if (_isSuccess(result.statusCode)) {
@@ -129,7 +130,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   Future<Map<String, dynamic>> resendOtp({required String email}) async {
     _log?.info('[AuthDatasource] POST /auth/resend-otp — $email');
     try {
-      final result = await _http.post('/auth/resend-otp', data: {'email': email});
+      final result = await _http.post('/auth/resend-otp', data: {});
 
       if (_isSuccess(result.statusCode)) {
         _log?.debug('[AuthDatasource] /auth/resend-otp ✅');

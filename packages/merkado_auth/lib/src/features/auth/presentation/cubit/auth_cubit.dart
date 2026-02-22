@@ -4,6 +4,7 @@ import 'package:common_utils2/common_utils2.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:merkado_auth/merkado_auth.dart';
+
 import '../../domain/usecases/auth_usecases.dart';
 
 part 'auth_state.dart';
@@ -51,6 +52,10 @@ class AuthCubit extends Cubit<AuthState> {
   final AuthSecureStorageService _storage = AuthSecureStorageService.instance;
   final AuthEventBus _eventBus = AuthEventBus.instance;
 
+  // ── Logger (optional — injected from app via MerkadoAuth.initialize) ───────
+  // Never creates its own LoggerService. If null, logging is silently skipped.
+  final LoggerService? _log;
+
   // ── Config ─────────────────────────────────────────────────────────────────
   late final MerkadoAuthConfig _config;
 
@@ -69,6 +74,7 @@ class AuthCubit extends Cubit<AuthState> {
     required ExchangeRefreshTokenUseCase exchangeRefreshTokenUseCase,
     required SignInWithGoogleUseCase signInWithGoogleUseCase,
     required SignInWithAppleUseCase signInWithAppleUseCase,
+    LoggerService? logger,
   }) : _loginUseCase = loginUseCase,
        _signUpUseCase = signUpUseCase,
        _logoutUseCase = logoutUseCase,
@@ -81,6 +87,7 @@ class AuthCubit extends Cubit<AuthState> {
        _exchangeRefreshTokenUseCase = exchangeRefreshTokenUseCase,
        _signInWithGoogleUseCase = signInWithGoogleUseCase,
        _signInWithAppleUseCase = signInWithAppleUseCase,
+       _log = logger,
        super(const AuthState.initial());
 
   // ══════════════════════════════════════════════════════════════
@@ -89,6 +96,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> init(MerkadoAuthConfig config) async {
     _config = config;
+    _log?.info('[AuthCubit] init — platform: ${config.platformName}');
 
     _reLoginSubscription = ReLoginEventBus.instance.stream.listen(
       (userId) => _handleSessionExpired(userId: userId),
@@ -97,7 +105,104 @@ class AuthCubit extends Cubit<AuthState> {
     await _checkStartupSession();
   }
 
-  /// Determines the correct startup state by reading stored flags.
+  // ── Timeout durations ─────────────────────────────────────────────────────
+  // OTP: 15 minutes (matches access token lifetime — expired token = rejected OTP anyway)
+  // Onboarding: 30 minutes (profile setup takes longer, no token risk)
+  static const _otpTimeout = Duration(minutes: 15);
+  static const _onboardingTimeout = Duration(minutes: 30);
+
+  Future<void> _checkStartupSession() async {
+    _log?.debug('[AuthCubit] Checking startup session...');
+    _emit(const AuthState.loading());
+    _eventBus.emit(const AuthLoading());
+
+    final accessToken = await _storage.getAccessToken();
+
+    if (accessToken == null) {
+      _log?.debug('[AuthCubit] No token found — checking cross-app accounts');
+      await _checkForCrossAppAccounts();
+      return;
+    }
+
+    final emailVerified = await _storage.isEmailVerified();
+
+    if (!emailVerified) {
+      // ── OTP timeout check ────────────────────────────────────────────────
+      // If the user left mid-verification and it's been > 15 minutes,
+      // the OTP they received has expired and the backend will reject it.
+      // Route to login so they can re-enter credentials — login will detect
+      // verified=false and send them a fresh OTP.
+      final otpExpired = await _storage.isOtpWindowExpired(
+        timeout: _otpTimeout,
+      );
+      if (otpExpired) {
+        _log?.warning(
+          '[AuthCubit] OTP window expired after ${_otpTimeout.inMinutes}min — clearing session, routing to login',
+        );
+        await _storage.clearLocalSession();
+        await _checkForCrossAppAccounts();
+        return;
+      }
+
+      final pendingEmail = await _storage.getPendingVerificationEmail();
+      final storedEmail = await _storage.getUserEmail();
+      final email = pendingEmail ?? storedEmail ?? '';
+      _log?.info(
+        '[AuthCubit] Token valid, email not verified — resuming OTP for $email',
+      );
+      _emit(AuthState.emailNotVerified(email: email));
+      _eventBus.emit(AuthEmailNotVerified(email: email));
+      return;
+    }
+
+    final onboardingDone = await _storage.isOnboardingCompleted();
+
+    if (!onboardingDone) {
+      // ── Onboarding timeout check ─────────────────────────────────────────
+      // If the user left mid-onboarding and it's been > 30 minutes,
+      // route to login. Their account exists and is verified — login will
+      // detect onboardingCompleted=false and send them back to onboarding.
+      final onboardingExpired = await _storage.isOnboardingWindowExpired(
+        timeout: _onboardingTimeout,
+      );
+      if (onboardingExpired) {
+        _log?.warning(
+          '[AuthCubit] Onboarding window expired after ${_onboardingTimeout.inMinutes}min — clearing session, routing to login',
+        );
+        await _storage.clearLocalSession();
+        await _checkForCrossAppAccounts();
+        return;
+      }
+
+      _log?.info(
+        '[AuthCubit] Email verified, onboarding incomplete — resuming onboarding',
+      );
+      _emit(const AuthState.onboardingRequired());
+      _eventBus.emit(const AuthOnboardingRequired());
+      return;
+    }
+
+    final tokenValid = await _storage.isAccessTokenValid();
+
+    if (tokenValid) {
+      _log?.info('[AuthCubit] Valid session found — authenticated');
+      _emit(const AuthState.authenticated());
+      _eventBus.emit(AuthSuccess(accessToken: accessToken));
+      return;
+    }
+
+    _log?.debug('[AuthCubit] Token expired — attempting refresh');
+    final refreshToken = await _storage.getRefreshToken();
+    if (refreshToken == null) {
+      _log?.warning('[AuthCubit] No refresh token — clearing session');
+      await _storage.clearLocalSession();
+      await _checkForCrossAppAccounts();
+      return;
+    }
+
+    await _attemptRefreshOnStartup(refreshToken);
+  }
+
   ///
   /// This handles every terminated-state scenario:
   ///
@@ -120,68 +225,9 @@ class AuthCubit extends Cubit<AuthState> {
   /// SCENARIO 5 — Tokens exist, verified, onboarded, token expired:
   ///   → Attempt refresh → if successful, authenticated
   ///   → If refresh fails, token is truly dead → session expired
-  Future<void> _checkStartupSession() async {
-    _emit(const AuthState.loading());
-    _eventBus.emit(const AuthLoading());
 
-    final accessToken = await _storage.getAccessToken();
-
-    // ── No tokens — check SSO or show login ───────────────────────────────
-    if (accessToken == null) {
-      await _checkForCrossAppAccounts();
-      return;
-    }
-
-    final emailVerified = await _storage.isEmailVerified();
-
-    // ── SCENARIO 2: Tokens exist but email not verified ───────────────────
-    // User was mid-verification when app was killed. Resume OTP screen.
-    if (!emailVerified) {
-      final pendingEmail = await _storage.getPendingVerificationEmail();
-      final storedEmail = await _storage.getUserEmail();
-      final email = pendingEmail ?? storedEmail ?? '';
-
-      _emit(AuthState.emailNotVerified(email: email));
-      _eventBus.emit(AuthEmailNotVerified(email: email));
-      return;
-    }
-
-    final onboardingDone = await _storage.isOnboardingCompleted();
-
-    // ── SCENARIO 3: Verified but onboarding incomplete ────────────────────
-    // User verified email, left before finishing profile setup. Resume onboarding.
-    if (!onboardingDone) {
-      _emit(const AuthState.onboardingRequired());
-      _eventBus.emit(const AuthOnboardingRequired());
-      return;
-    }
-
-    // ── SCENARIO 4 & 5: Fully signed up — check token validity ───────────
-    final tokenValid = await _storage.isAccessTokenValid();
-
-    if (tokenValid) {
-      // Token is still alive — emit authenticated immediately
-      _emit(const AuthState.authenticated());
-      _eventBus.emit(AuthSuccess(accessToken: accessToken));
-      return;
-    }
-
-    // Token expired — attempt refresh before giving up
-    final refreshToken = await _storage.getRefreshToken();
-    if (refreshToken == null) {
-      // No refresh token either — session is completely dead
-      await _storage.clearLocalSession();
-      await _checkForCrossAppAccounts();
-      return;
-    }
-
-    await _attemptRefreshOnStartup(refreshToken);
-  }
-
-  /// Attempts to refresh the access token on startup.
-  /// On success: saves new tokens, emits authenticated.
-  /// On failure: clears session, shows SSO picker or login.
   Future<void> _attemptRefreshOnStartup(String refreshToken) async {
+    _log?.debug('[AuthCubit] Attempting token refresh on startup');
     final result = await _exchangeRefreshTokenUseCase(
       refreshToken: refreshToken,
       platformId: _config.platformId,
@@ -190,7 +236,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.when(
       failure: (error, _) async {
-        // Refresh token is dead — clear everything and restart
+        _log?.warning('[AuthCubit] Startup refresh failed — clearing session');
         final userId = await _storage.getUserId();
         await _storage.clearLocalSession();
         if (userId != null) {
@@ -231,13 +277,18 @@ class AuthCubit extends Cubit<AuthState> {
   /// Reads known accounts from shared storage.
   /// Emits account picker if accounts found, login screen if none.
   Future<void> _checkForCrossAppAccounts() async {
+    _log?.debug(
+      '[AuthCubit] Checking for cross-app accounts (SSO enabled: ${_config.features.crossAppSso})',
+    );
     if (!_config.features.crossAppSso) {
+      _log?.debug('[AuthCubit] SSO disabled — emitting unauthenticated');
       _emit(const AuthState.unauthenticated());
       _eventBus.emit(const AuthUnauthenticated());
       return;
     }
 
     final accounts = await _storage.getKnownAccounts();
+    _log?.debug('[AuthCubit] Found ${accounts.length} known account(s)');
     if (accounts.isEmpty) {
       _emit(const AuthState.unauthenticated());
       _eventBus.emit(const AuthUnauthenticated());
@@ -258,6 +309,7 @@ class AuthCubit extends Cubit<AuthState> {
     String? deviceName,
     String? deviceOs,
   }) async {
+    _log?.info('[AuthCubit] Login attempt — $email');
     _emit(const AuthState.loading());
     _eventBus.emit(const AuthLoading());
 
@@ -313,6 +365,7 @@ class AuthCubit extends Cubit<AuthState> {
     String? deviceName,
     String? deviceOs,
   }) async {
+    _log?.info('[AuthCubit] Sign in with Google');
     _emit(const AuthState.loading());
     _eventBus.emit(const AuthLoading());
 
@@ -369,6 +422,7 @@ class AuthCubit extends Cubit<AuthState> {
     String? deviceName,
     String? deviceOs,
   }) async {
+    _log?.info('[AuthCubit] Sign in with Apple');
     _emit(const AuthState.loading());
     _eventBus.emit(const AuthLoading());
 
@@ -413,15 +467,17 @@ class AuthCubit extends Cubit<AuthState> {
     Map<String, dynamic> data, {
     required String email,
   }) async {
-    // ── 2FA ───────────────────────────────────────────────────────────────
+    HttpClient.instance.setAuthToken(data['accessToken'] as String);
+    _log?.debug('[AuthCubit] _handleAuthResponse — isMfa: ${data['isMfa']}');
     if (data['isMfa'] == true) {
       final userId = data['userId'] as String;
       final message = data['message'] as String? ?? 'Enter your 2FA code';
+      _log?.info('[AuthCubit] 2FA required for userId: $userId');
       _emit(AuthState.mfaRequired(userId: userId, message: message));
       _eventBus.emit(AuthMfaRequired(userId: userId, message: message));
       return;
     }
-    LoggerService.instance.info('[AuthCubit] Auth response data: $data');
+
     final accessToken = data['accessToken'] as String;
     final refreshToken = data['refreshToken'] as String;
     final expiresIn = data['expiresIn'] as int? ?? 900;
@@ -430,9 +486,10 @@ class AuthCubit extends Cubit<AuthState> {
     final verified = data['verified'] as bool? ?? false;
     final onboardingCompleted = data['onboardingCompleted'] as bool? ?? false;
 
-    // Save tokens immediately — regardless of verification status.
-    // This is what enables terminated state resumption. The user has tokens,
-    // we just track what stage they're at with the flag fields.
+    _log?.debug(
+      '[AuthCubit] Auth response — verified: $verified, onboardingCompleted: $onboardingCompleted, userId: $userId',
+    );
+
     await _storage.saveInitialSession(
       accessToken: accessToken,
       refreshToken: refreshToken,
@@ -445,24 +502,24 @@ class AuthCubit extends Cubit<AuthState> {
       platformId: _config.platformId,
     );
 
-    // ── Email not verified ─────────────────────────────────────────────────
     if (!verified) {
-      // Save email so OTP screen can be resumed after app termination
+      _log?.info(
+        '[AuthCubit] Email not verified — saving pending email: $email',
+      );
       await _storage.savePendingVerificationEmail(email);
-
       _emit(AuthState.emailNotVerified(email: email));
       _eventBus.emit(AuthEmailNotVerified(email: email));
       return;
     }
 
-    // ── Onboarding required ────────────────────────────────────────────────
     if (!onboardingCompleted) {
+      _log?.info('[AuthCubit] Onboarding not complete');
       _emit(const AuthState.onboardingRequired());
       _eventBus.emit(const AuthOnboardingRequired());
       return;
     }
 
-    // ── Fully authenticated ────────────────────────────────────────────────
+    _log?.info('[AuthCubit] Auth successful — emitting AuthSuccess');
     _emit(const AuthState.authenticated());
     _eventBus.emit(AuthSuccess(accessToken: accessToken));
   }
@@ -478,6 +535,7 @@ class AuthCubit extends Cubit<AuthState> {
     String? deviceName,
     String? deviceOs,
   }) async {
+    _log?.info('[AuthCubit] Signup attempt — $email');
     _emit(const AuthState.loading());
     _eventBus.emit(const AuthLoading());
 
@@ -510,19 +568,19 @@ class AuthCubit extends Cubit<AuthState> {
   // ══════════════════════════════════════════════════════════════
 
   Future<void> verifyEmail({required String email, required String otp}) async {
+    _log?.info('[AuthCubit] Verifying OTP for $email');
     _emit(const AuthState.loading());
 
     final result = await _verifyEmailUseCase(email: email, otp: otp);
 
     result.when(
       failure: (error, _) {
+        _log?.error('[AuthCubit] OTP verification failed — $error');
         _emit(AuthState.error(error));
         _eventBus.emit(AuthFailure(message: error));
       },
       success: (data) async {
-        // Verification response: { message: "Email verified successfully" }
-        // No tokens returned — they were already saved during signup.
-        // Update the verified flag and clear the pending email.
+        _log?.info('[AuthCubit] OTP verified successfully');
         await _storage.saveEmailVerified(true);
         await _storage.clearPendingVerificationEmail();
 
@@ -531,7 +589,6 @@ class AuthCubit extends Cubit<AuthState> {
         _emit(AuthState.otpVerified(message: message));
         _eventBus.emit(AuthOtpVerified(message: message));
 
-        // Navigate to onboarding next
         _emit(const AuthState.onboardingRequired());
         _eventBus.emit(const AuthOnboardingRequired());
       },
@@ -539,16 +596,21 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> resendOtp({required String email}) async {
+    _log?.info('[AuthCubit] Resending OTP — $email');
     _emit(const AuthState.loading());
 
     final result = await _resendOtpUseCase(email: email);
 
     result.when(
       failure: (error, _) {
+        _log?.error('[AuthCubit] Resend OTP failed — $error');
         _emit(AuthState.error(error));
         _eventBus.emit(AuthFailure(message: error));
       },
-      success: (_) => _emit(const AuthState.otpResent()),
+      success: (_) {
+        _log?.info('[AuthCubit] OTP resent successfully');
+        _emit(const AuthState.otpResent());
+      },
     );
   }
 
@@ -568,6 +630,9 @@ class AuthCubit extends Cubit<AuthState> {
     required String country,
     String? avatarUrl,
   }) async {
+    _log?.info(
+      '[AuthCubit] Completing onboarding — $firstName $lastName, country: $country',
+    );
     _emit(const AuthState.loading());
 
     final result = await _completeOnboardingUseCase(
@@ -610,6 +675,9 @@ class AuthCubit extends Cubit<AuthState> {
   /// Exchanges the stored refresh token for a scoped access token for this app.
   /// Handles expired tokens gracefully with targeted error messaging.
   Future<void> continueAsAccount(GrascopeSessionHint hint) async {
+    _log?.info(
+      '[AuthCubit] continueAsAccount — ${hint.displayName} (${hint.userId})',
+    );
     _emit(const AuthState.loading());
     _eventBus.emit(const AuthLoading());
 
@@ -668,6 +736,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String userId,
     required String otp,
   }) async {
+    _log?.info('[AuthCubit] Verifying 2FA — userId: $userId');
     _emit(const AuthState.loading());
 
     final result = await _verifyTwoFactorUseCase(userId: userId, otp: otp);
@@ -689,16 +758,21 @@ class AuthCubit extends Cubit<AuthState> {
   // ══════════════════════════════════════════════════════════════
 
   Future<void> forgotPassword({required String email}) async {
+    _log?.info('[AuthCubit] Forgot password — $email');
     _emit(const AuthState.loading());
 
     final result = await _forgotPasswordUseCase(email: email);
 
     result.when(
       failure: (error, _) {
+        _log?.error('[AuthCubit] Forgot password failed — $error');
         _emit(AuthState.error(error));
         _eventBus.emit(AuthFailure(message: error));
       },
-      success: (_) => _emit(const AuthState.passwordResetSent()),
+      success: (_) {
+        _log?.info('[AuthCubit] Password reset email sent');
+        _emit(const AuthState.passwordResetSent());
+      },
     );
   }
 
@@ -706,6 +780,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String token,
     required String newPassword,
   }) async {
+    _log?.info('[AuthCubit] Resetting password');
     _emit(const AuthState.loading());
 
     final result = await _resetPasswordUseCase(
@@ -715,10 +790,14 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.when(
       failure: (error, _) {
+        _log?.error('[AuthCubit] Reset password failed — $error');
         _emit(AuthState.error(error));
         _eventBus.emit(AuthFailure(message: error));
       },
-      success: (_) => _emit(const AuthState.passwordResetSuccess()),
+      success: (_) {
+        _log?.info('[AuthCubit] Password reset successful');
+        _emit(const AuthState.passwordResetSuccess());
+      },
     );
   }
 
@@ -729,6 +808,7 @@ class AuthCubit extends Cubit<AuthState> {
   /// Logs out the current account in this app.
   /// Removes this account from shared storage — other accounts unaffected.
   Future<void> logout() async {
+    _log?.info('[AuthCubit] Logout requested');
     _emit(const AuthState.loading());
 
     final sessionId = await _storage.getSessionId();
@@ -744,12 +824,14 @@ class AuthCubit extends Cubit<AuthState> {
       await _storage.clearLocalSession();
     }
 
+    _log?.info('[AuthCubit] Logout complete');
     _emit(const AuthState.unauthenticated());
     _eventBus.emit(const AuthLoggedOut());
   }
 
   /// Logs out ALL known Grascope accounts on this device.
   Future<void> logoutAll() async {
+    _log?.info('[AuthCubit] Logging out all accounts');
     _emit(const AuthState.loading());
 
     final sessionId = await _storage.getSessionId();
@@ -760,6 +842,7 @@ class AuthCubit extends Cubit<AuthState> {
     await _storage.clearLocalSession();
     await _storage.clearAllKnownAccounts();
 
+    _log?.info('[AuthCubit] All accounts logged out');
     _emit(const AuthState.unauthenticated());
     _eventBus.emit(const AuthLoggedOut());
   }
@@ -769,6 +852,7 @@ class AuthCubit extends Cubit<AuthState> {
   // ══════════════════════════════════════════════════════════════
 
   Future<void> _handleSessionExpired({String? userId}) async {
+    _log?.warning('[AuthCubit] Session expired for userId: $userId');
     String? displayName;
 
     if (userId != null) {
@@ -822,6 +906,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   @override
   Future<void> close() {
+    _log?.debug('[AuthCubit] Closing cubit');
     _reLoginSubscription?.cancel();
     return super.close();
   }

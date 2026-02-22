@@ -12,8 +12,9 @@ import '../datasource/auth_remote_datasource.dart';
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDatasource authRemoteDatasource;
+  final LoggerService? _log;
 
-  AuthRepositoryImpl({required this.authRemoteDatasource});
+  AuthRepositoryImpl({required this.authRemoteDatasource, LoggerService? logger}) : _log = logger;
 
   /// POST /auth/register
   @override
@@ -22,14 +23,17 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
     required Map<String, dynamic> deviceInfo,
   }) async {
+    _log?.debug('[AuthRepo] signUp — $email');
     try {
       final result = await authRemoteDatasource.signUp(
         email: email,
         password: password,
         deviceInfo: deviceInfo,
       );
+      _log?.info('[AuthRepo] signUp success — $email');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] signUp failed — $email', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -40,11 +44,14 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String otp,
   }) async {
+    _log?.debug('[AuthRepo] verifyEmail — $email');
     try {
       final result =
           await authRemoteDatasource.verifyEmail(email: email, otp: otp);
+      _log?.info('[AuthRepo] verifyEmail success — $email');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] verifyEmail failed — $email', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -54,10 +61,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<Map<String, dynamic>>> resendOtp({
     required String email,
   }) async {
+    _log?.debug('[AuthRepo] resendOtp — $email');
     try {
       final result = await authRemoteDatasource.resendOtp(email: email);
+      _log?.info('[AuthRepo] resendOtp success — $email');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] resendOtp failed — $email', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -67,10 +77,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<Map<String, dynamic>>> login({
     required Map<String, dynamic> data,
   }) async {
+    _log?.debug('[AuthRepo] login — ${data['email']}');
     try {
       final result = await authRemoteDatasource.login(data: data);
+      _log?.info('[AuthRepo] login success');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] login failed', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -78,10 +91,13 @@ class AuthRepositoryImpl implements AuthRepository {
   /// POST /auth/logout
   @override
   Future<Result<void>> logout({required String sessionId}) async {
+    _log?.debug('[AuthRepo] logout — sessionId: $sessionId');
     try {
       await authRemoteDatasource.logout(sessionId: sessionId);
+      _log?.info('[AuthRepo] logout success');
       return Result.success(null);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.warning('[AuthRepo] logout failed (non-critical)', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -91,10 +107,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<Map<String, dynamic>>> forgotPassword({
     required String email,
   }) async {
+    _log?.debug('[AuthRepo] forgotPassword — $email');
     try {
       final result = await authRemoteDatasource.forgotPassword(email: email);
+      _log?.info('[AuthRepo] forgotPassword success — $email');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] forgotPassword failed', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -105,13 +124,16 @@ class AuthRepositoryImpl implements AuthRepository {
     required String token,
     required String newPassword,
   }) async {
+    _log?.debug('[AuthRepo] resetPassword');
     try {
       final result = await authRemoteDatasource.resetPassword(
         token: token,
         newPassword: newPassword,
       );
+      _log?.info('[AuthRepo] resetPassword success');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] resetPassword failed', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -122,13 +144,16 @@ class AuthRepositoryImpl implements AuthRepository {
     required String userId,
     required String otp,
   }) async {
+    _log?.debug('[AuthRepo] verifyTwoFactor — userId: $userId');
     try {
       final result = await authRemoteDatasource.verifyTwoFactor(
         userId: userId,
         otp: otp,
       );
+      _log?.info('[AuthRepo] verifyTwoFactor success');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] verifyTwoFactor failed', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -140,14 +165,17 @@ class AuthRepositoryImpl implements AuthRepository {
     required String platformId,
     required List<String> scopes,
   }) async {
+    _log?.debug('[AuthRepo] exchangeRefreshToken — platformId: $platformId');
     try {
       final result = await authRemoteDatasource.exchangeRefreshToken(
         refreshToken: refreshToken,
         platformId: platformId,
         scopes: scopes,
       );
+      _log?.info('[AuthRepo] exchangeRefreshToken success');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] exchangeRefreshToken failed', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -158,13 +186,16 @@ class AuthRepositoryImpl implements AuthRepository {
     required String idToken,
     required Map<String, dynamic> deviceInfo,
   }) async {
+    _log?.debug('[AuthRepo] signInWithGoogle');
     try {
       final result = await authRemoteDatasource.loginWithGoogle(
         idToken: idToken,
         deviceInfo: deviceInfo,
       );
+      _log?.info('[AuthRepo] signInWithGoogle success');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] signInWithGoogle failed', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -178,6 +209,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String? lastName,
     required Map<String, dynamic> deviceInfo,
   }) async {
+    _log?.debug('[AuthRepo] signInWithApple');
     try {
       final result = await authRemoteDatasource.loginWithApple(
         identityToken: identityToken,
@@ -186,8 +218,10 @@ class AuthRepositoryImpl implements AuthRepository {
         lastName: lastName,
         deviceInfo: deviceInfo,
       );
+      _log?.info('[AuthRepo] signInWithApple success');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] signInWithApple failed', e, st);
       return Result.failure(e.toString());
     }
   }
@@ -201,6 +235,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String country,
     String? avatarUrl,
   }) async {
+    _log?.debug('[AuthRepo] completeOnboarding — $firstName $lastName, country: $country');
     try {
       final result = await authRemoteDatasource.completeOnboarding(data: {
         'firstName': firstName,
@@ -208,8 +243,10 @@ class AuthRepositoryImpl implements AuthRepository {
         'country': country,
         'avatarUrl': ?avatarUrl,
       });
+      _log?.info('[AuthRepo] completeOnboarding success');
       return Result.success(result);
-    } catch (e) {
+    } catch (e, st) {
+      _log?.error('[AuthRepo] completeOnboarding failed', e, st);
       return Result.failure(e.toString());
     }
   }

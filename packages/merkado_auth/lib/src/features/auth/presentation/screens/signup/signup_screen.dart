@@ -1,4 +1,3 @@
-
 // ════════════════════════════════════════════════════════════════════════════
 // SIGNUP SCREEN
 // lib/src/features/auth/presentation/screens/signup_screen.dart
@@ -8,12 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 
+
 import '../../cubit/auth_cubit.dart';
+
 
 /// SignupScreen
 /// ============
-/// Built-in signup screen. On success, cubit emits [AuthState.emailNotVerified]
-/// which the [AuthShell] catches and navigates to [OtpScreen].
+/// Pushed by [LoginScreen] via Navigator.push — it sits ON TOP of [AuthShell]
+/// in the navigator stack, not inside it.
+///
+/// NAVIGATION CONTRACT:
+/// When cubit emits [AuthState.emailNotVerified], [AuthShell]'s body rebuilds
+/// to [OtpScreen] underneath this screen. This screen MUST pop itself so the
+/// OtpScreen becomes visible. The BlocListener below handles this.
+///
+/// Do NOT add navigation logic for any other state here — [AuthShell] handles
+/// all other transitions (onboarding, authenticated, etc.).
 class SignupScreen extends StatefulWidget {
   final MerkadoAuthConfig config;
   const SignupScreen({super.key, required this.config});
@@ -47,13 +56,15 @@ class _SignupScreenState extends State<SignupScreen> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           state.whenOrNull(
+            // Pop this screen so AuthShell's body (OtpScreen) becomes visible.
+            // This is the correct fix — the shell has already rebuilt its body
+            // to OtpScreen, this screen just needs to get out of the way.
+            emailNotVerified: (_) {
+              if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+            },
             error: (msg) => ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(msg), backgroundColor: Colors.red),
             ),
-            emailNotVerified: (email) {
-              if(!mounted) return;
-              Navigator.of(context).pop();
-            },
           );
         },
         child: SingleChildScrollView(
@@ -126,16 +137,19 @@ class _SignupScreenState extends State<SignupScreen> {
                         backgroundColor: config.primaryColor,
                       ),
                       child: state.maybeWhen(
-                        loading: () => const CircularProgressIndicator(color: Colors.white),
-                        orElse: () => const Text('Create account',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600)),
+                        loading: () => const CircularProgressIndicator(
+                            color: Colors.white),
+                        orElse: () => const Text(
+                          'Create account',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-                // ── Terms footer ─────────────────────────────────────────
                 if (config.termsUrl != null || config.privacyUrl != null) ...[
                   const SizedBox(height: 16),
                   Text(
@@ -152,4 +166,3 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 }
-

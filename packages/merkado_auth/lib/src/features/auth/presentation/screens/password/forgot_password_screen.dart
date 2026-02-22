@@ -45,9 +45,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Reset password'), elevation: 0),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
+      body: BlocListener<AuthCubit, AuthState>(
+        // ForgotPasswordScreen is Navigator.pushed on top of AuthShell from LoginScreen.
+        // When cubit emits passwordResetSent, AuthShell's body swaps to a confirmation
+        // view underneath. Pop here so the confirmation becomes visible.
+        listener: (context, state) {
+          state.whenOrNull(
+            passwordResetSent: () {
+              if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+            },
+            error: (msg) => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(msg), backgroundColor: Colors.red),
+            ),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.resetSent)
@@ -109,7 +123,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
           ],
         ),
-      ),
+        ),  // Padding
+      ),    // BlocListener
     );
   }
 }

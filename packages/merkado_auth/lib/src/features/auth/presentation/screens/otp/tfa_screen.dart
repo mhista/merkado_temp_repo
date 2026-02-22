@@ -16,6 +16,7 @@ import '../../cubit/auth_cubit.dart';
 /// Shown when backend returns [isMfa: true] in the login response.
 /// Collects the 2FA OTP and submits to [AuthCubit.verifyTwoFactor].
 /// Enabled/disabled via [AuthFeatures.twoFactorAuth].
+
 class TwoFactorScreen extends StatefulWidget {
   final String userId;
   final String message;

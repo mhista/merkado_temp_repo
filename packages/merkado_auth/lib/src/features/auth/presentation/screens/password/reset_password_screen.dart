@@ -15,6 +15,7 @@ import '../../cubit/auth_cubit.dart';
 /// Shown when the user follows the reset link from their email.
 /// The reset [token] is extracted from the deep link and passed in.
 /// Enabled/disabled via [AuthFeatures.resetPassword].
+
 class ResetPasswordScreen extends StatefulWidget {
   final String token;
   final MerkadoAuthConfig config;

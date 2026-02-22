@@ -71,6 +71,25 @@ class AuthStorageKeys {
   static const String pendingVerificationEmail =
       'merkado_pending_verification_email';
 
+  // ── OTP / onboarding timeout keys ────────────────────────────────────────
+
+  /// Unix timestamp (ms) of when the OTP verification flow was started.
+  /// Used to enforce the verification timeout window (default: 15 minutes).
+  ///
+  /// If (now - otpStartedAt) > timeout, the unverified session is cleared
+  /// and the user is routed to login instead of the OTP screen.
+  ///
+  /// This prevents indefinitely resuming a stale verification flow where
+  /// the OTP has long expired and the backend would reject it anyway.
+  static const String otpStartedAt = 'merkado_otp_started_at';
+
+  /// Unix timestamp (ms) of when the onboarding flow was started.
+  /// Used to enforce the onboarding timeout window (default: 30 minutes).
+  ///
+  /// If (now - onboardingStartedAt) > timeout, the incomplete session is
+  /// cleared and the user is routed to login to start fresh.
+  static const String onboardingStartedAt = 'merkado_onboarding_started_at';
+
   // ── Biometric auth keys ───────────────────────────────────────────────────
 
   /// Whether biometric login is enrolled for this app on this device.

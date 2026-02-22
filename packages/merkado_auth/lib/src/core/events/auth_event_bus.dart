@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:common_utils2/common_utils2.dart';
 import '../models/auth_result.dart';
 
 /// AuthEventBus
@@ -42,6 +43,11 @@ class AuthEventBus {
   /// Singleton instance.
   static AuthEventBus get instance => _instance ??= AuthEventBus._();
 
+  static LoggerService? _log;
+
+  /// Wire up logging. Called automatically by MerkadoAuth.initialize().
+  static void setLogger(LoggerService? logger) => _log = logger;
+
   final StreamController<AuthResult> _controller =
       StreamController<AuthResult>.broadcast();
 
@@ -59,12 +65,15 @@ class AuthEventBus {
     if (!_controller.isClosed) {
       _lastResult = result;
       _controller.add(result);
+      _log?.info('[AuthEventBus] → ${result.runtimeType}');
     }
   }
 
   /// Dispose the stream. Called by [MerkadoAuth.dispose()].
   void dispose() {
+    _log?.debug('[AuthEventBus] Disposed');
     _controller.close();
     _instance = null;
+    _log = null;
   }
 }
