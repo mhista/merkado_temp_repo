@@ -56,7 +56,7 @@ dependencies:
     git:
       url: https://github.com/mhista/merkado_temp_repo.git
       path: packages/merkado_auth
-      ref: v1.0.0   # pin to a tag — don't use main in production
+      ref: v1.0.1   # pin to a tag — don't use main in production
 
 ```
 
@@ -370,7 +370,7 @@ class MyBrandedLoginScreen extends StatelessWidget {
 
 ## Logging
 
-The package never creates its own `LoggerService`. Pass the app's instance to `initialize()` and all auth logs route through your existing Talker setup automatically.
+At the moment, the package never creates its own `LoggerService`. Pass the app's instance to `initialize()` and all auth logs route through your existing Talker setup automatically.
 
 ```dart
 await MerkadoAuth.initialize(
