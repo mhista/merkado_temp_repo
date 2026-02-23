@@ -28,6 +28,9 @@ class MerkadoPlatform {
   /// ItsYourDay — Event Planning & Coordination
   static const String itsYourDay = '019c761c-d265-7a25-a095-ec9c5ad364f5';
 
+  // Hawker — Street Food Vendor Marketplace
+  static const String hawker = '019c7b2d-c6ca-7671-b143-35b8390cb1df';
+
   /// Returns the human-readable name for a given platform ID.
   /// Used in logging and error messages.
   static String nameOf(String platformId) {
@@ -40,5 +43,6 @@ class MerkadoPlatform {
     haulway: 'Haulway',
     feastFeed: 'FeastFeed',
     itsYourDay: 'ItsYourDay',
+    hawker: 'Hawker',
   };
 }
