@@ -233,15 +233,17 @@ class AuthRepositoryImpl implements AuthRepository {
     required String firstName,
     required String lastName,
     required String country,
+    required String phone,
     String? avatarUrl,
   }) async {
-    _log?.debug('[AuthRepo] completeOnboarding — $firstName $lastName, country: $country');
+    _log?.debug('[AuthRepo] completeOnboarding — $firstName $lastName, country: $country, phone: $phone');
     try {
       final result = await authRemoteDatasource.completeOnboarding(data: {
         'firstName': firstName,
         'lastName': lastName,
         'country': country,
-        'avatarUrl': ?avatarUrl,
+        'phone': phone,
+        if (avatarUrl != null) 'avatarUrl': avatarUrl,
       });
       _log?.info('[AuthRepo] completeOnboarding success');
       return Result.success(result);

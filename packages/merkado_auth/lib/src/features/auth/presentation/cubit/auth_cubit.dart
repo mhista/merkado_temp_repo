@@ -4,7 +4,6 @@ import 'package:common_utils2/common_utils2.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:merkado_auth/merkado_auth.dart';
-
 import '../../domain/usecases/auth_usecases.dart';
 
 part 'auth_state.dart';
@@ -75,20 +74,20 @@ class AuthCubit extends Cubit<AuthState> {
     required SignInWithGoogleUseCase signInWithGoogleUseCase,
     required SignInWithAppleUseCase signInWithAppleUseCase,
     LoggerService? logger,
-  }) : _loginUseCase = loginUseCase,
-       _signUpUseCase = signUpUseCase,
-       _logoutUseCase = logoutUseCase,
-       _resendOtpUseCase = resendOtpUseCase,
-       _verifyEmailUseCase = verifyEmailUseCase,
-       _completeOnboardingUseCase = completeOnboardingUseCase,
-       _forgotPasswordUseCase = forgotPasswordUseCase,
-       _resetPasswordUseCase = resetPasswordUseCase,
-       _verifyTwoFactorUseCase = verifyTwoFactorUseCase,
-       _exchangeRefreshTokenUseCase = exchangeRefreshTokenUseCase,
-       _signInWithGoogleUseCase = signInWithGoogleUseCase,
-       _signInWithAppleUseCase = signInWithAppleUseCase,
-       _log = logger,
-       super(const AuthState.initial());
+  })  : _loginUseCase = loginUseCase,
+        _signUpUseCase = signUpUseCase,
+        _logoutUseCase = logoutUseCase,
+        _resendOtpUseCase = resendOtpUseCase,
+        _verifyEmailUseCase = verifyEmailUseCase,
+        _completeOnboardingUseCase = completeOnboardingUseCase,
+        _forgotPasswordUseCase = forgotPasswordUseCase,
+        _resetPasswordUseCase = resetPasswordUseCase,
+        _verifyTwoFactorUseCase = verifyTwoFactorUseCase,
+        _exchangeRefreshTokenUseCase = exchangeRefreshTokenUseCase,
+        _signInWithGoogleUseCase = signInWithGoogleUseCase,
+        _signInWithAppleUseCase = signInWithAppleUseCase,
+        _log = logger,
+        super(const AuthState.initial());
 
   // ══════════════════════════════════════════════════════════════
   // INITIALIZATION
@@ -132,13 +131,9 @@ class AuthCubit extends Cubit<AuthState> {
       // the OTP they received has expired and the backend will reject it.
       // Route to login so they can re-enter credentials — login will detect
       // verified=false and send them a fresh OTP.
-      final otpExpired = await _storage.isOtpWindowExpired(
-        timeout: _otpTimeout,
-      );
+      final otpExpired = await _storage.isOtpWindowExpired(timeout: _otpTimeout);
       if (otpExpired) {
-        _log?.warning(
-          '[AuthCubit] OTP window expired after ${_otpTimeout.inMinutes}min — clearing session, routing to login',
-        );
+        _log?.warning('[AuthCubit] OTP window expired after ${_otpTimeout.inMinutes}min — clearing session, routing to login');
         await _storage.clearLocalSession();
         await _checkForCrossAppAccounts();
         return;
@@ -147,9 +142,7 @@ class AuthCubit extends Cubit<AuthState> {
       final pendingEmail = await _storage.getPendingVerificationEmail();
       final storedEmail = await _storage.getUserEmail();
       final email = pendingEmail ?? storedEmail ?? '';
-      _log?.info(
-        '[AuthCubit] Token valid, email not verified — resuming OTP for $email',
-      );
+      _log?.info('[AuthCubit] Token valid, email not verified — resuming OTP for $email');
       _emit(AuthState.emailNotVerified(email: email));
       _eventBus.emit(AuthEmailNotVerified(email: email));
       return;
@@ -162,21 +155,15 @@ class AuthCubit extends Cubit<AuthState> {
       // If the user left mid-onboarding and it's been > 30 minutes,
       // route to login. Their account exists and is verified — login will
       // detect onboardingCompleted=false and send them back to onboarding.
-      final onboardingExpired = await _storage.isOnboardingWindowExpired(
-        timeout: _onboardingTimeout,
-      );
+      final onboardingExpired = await _storage.isOnboardingWindowExpired(timeout: _onboardingTimeout);
       if (onboardingExpired) {
-        _log?.warning(
-          '[AuthCubit] Onboarding window expired after ${_onboardingTimeout.inMinutes}min — clearing session, routing to login',
-        );
+        _log?.warning('[AuthCubit] Onboarding window expired after ${_onboardingTimeout.inMinutes}min — clearing session, routing to login');
         await _storage.clearLocalSession();
         await _checkForCrossAppAccounts();
         return;
       }
 
-      _log?.info(
-        '[AuthCubit] Email verified, onboarding incomplete — resuming onboarding',
-      );
+      _log?.info('[AuthCubit] Email verified, onboarding incomplete — resuming onboarding');
       _emit(const AuthState.onboardingRequired());
       _eventBus.emit(const AuthOnboardingRequired());
       return;
@@ -202,7 +189,6 @@ class AuthCubit extends Cubit<AuthState> {
 
     await _attemptRefreshOnStartup(refreshToken);
   }
-
   ///
   /// This handles every terminated-state scenario:
   ///
@@ -225,7 +211,7 @@ class AuthCubit extends Cubit<AuthState> {
   /// SCENARIO 5 — Tokens exist, verified, onboarded, token expired:
   ///   → Attempt refresh → if successful, authenticated
   ///   → If refresh fails, token is truly dead → session expired
-
+  
   Future<void> _attemptRefreshOnStartup(String refreshToken) async {
     _log?.debug('[AuthCubit] Attempting token refresh on startup');
     final result = await _exchangeRefreshTokenUseCase(
@@ -255,16 +241,14 @@ class AuthCubit extends Cubit<AuthState> {
         if (data['refreshToken'] != null) {
           final userId = await _storage.getUserId() ?? '';
           final email = await _storage.getUserEmail() ?? '';
-          await _storage.upsertKnownAccount(
-            GrascopeSessionHint.create(
-              userId: userId,
-              displayName: await _storage.getUserDisplayName() ?? email,
-              avatarUrl: await _storage.getUserAvatarUrl() ?? '',
-              email: email,
-              refreshToken: data['refreshToken'] as String,
-              sourcePlatformId: _config.platformId,
-            ),
-          );
+          await _storage.upsertKnownAccount(GrascopeSessionHint.create(
+            userId: userId,
+            displayName: await _storage.getUserDisplayName() ?? email,
+            avatarUrl: await _storage.getUserAvatarUrl() ?? '',
+            email: email,
+            refreshToken: data['refreshToken'] as String,
+            sourcePlatformId: _config.platformId,
+          ));
         }
 
         final newToken = data['accessToken'] as String;
@@ -277,9 +261,7 @@ class AuthCubit extends Cubit<AuthState> {
   /// Reads known accounts from shared storage.
   /// Emits account picker if accounts found, login screen if none.
   Future<void> _checkForCrossAppAccounts() async {
-    _log?.debug(
-      '[AuthCubit] Checking for cross-app accounts (SSO enabled: ${_config.features.crossAppSso})',
-    );
+    _log?.debug('[AuthCubit] Checking for cross-app accounts (SSO enabled: ${_config.features.crossAppSso})');
     if (!_config.features.crossAppSso) {
       _log?.debug('[AuthCubit] SSO disabled — emitting unauthenticated');
       _emit(const AuthState.unauthenticated());
@@ -313,17 +295,15 @@ class AuthCubit extends Cubit<AuthState> {
     _emit(const AuthState.loading());
     _eventBus.emit(const AuthLoading());
 
-    final result = await _loginUseCase(
-      data: {
-        'email': email,
-        'password': password,
-        'platformId': _config.platformId,
-        'deviceName': deviceName ?? 'Unknown Device',
-        'deviceType': 'mobile',
-        'deviceOs': deviceOs ?? 'Unknown',
-        'fcmToken': fcmToken ?? '',
-      },
-    );
+    final result = await _loginUseCase(data: {
+      'email': email,
+      'password': password,
+      'platformId': _config.platformId,
+      'deviceName': deviceName ?? 'Unknown Device',
+      'deviceType': 'mobile',
+      'deviceOs': deviceOs ?? 'Unknown',
+      'fcmToken': fcmToken ?? '',
+    });
 
     result.when(
       failure: (error, _) {
@@ -467,7 +447,6 @@ class AuthCubit extends Cubit<AuthState> {
     Map<String, dynamic> data, {
     required String email,
   }) async {
-    HttpClient.instance.setAuthToken(data['accessToken'] as String);
     _log?.debug('[AuthCubit] _handleAuthResponse — isMfa: ${data['isMfa']}');
     if (data['isMfa'] == true) {
       final userId = data['userId'] as String;
@@ -486,9 +465,7 @@ class AuthCubit extends Cubit<AuthState> {
     final verified = data['verified'] as bool? ?? false;
     final onboardingCompleted = data['onboardingCompleted'] as bool? ?? false;
 
-    _log?.debug(
-      '[AuthCubit] Auth response — verified: $verified, onboardingCompleted: $onboardingCompleted, userId: $userId',
-    );
+    _log?.debug('[AuthCubit] Auth response — verified: $verified, onboardingCompleted: $onboardingCompleted, userId: $userId');
 
     await _storage.saveInitialSession(
       accessToken: accessToken,
@@ -503,9 +480,7 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     if (!verified) {
-      _log?.info(
-        '[AuthCubit] Email not verified — saving pending email: $email',
-      );
+      _log?.info('[AuthCubit] Email not verified — saving pending email: $email');
       await _storage.savePendingVerificationEmail(email);
       _emit(AuthState.emailNotVerified(email: email));
       _eventBus.emit(AuthEmailNotVerified(email: email));
@@ -567,7 +542,10 @@ class AuthCubit extends Cubit<AuthState> {
   // OTP VERIFICATION
   // ══════════════════════════════════════════════════════════════
 
-  Future<void> verifyEmail({required String email, required String otp}) async {
+  Future<void> verifyEmail({
+    required String email,
+    required String otp,
+  }) async {
     _log?.info('[AuthCubit] Verifying OTP for $email');
     _emit(const AuthState.loading());
 
@@ -584,8 +562,7 @@ class AuthCubit extends Cubit<AuthState> {
         await _storage.saveEmailVerified(true);
         await _storage.clearPendingVerificationEmail();
 
-        final message =
-            data['message'] as String? ?? 'Email verified successfully';
+        final message = data['message'] as String? ?? 'Email verified successfully';
         _emit(AuthState.otpVerified(message: message));
         _eventBus.emit(AuthOtpVerified(message: message));
 
@@ -628,17 +605,17 @@ class AuthCubit extends Cubit<AuthState> {
     required String firstName,
     required String lastName,
     required String country,
+    required String phone,
     String? avatarUrl,
   }) async {
-    _log?.info(
-      '[AuthCubit] Completing onboarding — $firstName $lastName, country: $country',
-    );
+    _log?.info('[AuthCubit] Completing onboarding — $firstName $lastName, country: $country, phone: $phone');
     _emit(const AuthState.loading());
 
     final result = await _completeOnboardingUseCase(
       firstName: firstName,
       lastName: lastName,
       country: country,
+      phone: phone,
       avatarUrl: avatarUrl,
     );
 
@@ -675,9 +652,7 @@ class AuthCubit extends Cubit<AuthState> {
   /// Exchanges the stored refresh token for a scoped access token for this app.
   /// Handles expired tokens gracefully with targeted error messaging.
   Future<void> continueAsAccount(GrascopeSessionHint hint) async {
-    _log?.info(
-      '[AuthCubit] continueAsAccount — ${hint.displayName} (${hint.userId})',
-    );
+    _log?.info('[AuthCubit] continueAsAccount — ${hint.displayName} (${hint.userId})');
     _emit(const AuthState.loading());
     _eventBus.emit(const AuthLoading());
 
@@ -692,15 +667,14 @@ class AuthCubit extends Cubit<AuthState> {
         // Refresh token dead — remove stale account from shared list
         await _storage.removeKnownAccount(hint.userId);
 
-        _emit(
-          AuthState.sessionExpiredForAccount(
-            userId: hint.userId,
-            displayName: hint.displayName,
-          ),
-        );
-        _eventBus.emit(
-          AuthExpired(userId: hint.userId, displayName: hint.displayName),
-        );
+        _emit(AuthState.sessionExpiredForAccount(
+          userId: hint.userId,
+          displayName: hint.displayName,
+        ));
+        _eventBus.emit(AuthExpired(
+          userId: hint.userId,
+          displayName: hint.displayName,
+        ));
       },
       success: (data) async {
         final accessToken = data['accessToken'] as String;
@@ -721,9 +695,10 @@ class AuthCubit extends Cubit<AuthState> {
         }
 
         _emit(const AuthState.authenticated());
-        _eventBus.emit(
-          AuthSuccess(accessToken: accessToken, fromCrossAppSso: true),
-        );
+        _eventBus.emit(AuthSuccess(
+          accessToken: accessToken,
+          fromCrossAppSso: true,
+        ));
       },
     );
   }
@@ -847,6 +822,97 @@ class AuthCubit extends Cubit<AuthState> {
     _eventBus.emit(const AuthLoggedOut());
   }
 
+
+  // ══════════════════════════════════════════════════════════════
+  // ACCOUNT SWITCHING (same app, multiple accounts)
+  // ══════════════════════════════════════════════════════════════
+
+  /// Switches to a different account that already exists in the known
+  /// accounts list for this app — without requiring the user to re-enter
+  /// credentials.
+  ///
+  /// Unlike [continueAsAccount] (used on startup for cross-app SSO),
+  /// [switchAccount] is called while a session is already active.
+  /// It:
+  ///   1. Ends the current session locally (no network call — the old
+  ///      session remains valid server-side but the local tokens are replaced).
+  ///   2. Exchanges the target account's stored refresh token for a new
+  ///      platform-scoped access token.
+  ///   3. Saves the new session and emits [AuthSuccess].
+  ///
+  /// If the target account's refresh token has expired, removes it from
+  /// the known list and emits [AuthState.error] so the caller can inform
+  /// the user to log in to that account again.
+  ///
+  /// USAGE (from profile / account switcher screen):
+  /// ```dart
+  /// final accounts = await MerkadoAuth.instance.getKnownAccounts();
+  /// // Show picker, user picks one:
+  /// MerkadoAuth.instance.cubit.switchAccount(selectedHint);
+  /// ```
+  Future<void> switchAccount(GrascopeSessionHint targetHint) async {
+    _log?.info('[AuthCubit] switchAccount → ${targetHint.displayName} (${targetHint.userId})');
+
+    final currentUserId = await _storage.getUserId();
+    if (currentUserId == targetHint.userId) {
+      _log?.debug('[AuthCubit] switchAccount — already active account, ignoring');
+      return;
+    }
+
+    _emit(const AuthState.loading());
+    _eventBus.emit(const AuthLoading());
+
+    // Step 1 — clear current session tokens locally.
+    // We keep the current account in knownAccounts so it can be switched back to.
+    await _storage.clearLocalSession();
+    _log?.debug('[AuthCubit] switchAccount — local session cleared');
+
+    // Step 2 — exchange the target account's refresh token
+    final result = await _exchangeRefreshTokenUseCase(
+      refreshToken: targetHint.refreshToken,
+      platformId: _config.platformId,
+      scopes: _scopesForPlatform(_config.platformId),
+    );
+
+    result.when(
+      failure: (error, _) async {
+        _log?.error('[AuthCubit] switchAccount — token exchange failed for ${targetHint.userId}: $error');
+
+        // Token is dead — remove stale account from the list
+        await _storage.removeKnownAccount(targetHint.userId);
+
+        _emit(AuthState.error(
+          'Session for ${targetHint.displayName} has expired. '
+          'Please log in to that account again.',
+        ));
+        _eventBus.emit(AuthFailure(
+          message: 'Session for ${targetHint.displayName} has expired.',
+        ));
+      },
+      success: (data) async {
+        final accessToken  = data['accessToken']  as String;
+        final newRefreshToken = data['refreshToken'] as String?;
+        final expiresIn    = data['expiresIn']    as int? ?? 900;
+
+        await _storage.saveAccessToken(accessToken, expiresIn: expiresIn);
+        await _storage.saveUserId(targetHint.userId);
+        await _storage.saveUserEmail(targetHint.email);
+        await _storage.saveEmailVerified(true);
+        await _storage.saveOnboardingCompleted(true);
+
+        // Update lastUsedAt and refresh token if rotated
+        final updatedHint = newRefreshToken != null && newRefreshToken != targetHint.refreshToken
+            ? targetHint.copyWith(refreshToken: newRefreshToken)
+            : targetHint;
+        await _storage.upsertKnownAccount(updatedHint);
+
+        _log?.info('[AuthCubit] switchAccount — success for ${targetHint.displayName}');
+        _emit(const AuthState.authenticated());
+        _eventBus.emit(AuthSuccess(accessToken: accessToken, fromCrossAppSso: false));
+      },
+    );
+  }
+
   // ══════════════════════════════════════════════════════════════
   // SESSION EXPIRY (from interceptor)
   // ══════════════════════════════════════════════════════════════
@@ -867,12 +933,10 @@ class AuthCubit extends Cubit<AuthState> {
 
     await _storage.clearLocalSession();
 
-    _emit(
-      AuthState.sessionExpiredForAccount(
-        userId: userId,
-        displayName: displayName,
-      ),
-    );
+    _emit(AuthState.sessionExpiredForAccount(
+      userId: userId,
+      displayName: displayName,
+    ));
     _eventBus.emit(AuthExpired(userId: userId, displayName: displayName));
   }
 

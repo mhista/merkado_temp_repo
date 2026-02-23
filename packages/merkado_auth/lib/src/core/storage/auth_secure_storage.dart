@@ -78,7 +78,7 @@ class AuthSecureStorageService {
               accessibility: KeychainAccessibility.first_unlock,
             ),
       androidOptions: AndroidOptions(
-        encryptedSharedPreferences: true,
+        // encryptedSharedPreferences: true,
         sharedPreferencesName: enableSharedKeychain
             ? 'grascope_shared_secure'    // same name across ALL Grascope apps
             : 'grascope_shared_local',
@@ -454,6 +454,7 @@ class AuthSecureStorageService {
   /// and offer "Continue as [name]" without the user re-entering credentials.
   Future<void> clearLocalSession() async {
     _log?.info('[AuthStorage] Clearing local session');
+    // _cachedUserId = null;
     await _local.clear();
   }
 

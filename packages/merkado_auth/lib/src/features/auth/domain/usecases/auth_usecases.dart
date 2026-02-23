@@ -76,12 +76,14 @@ class CompleteOnboardingUseCase {
     required String firstName,
     required String lastName,
     required String country,
+    required String phone,
     String? avatarUrl,
   }) async {
     return await _repository.completeOnboarding(
       firstName: firstName,
       lastName: lastName,
       country: country,
+      phone: phone,
       avatarUrl: avatarUrl,
     );
   }

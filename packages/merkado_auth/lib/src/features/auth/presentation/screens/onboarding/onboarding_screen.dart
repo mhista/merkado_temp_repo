@@ -3,31 +3,29 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_auth/src/features/auth/presentation/cubit/auth_cubit.dart';
 
-
 /// OnboardingScreen
 /// ================
 /// Shown after successful email OTP verification, before the user is
 /// considered fully authenticated.
 ///
-/// Collects: firstName, lastName, country, and an optional avatar URL.
+/// Collects: firstName, lastName, phone, country, and an optional avatar URL.
 /// On submit, calls [AuthCubit.completeOnboarding] → POST /onboarding/complete.
-/// On success, cubit emits [AuthState.authenticated] and the [AuthShell] pops.
+/// On success, cubit emits [AuthState.authenticated] and [AuthShell] pops.
 ///
 /// MULTI-STEP FORM:
-///   Step 1 — Name (firstName + lastName)
-///   Step 2 — Country
-///   Step 3 — Avatar (optional, can skip)
+///   Step 1 — Name        (firstName + lastName)
+///   Step 2 — Contact     (phone + country)
+///   Step 3 — Avatar      (optional, can skip)
 ///
 /// TERMINATED STATE RESUMPTION:
 /// If the app is killed mid-onboarding, [AuthCubit._checkStartupSession]
 /// detects [isEmailVerified=true] + [isOnboardingCompleted=false] and
-/// navigates back here automatically. No data is pre-filled since the
-/// backend hasn't received it yet — the user simply fills it in again.
+/// navigates back here automatically within the 30-minute window.
 ///
 /// CUSTOM UI:
 /// Replace entirely via [CustomAuthScreens.onboardingScreenBuilder].
-/// The cubit is passed to your screen so you call [cubit.completeOnboarding]
-/// from your own UI.
+/// Call [cubit.completeOnboarding()] from your own screen — the shell handles
+/// navigation on success.
 class OnboardingScreen extends StatefulWidget {
   final MerkadoAuthConfig config;
 
@@ -41,30 +39,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _countryController = TextEditingController();
 
   /// Avatar URL — set after image pick + upload. Null means skipped.
-  /// Integrate your image_picker + upload flow here, set [_avatarUrl]
-  /// with the returned URL from your media service.
   String? _avatarUrl;
 
-  /// Current active step index (0 = name, 1 = country, 2 = avatar).
+  /// Current active step index (0 = name, 1 = contact, 2 = avatar).
   int _currentStep = 0;
 
   @override
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
+    _phoneController.dispose();
     _countryController.dispose();
     super.dispose();
   }
 
-  /// Submits the completed onboarding form.
-  /// Called from the final step or the "Skip" button on the avatar step.
   void _submit(AuthCubit cubit) {
     cubit.completeOnboarding(
       firstName: _firstNameController.text.trim(),
       lastName: _lastNameController.text.trim(),
+      phone: _phoneController.text.trim(),
       country: _countryController.text.trim(),
       avatarUrl: _avatarUrl,
     );
@@ -79,13 +76,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          // Show error inline — stay on screen for the user to retry
           state.whenOrNull(
             error: (message) => ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: Colors.red,
-              ),
+              SnackBar(content: Text(message), backgroundColor: Colors.red),
             ),
           );
         },
@@ -101,7 +94,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ── Header (always visible) ───────────────────────────
+                  // ── Header ────────────────────────────────────────────
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 32, 24, 0),
                     child: Column(
@@ -114,33 +107,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               height: config.logoHeight,
                             ),
                           ),
-
                         const SizedBox(height: 32),
-
                         Text(
                           'Set up your profile',
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-
                         const SizedBox(height: 6),
-
                         Text(
                           'You\'ll appear this way across ${config.appName} '
                           'and the Grascope ecosystem.',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color:
+                                theme.colorScheme.onSurface.withOpacity(0.6),
                           ),
                         ),
-
                         const SizedBox(height: 16),
-
-                        // Step progress bar
                         _StepProgressBar(
                           currentStep: _currentStep,
                           totalSteps: 3,
-                          color: config.primaryColor ?? theme.colorScheme.primary,
+                          color:
+                              config.primaryColor ?? theme.colorScheme.primary,
                         ),
                       ],
                     ),
@@ -165,7 +153,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  /// Renders the current step widget.
   Widget _buildStep(BuildContext context, AuthCubit cubit, bool isLoading) {
     switch (_currentStep) {
       case 0:
@@ -175,7 +162,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           lastNameController: _lastNameController,
           primaryColor: widget.config.primaryColor,
           onNext: () {
-            // Validate only the name fields before advancing
             if (_firstNameController.text.trim().length >= 2 &&
                 _lastNameController.text.trim().length >= 2) {
               setState(() => _currentStep = 1);
@@ -186,13 +172,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         );
 
       case 1:
-        return _CountryStep(
-          key: const ValueKey('country'),
+        return _ContactStep(
+          key: const ValueKey('contact'),
+          phoneController: _phoneController,
           countryController: _countryController,
           primaryColor: widget.config.primaryColor,
           onBack: () => setState(() => _currentStep = 0),
           onNext: () {
-            if (_countryController.text.trim().isNotEmpty) {
+            final phoneOk = _phoneController.text.trim().length >= 7;
+            final countryOk = _countryController.text.trim().isNotEmpty;
+            if (phoneOk && countryOk) {
               setState(() => _currentStep = 2);
             } else {
               _formKey.currentState?.validate();
@@ -245,10 +234,7 @@ class _NameStep extends StatelessWidget {
               .titleLarge
               ?.copyWith(fontWeight: FontWeight.w600),
         ),
-
         const SizedBox(height: 24),
-
-        // First name
         TextFormField(
           controller: firstNameController,
           textInputAction: TextInputAction.next,
@@ -264,10 +250,7 @@ class _NameStep extends StatelessWidget {
             return null;
           },
         ),
-
         const SizedBox(height: 16),
-
-        // Last name
         TextFormField(
           controller: lastNameController,
           textInputAction: TextInputAction.done,
@@ -283,9 +266,7 @@ class _NameStep extends StatelessWidget {
             return null;
           },
         ),
-
         const SizedBox(height: 32),
-
         _PrimaryButton(
           label: 'Continue',
           primaryColor: primaryColor,
@@ -296,16 +277,18 @@ class _NameStep extends StatelessWidget {
   }
 }
 
-// ── Step 2: Country ───────────────────────────────────────────────────────────
+// ── Step 2: Contact (Phone + Country) ─────────────────────────────────────────
 
-class _CountryStep extends StatelessWidget {
+class _ContactStep extends StatelessWidget {
+  final TextEditingController phoneController;
   final TextEditingController countryController;
   final Color? primaryColor;
   final VoidCallback onBack;
   final VoidCallback onNext;
 
-  const _CountryStep({
+  const _ContactStep({
     super.key,
+    required this.phoneController,
     required this.countryController,
     required this.primaryColor,
     required this.onBack,
@@ -318,28 +301,45 @@ class _CountryStep extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Where are you based?',
+          'Your contact details',
           style: Theme.of(context)
               .textTheme
               .titleLarge
               ?.copyWith(fontWeight: FontWeight.w600),
         ),
-
         const SizedBox(height: 6),
-
         Text(
           'Helps us show relevant vendors and services near you.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
         ),
-
         const SizedBox(height: 24),
 
-        // Country field.
-        // TIP: Replace with a country_picker package for production —
-        // e.g. country_picker: ^2.0.0. Call showCountryPicker() on tap
-        // and set the controller text from the selected Country object.
+        // Phone number
+        // TIP: Replace with intl_phone_number_input for a country-code picker.
+        // On change: phoneController.text = formattedE164Number
+        TextFormField(
+          controller: phoneController,
+          keyboardType: TextInputType.phone,
+          textInputAction: TextInputAction.next,
+          decoration: const InputDecoration(
+            labelText: 'Phone number',
+            border: OutlineInputBorder(),
+            prefixIcon: Icon(Icons.phone_outlined),
+            hintText: 'e.g. +234 801 234 5678',
+          ),
+          validator: (v) {
+            if (v == null || v.trim().isEmpty) return 'Phone number is required';
+            if (v.trim().length < 7) return 'Enter a valid phone number';
+            return null;
+          },
+        ),
+        const SizedBox(height: 16),
+
+        // Country
+        // TIP: Replace with country_picker package for production.
+        // showCountryPicker() on tap, set countryController.text = country.name
         TextFormField(
           controller: countryController,
           textInputAction: TextInputAction.done,
@@ -355,7 +355,6 @@ class _CountryStep extends StatelessWidget {
             return null;
           },
         ),
-
         const SizedBox(height: 32),
 
         Row(
@@ -416,29 +415,24 @@ class _AvatarStep extends StatelessWidget {
               .titleLarge
               ?.copyWith(fontWeight: FontWeight.w600),
         ),
-
         const SizedBox(height: 6),
-
         Text(
           'Optional — you can always update this later.',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
         ),
-
         const SizedBox(height: 40),
 
         // Avatar picker
         // TIP: On tap, use image_picker to pick from gallery or camera.
-        // Upload the image to your media service and call onAvatarChanged(url)
-        // with the returned CDN URL.
+        // Upload to your media service, call onAvatarChanged(cdnUrl) with result.
         Center(
           child: GestureDetector(
             onTap: isLoading
                 ? null
                 : () {
-                    // TODO: integrate image_picker here
-                    // Example:
+                    // TODO: integrate image_picker + upload here
                     // final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
                     // if (picked != null) {
                     //   final url = await uploadToMediaService(picked);
@@ -453,11 +447,8 @@ class _AvatarStep extends StatelessWidget {
                   backgroundImage:
                       avatarUrl != null ? NetworkImage(avatarUrl!) : null,
                   child: avatarUrl == null
-                      ? Icon(
-                          Icons.person_outline,
-                          size: 52,
-                          color: Colors.grey.shade400,
-                        )
+                      ? Icon(Icons.person_outline,
+                          size: 52, color: Colors.grey.shade400)
                       : null,
                 ),
                 Positioned(
@@ -466,18 +457,14 @@ class _AvatarStep extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 20,
                     backgroundColor: color,
-                    child: const Icon(
-                      Icons.camera_alt_outlined,
-                      size: 18,
-                      color: Colors.white,
-                    ),
+                    child: const Icon(Icons.camera_alt_outlined,
+                        size: 18, color: Colors.white),
                   ),
                 ),
               ],
             ),
           ),
         ),
-
         const SizedBox(height: 48),
 
         Row(
@@ -500,10 +487,7 @@ class _AvatarStep extends StatelessWidget {
             ),
           ],
         ),
-
         const SizedBox(height: 12),
-
-        // Skip avatar — submits without an avatar URL
         Center(
           child: TextButton(
             onPressed: isLoading ? null : onSubmit,
@@ -515,9 +499,8 @@ class _AvatarStep extends StatelessWidget {
   }
 }
 
-// ── Shared reusable widgets ───────────────────────────────────────────────────
+// ── Shared widgets ────────────────────────────────────────────────────────────
 
-/// Three-segment progress bar showing current onboarding step.
 class _StepProgressBar extends StatelessWidget {
   final int currentStep;
   final int totalSteps;
@@ -533,13 +516,12 @@ class _StepProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: List.generate(totalSteps, (index) {
-        final isActive = index <= currentStep;
         return Expanded(
           child: Container(
             margin: EdgeInsets.only(right: index < totalSteps - 1 ? 6 : 0),
             height: 4,
             decoration: BoxDecoration(
-              color: isActive ? color : Colors.grey.shade300,
+              color: index <= currentStep ? color : Colors.grey.shade300,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -549,7 +531,6 @@ class _StepProgressBar extends StatelessWidget {
   }
 }
 
-/// Reusable primary action button used across all onboarding steps.
 class _PrimaryButton extends StatelessWidget {
   final String label;
   final Color? primaryColor;
@@ -580,9 +561,7 @@ class _PrimaryButton extends StatelessWidget {
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
-                ),
+                    strokeWidth: 2, color: Colors.white),
               )
             : Text(
                 label,

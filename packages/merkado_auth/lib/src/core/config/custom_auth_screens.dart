@@ -21,9 +21,10 @@ import '../../features/auth/presentation/cubit/auth_cubit.dart';
 /// EXAMPLE — replace all screens:
 /// ```dart
 /// CustomAuthScreens(
-///   loginScreenBuilder: (context, cubit) => MyLoginScreen(cubit: cubit),
-///   signupScreenBuilder: (context, cubit) => MySignupScreen(cubit: cubit),
-///   otpScreenBuilder: (context, cubit, email) => MyOtpScreen(cubit: cubit, email: email),
+///   loginScreenBuilder:      (context, cubit) => MyLoginScreen(cubit: cubit),
+///   signupScreenBuilder:     (context, cubit) => MySignupScreen(cubit: cubit),
+///   otpScreenBuilder:        (context, cubit, email) => MyOtpScreen(cubit: cubit, email: email),
+///   onboardingScreenBuilder: (context, cubit) => MyOnboardingScreen(cubit: cubit),
 /// )
 /// ```
 class CustomAuthScreens {
@@ -41,6 +42,17 @@ class CustomAuthScreens {
   /// Receives [cubit] and the [email] the OTP was sent to.
   final Widget Function(BuildContext context, AuthCubit cubit, String email)?
       otpScreenBuilder;
+
+  /// Custom onboarding screen.
+  /// Shown after OTP verification when onboarding is not yet complete.
+  /// Receives [cubit] — call [cubit.completeOnboarding()] to finish setup.
+  ///
+  /// CONTRACT: This screen is rendered inside [AuthShell] like all other
+  /// screens. When [cubit.completeOnboarding()] succeeds, the cubit emits
+  /// [AuthState.authenticated] and [AuthShell] pops itself automatically.
+  /// You do NOT need to navigate manually — just call the cubit method.
+  final Widget Function(BuildContext context, AuthCubit cubit)?
+      onboardingScreenBuilder;
 
   /// Custom forgot password screen.
   final Widget Function(BuildContext context, AuthCubit cubit)?
@@ -67,6 +79,7 @@ class CustomAuthScreens {
     this.loginScreenBuilder,
     this.signupScreenBuilder,
     this.otpScreenBuilder,
+    this.onboardingScreenBuilder,
     this.forgotPasswordScreenBuilder,
     this.resetPasswordScreenBuilder,
     this.twoFactorScreenBuilder,

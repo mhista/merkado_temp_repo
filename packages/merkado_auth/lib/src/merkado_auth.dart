@@ -2,8 +2,7 @@ import 'package:common_utils2/common_utils2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:merkado_auth/merkado_auth.dart';
-import 'package:merkado_auth/src/core/interceptors/merkado_auth_interceptor.dart';
-import 'features/auth/data/auth_repo_impl/auth_repository_implementation.dart';
+import 'package:merkado_auth/src/features/auth/data/auth_repo_impl/auth_repository_implementation.dart';
 import 'features/auth/data/datasource/auth_remote_datasource.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/domain/usecases/auth_usecases.dart';
@@ -49,11 +48,7 @@ class MerkadoAuth {
     await _instance!._cubit.init(config);
     _log?.info('[MerkadoAuth] Initialization complete');
 
-    if (!HttpClient.isInitialized) {
-      HttpClient.init(baseUrl: 'https://auth-api.merkado.site');
-    }
 
-    HttpClient.instance.addInterceptor(MerkadoAuthInterceptor(logger: logger));
   }
 
   Future<void> _setupDependencies() async {
@@ -132,6 +127,22 @@ class MerkadoAuth {
   MerkadoAuthConfig get config => _config;
   AuthCubit get cubit => _cubit;
 
+  /// Returns all known accounts stored on this device for this app.
+  /// Sorted by most recently used first.
+  /// Use this to build an in-app account switcher UI.
+  ///
+  /// EXAMPLE:
+  /// ```dart
+  /// final accounts = await MerkadoAuth.instance.getKnownAccounts();
+  /// // accounts is List<GrascopeSessionHint>
+  /// // Show a picker, then call:
+  /// MerkadoAuth.instance.cubit.switchAccount(selectedAccount);
+  /// ```
+  Future<List<GrascopeSessionHint>> getKnownAccounts() {
+    return AuthSecureStorageService.instance.getKnownAccounts();
+  }
+
+  /// Pushes the auth shell — for login / signup from scratch.
   Future<void> pushAuth(BuildContext context) async {
     _log?.info('[MerkadoAuth] Pushing auth shell');
     await Navigator.of(context).push(
@@ -142,6 +153,28 @@ class MerkadoAuth {
     );
   }
 
+  /// Pushes a standalone account switcher sheet showing all known accounts
+  /// on this device. The user can switch to any account or add a new one.
+  ///
+  /// Call this from a profile screen, a long-press on the avatar, etc.
+  ///
+  /// EXAMPLE:
+  /// ```dart
+  /// ElevatedButton(
+  ///   onPressed: () => MerkadoAuth.instance.pushAccountSwitcher(context),
+  ///   child: const Text('Switch account'),
+  /// )
+  /// ```
+  Future<void> pushAccountSwitcher(BuildContext context) async {
+    _log?.info('[MerkadoAuth] Pushing account switcher');
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _AccountSwitcherSheet(cubit: _cubit, config: _config),
+    );
+  }
+
   void dispose() {
     _log?.info('[MerkadoAuth] Disposing');
     _cubit.close();
@@ -149,5 +182,200 @@ class MerkadoAuth {
     ReLoginEventBus.instance.dispose();
     _instance = null;
     _log = null;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// _AccountSwitcherSheet
+//
+// Internal modal bottom sheet shown by pushAccountSwitcher().
+// Lists all known accounts. User can switch or tap "Add account" to trigger
+// a fresh login. The consuming app never imports this directly.
+// ════════════════════════════════════════════════════════════════════════════
+class _AccountSwitcherSheet extends StatefulWidget {
+  final AuthCubit cubit;
+  final MerkadoAuthConfig config;
+
+  const _AccountSwitcherSheet({required this.cubit, required this.config});
+
+  @override
+  State<_AccountSwitcherSheet> createState() => _AccountSwitcherSheetState();
+}
+
+class _AccountSwitcherSheetState extends State<_AccountSwitcherSheet> {
+  late Future<List<GrascopeSessionHint>> _accountsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _accountsFuture = AuthSecureStorageService.instance.getKnownAccounts();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final color =
+        widget.config.primaryColor ?? Theme.of(context).colorScheme.primary;
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.45,
+      minChildSize: 0.3,
+      maxChildSize: 0.85,
+      expand: false,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              // Handle bar
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+
+              // Title
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                child: Row(
+                  children: [
+                    Text(
+                      'Switch account',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Divider(height: 1),
+
+              // Account list
+              Expanded(
+                child: FutureBuilder<List<GrascopeSessionHint>>(
+                  future: _accountsFuture,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    final accounts = snapshot.data!;
+
+                    return ListView(
+                      controller: scrollController,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      children: [
+                        // Known accounts
+                        ...accounts.map(
+                          (hint) => _AccountTile(
+                            hint: hint,
+                            isActive: false, // TODO: detect active user by comparing hint.userId to current session's userId
+                                // hint.userId ==
+                                // AuthSecureStorageService.instance.cachedUserId,
+                            primaryColor: color,
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              widget.cubit.switchAccount(hint);
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 24),
+
+                        // Add account — triggers fresh login
+                        ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: color.withOpacity(0.12),
+                            child: Icon(Icons.add, color: color),
+                          ),
+                          title: const Text('Add account'),
+                          subtitle: const Text(
+                            'Sign in with a different email',
+                          ),
+                          onTap: () async {
+                            Navigator.of(context).pop();
+                            // Push auth shell in login-only mode
+                            await Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => AuthShell(
+                                  config: widget.config,
+                                  cubit: widget.cubit,
+                                ),
+                                fullscreenDialog: true,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _AccountTile extends StatelessWidget {
+  final GrascopeSessionHint hint;
+  final bool isActive;
+  final Color primaryColor;
+  final VoidCallback onTap;
+
+  const _AccountTile({
+    required this.hint,
+    required this.isActive,
+    required this.primaryColor,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: isActive ? null : onTap,
+      leading: CircleAvatar(
+        backgroundImage: hint.avatarUrl.isNotEmpty
+            ? NetworkImage(hint.avatarUrl)
+            : null,
+        backgroundColor: primaryColor.withValues(alpha: .15),
+        child: hint.avatarUrl.isEmpty
+            ? Text(
+                hint.displayName.isNotEmpty
+                    ? hint.displayName[0].toUpperCase()
+                    : '?',
+                style: TextStyle(
+                  color: primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            : null,
+      ),
+      title: Text(
+        hint.displayName,
+        style: TextStyle(
+          fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      subtitle: Text(
+        hint.email,
+        style: Theme.of(context).textTheme.bodySmall,
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: isActive
+          ? Icon(Icons.check_circle, color: primaryColor, size: 20)
+          : null,
+    );
   }
 }

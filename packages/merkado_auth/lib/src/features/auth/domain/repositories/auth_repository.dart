@@ -1,4 +1,3 @@
-import '../../../../core/models/auth_result.dart';
 
 /// AuthRepository
 /// ==============
@@ -50,6 +49,7 @@ abstract interface class AuthRepository {
     required String firstName,
     required String lastName,
     required String country,
+    required String phone,
     String? avatarUrl,
   });
 
