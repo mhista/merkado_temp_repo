@@ -6,7 +6,7 @@ environment:
   sdk: "^3.10.0"
 
 workspace:
-  - packages/merkado_design_system
+  - packages/merkado_ds
   - packages/merkado_auth
 
 dev_dependencies:

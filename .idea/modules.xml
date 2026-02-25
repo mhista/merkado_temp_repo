@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
 <module fileurl="file://$PROJECT_DIR$/packages/merkado_auth/melos_merkado_auth.iml" filepath="$PROJECT_DIR$/packages/merkado_auth/melos_merkado_auth.iml"/>
-<module fileurl="file://$PROJECT_DIR$/packages/merkado_design_system/melos_merkado_design_system.iml" filepath="$PROJECT_DIR$/packages/merkado_design_system/melos_merkado_design_system.iml"/>
+<module fileurl="file://$PROJECT_DIR$/packages/merkado_ds/melos_merkado_ds.iml" filepath="$PROJECT_DIR$/packages/merkado_ds/melos_merkado_ds.iml"/>
 <module fileurl="file://$PROJECT_DIR$/melos_merkado_monorepo.iml" filepath="$PROJECT_DIR$/melos_merkado_monorepo.iml"/>
     </modules>
   </component>

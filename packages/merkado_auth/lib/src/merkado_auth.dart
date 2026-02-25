@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_auth/src/features/auth/data/auth_repo_impl/auth_repository_implementation.dart';
+import 'core/interceptors/merkado_auth_interceptor.dart';
 import 'features/auth/data/datasource/auth_remote_datasource.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/domain/usecases/auth_usecases.dart';
@@ -48,7 +49,11 @@ class MerkadoAuth {
     await _instance!._cubit.init(config);
     _log?.info('[MerkadoAuth] Initialization complete');
 
+    if (!HttpClient.isInitialized) {
+      HttpClient.init(baseUrl: 'https://auth-api.merkado.site');
+    }
 
+    HttpClient.instance.addInterceptor(MerkadoAuthInterceptor(logger: logger));
   }
 
   Future<void> _setupDependencies() async {
@@ -278,9 +283,10 @@ class _AccountSwitcherSheetState extends State<_AccountSwitcherSheet> {
                         ...accounts.map(
                           (hint) => _AccountTile(
                             hint: hint,
-                            isActive: false, // TODO: detect active user by comparing hint.userId to current session's userId
-                                // hint.userId ==
-                                // AuthSecureStorageService.instance.cachedUserId,
+                            isActive:
+                                false, // TODO: detect active user by comparing hint.userId to current session's userId
+                            // hint.userId ==
+                            // AuthSecureStorageService.instance.cachedUserId,
                             primaryColor: color,
                             onTap: () async {
                               Navigator.of(context).pop();

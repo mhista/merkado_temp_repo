@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:common_utils2/common_utils2.dart';
 import 'package:merkado_auth/merkado_auth.dart';
-import 'auth_storage_keys.dart';
 
 /// AuthSecureStorageService
 /// ========================
@@ -50,6 +49,15 @@ class AuthSecureStorageService {
   /// The local-scope storage instance (per-app private data).
   late final SecureStorageService _local;
 
+  /// In-memory cache of the currently active user ID.
+  /// Updated on every [saveUserId] call, cleared on [clearLocalSession].
+  /// Used synchronously by the account switcher UI to highlight the
+  /// active account without needing an async storage read.
+  String? _cachedUserId;
+
+  /// Synchronously returns the last known active user ID.
+  String? get cachedUserId => _cachedUserId;
+
   /// Initialize with two scoped [SecureStorageService] instances.
   ///
   /// [enableSharedKeychain] — set true once all Grascope apps share the same
@@ -78,7 +86,7 @@ class AuthSecureStorageService {
               accessibility: KeychainAccessibility.first_unlock,
             ),
       androidOptions: AndroidOptions(
-        // encryptedSharedPreferences: true,
+        encryptedSharedPreferences: true,
         sharedPreferencesName: enableSharedKeychain
             ? 'grascope_shared_secure'    // same name across ALL Grascope apps
             : 'grascope_shared_local',
@@ -211,6 +219,7 @@ class AuthSecureStorageService {
   Future<String?> getSessionId() => _local.getString(AuthStorageKeys.sessionId);
 
   Future<void> saveUserId(String id) async {
+    _cachedUserId = id;
     _log?.debug('[AuthStorage] saveUserId: $id');
     await _local.setString(AuthStorageKeys.activeUserId, id);
     await _shared.setString(AuthStorageKeys.activeUserId, id);
@@ -454,7 +463,7 @@ class AuthSecureStorageService {
   /// and offer "Continue as [name]" without the user re-entering credentials.
   Future<void> clearLocalSession() async {
     _log?.info('[AuthStorage] Clearing local session');
-    // _cachedUserId = null;
+    _cachedUserId = null;
     await _local.clear();
   }
 

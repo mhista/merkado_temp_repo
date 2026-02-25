@@ -1,0 +1,4207 @@
+{
+  "version": "1.0.4",
+  "metadata": {},
+  "collections": [
+    {
+      "name": "Driply/theme/light",
+      "modes": [
+        {
+          "name": "Driply",
+          "variables": [
+            {
+              "name": "color/light/bg/Primary color",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E11D48"
+            },
+            {
+              "name": "color/light/bg/Support color- blue",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2563EB"
+            },
+            {
+              "name": "color/light/bg/Commerce success",
+              "type": "color",
+              "isAlias": false,
+              "value": "#10B981"
+            },
+            {
+              "name": "color/light/bg/Energy accent",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F59E0B"
+            },
+            {
+              "name": "color/light/bg/primary bg",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "color/light/bg/Text primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0F172A"
+            },
+            {
+              "name": "color/light/bg/Secondary text",
+              "type": "color",
+              "isAlias": false,
+              "value": "#64748B"
+            },
+            {
+              "name": "Primary color",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E11D48"
+            },
+            {
+              "name": "Support color- blue",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2563EB"
+            },
+            {
+              "name": "Commerce success",
+              "type": "color",
+              "isAlias": false,
+              "value": "#10B981"
+            },
+            {
+              "name": "Energy accent",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F59E0B"
+            },
+            {
+              "name": "primary bg",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "Driply",
+              "type": "string",
+              "isAlias": false,
+              "value": "Driply"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Driply/theme/dark",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "bg-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            },
+            {
+              "name": "bg-surface",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1A1A1A"
+            },
+            {
+              "name": "text-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "text/bg-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            },
+            {
+              "name": "text/bg-surface",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1A1A1A"
+            },
+            {
+              "name": "text/Text-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "text/Text-secondary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#B3B3B3"
+            },
+            {
+              "name": "text/Text-inverse",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            },
+            {
+              "name": "text/Border",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            },
+            {
+              "name": "border-default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#333333"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Mycut/theme/light",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "My cut Primary color",
+              "type": "color",
+              "isAlias": false,
+              "value": "#103128"
+            },
+            {
+              "name": "My cut Primay-BG",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F5FFFF"
+            },
+            {
+              "name": "My cut logo blue",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0504AA"
+            },
+            {
+              "name": "My cutInactive Grey",
+              "type": "color",
+              "isAlias": false,
+              "value": "#737373"
+            },
+            {
+              "name": "My cutInactive Grey 2",
+              "type": "color",
+              "isAlias": false,
+              "value": "#737373"
+            },
+            {
+              "name": "My cut Primary text",
+              "type": "color",
+              "isAlias": false,
+              "value": "#000000"
+            },
+            {
+              "name": "My cut container color",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F8EDD9"
+            },
+            {
+              "name": "My cut White accent",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "My cut Pending Red",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D10202"
+            },
+            {
+              "name": "My cut Pending  yellow",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D18902"
+            },
+            {
+              "name": "My cut Negotiating Purple",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D1028C"
+            },
+            {
+              "name": "My cut accent green",
+              "type": "color",
+              "isAlias": false,
+              "value": "#02D121"
+            },
+            {
+              "name": "My cut Completed blue",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0224D1"
+            },
+            {
+              "name": "My cut Blue accent",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E9E9F1"
+            },
+            {
+              "name": "My cut Draft blue",
+              "type": "color",
+              "isAlias": false,
+              "value": "#02C3D1"
+            },
+            {
+              "name": "My cut white",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F8EDD9"
+            },
+            {
+              "name": "My cut green accent",
+              "type": "color",
+              "isAlias": false,
+              "value": "#C8D9D4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Driply/typography/mobile",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Display text",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Bold"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "40"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "32"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.5"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/H1",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "32"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "24"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.25"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font family/mobile/H2",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font family/mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font family/mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "28"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font family/mobile/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "20"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font family/mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Font Family",
+              "type": "string",
+              "isAlias": false,
+              "value": "Outfit"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Font family/Mobile/H3",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Font family/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "26"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Font family/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Font family/Mobile/size",
+              "type": "string",
+              "isAlias": false,
+              "value": "18"
+            },
+            {
+              "name": "Font family/Mobile/Body L",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Font family/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "26"
+            },
+            {
+              "name": "Font family/Mobile/Letters spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Font family/Mobile/Size",
+              "type": "string",
+              "isAlias": false,
+              "value": "18"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Body",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "26"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/size",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Body sm",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "20"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.25"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/size",
+              "type": "string",
+              "isAlias": false,
+              "value": "14"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/button",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semi bold"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "24px"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.25"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/size",
+              "type": "string",
+              "isAlias": false,
+              "value": "14"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Secondary button",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plius Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "24"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.25"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Size",
+              "type": "string",
+              "isAlias": false,
+              "value": "14"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/label",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "20"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.25"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/size",
+              "type": "string",
+              "isAlias": false,
+              "value": "14"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Nav",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "medium"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.4"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Size",
+              "type": "string",
+              "isAlias": false,
+              "value": "12"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Meta",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Line Height",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.4"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/captions",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.4"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/overline",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font family/mobile/overline",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font family/mobile/font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "medium"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font family/mobile/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font family/mobile/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.8"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font family/mobile/Size",
+              "type": "string",
+              "isAlias": false,
+              "value": "10"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Driply/typography/desktop",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "Fonts/Display large",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Bold"
+            },
+            {
+              "name": "Fonts/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "40"
+            },
+            {
+              "name": "Fonts/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "48"
+            },
+            {
+              "name": "Fonts/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.75"
+            },
+            {
+              "name": "Fonts/Fonts/H1",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "Fonts/Fonts/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "32"
+            },
+            {
+              "name": "Fonts/Fonts/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "40"
+            },
+            {
+              "name": "Fonts/Fonts/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.5"
+            },
+            {
+              "name": "Fonts/Fonts/Font/H2",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "semibold"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "24"
+            },
+            {
+              "name": "Fonts/Fonts/Font/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "32"
+            },
+            {
+              "name": "Fonts/Fonts/Font/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.25"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/H3",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "20"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "28"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Heading 2",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "24"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "32"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.25"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/H3",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "20"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "28"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Body text",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Sans Jakarta"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "18"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "28"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Body Regular",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "24"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Body sm",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "14"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "20"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Button Primary",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "24"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/label",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "medium"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "14"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "20"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.25"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Nav",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "medium"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "13"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "18"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.3"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Font/Meta",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Font/weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Font/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Font/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.4"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Font/Font/overline",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Font/Font/weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "medium"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Font/Font/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Font/Font/leter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.8"
+            },
+            {
+              "name": "Fonts/Fonts/Font/Fonts/Font/Front/Font/Font/Font/Font/Font/Font/Font/Font/leter spacing 2",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Spacing",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "Spacing-xs",
+              "type": "number",
+              "isAlias": false,
+              "value": 4
+            },
+            {
+              "name": "Spacing-sm",
+              "type": "number",
+              "isAlias": false,
+              "value": 8
+            },
+            {
+              "name": "Spacing-md",
+              "type": "number",
+              "isAlias": false,
+              "value": 16
+            },
+            {
+              "name": "Spacing-lg",
+              "type": "number",
+              "isAlias": false,
+              "value": 24
+            },
+            {
+              "name": "Spacing-xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 32
+            },
+            {
+              "name": "Spacing-xxl",
+              "type": "number",
+              "isAlias": false,
+              "value": 40
+            },
+            {
+              "name": "Spacing-3xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 48
+            },
+            {
+              "name": "Spacing-5xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 64
+            },
+            {
+              "name": "Spacing-6xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 80
+            },
+            {
+              "name": "Spacing-7xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 96
+            },
+            {
+              "name": "Spacing-8xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 128
+            },
+            {
+              "name": "Spacing-9xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 160
+            },
+            {
+              "name": "Spacing-10x",
+              "type": "number",
+              "isAlias": false,
+              "value": 192
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Corner_radius",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "3xs",
+              "type": "number",
+              "isAlias": false,
+              "value": 2
+            },
+            {
+              "name": "2xs",
+              "type": "number",
+              "isAlias": false,
+              "value": 4
+            },
+            {
+              "name": "xs",
+              "type": "number",
+              "isAlias": false,
+              "value": 6
+            },
+            {
+              "name": "S",
+              "type": "number",
+              "isAlias": false,
+              "value": 8
+            },
+            {
+              "name": "M",
+              "type": "number",
+              "isAlias": false,
+              "value": 12
+            },
+            {
+              "name": "L",
+              "type": "number",
+              "isAlias": false,
+              "value": 16
+            },
+            {
+              "name": "Xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 20
+            },
+            {
+              "name": "2xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 24
+            },
+            {
+              "name": "3xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 32
+            },
+            {
+              "name": "4xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 40
+            },
+            {
+              "name": "5xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 48
+            },
+            {
+              "name": "6xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 56
+            },
+            {
+              "name": "Full",
+              "type": "number",
+              "isAlias": false,
+              "value": 999
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "core",
+      "modes": [
+        {
+          "name": "core",
+          "variables": [
+            {
+              "name": "dimension/scale",
+              "type": "number",
+              "isAlias": false,
+              "value": 2
+            },
+            {
+              "name": "dimension/xs",
+              "type": "number",
+              "isAlias": false,
+              "value": 4
+            },
+            {
+              "name": "dimension/sm",
+              "type": "number",
+              "isAlias": false,
+              "value": 8
+            },
+            {
+              "name": "dimension/md",
+              "type": "number",
+              "isAlias": false,
+              "value": 16
+            },
+            {
+              "name": "dimension/lg",
+              "type": "number",
+              "isAlias": false,
+              "value": 32
+            },
+            {
+              "name": "dimension/xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 64
+            },
+            {
+              "name": "spacing/xs",
+              "type": "number",
+              "isAlias": true,
+              "value": {
+                "collection": "core",
+                "name": "dimension/xs"
+              }
+            },
+            {
+              "name": "spacing/sm",
+              "type": "number",
+              "isAlias": true,
+              "value": {
+                "collection": "core",
+                "name": "dimension/sm"
+              }
+            },
+            {
+              "name": "spacing/md",
+              "type": "number",
+              "isAlias": true,
+              "value": {
+                "collection": "core",
+                "name": "dimension/md"
+              }
+            },
+            {
+              "name": "spacing/lg",
+              "type": "number",
+              "isAlias": true,
+              "value": {
+                "collection": "core",
+                "name": "dimension/lg"
+              }
+            },
+            {
+              "name": "spacing/xl",
+              "type": "number",
+              "isAlias": true,
+              "value": {
+                "collection": "core",
+                "name": "dimension/xl"
+              }
+            },
+            {
+              "name": "borderRadius/sm",
+              "type": "number",
+              "isAlias": false,
+              "value": 4
+            },
+            {
+              "name": "borderRadius/lg",
+              "type": "number",
+              "isAlias": false,
+              "value": 8
+            },
+            {
+              "name": "borderRadius/xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 16
+            },
+            {
+              "name": "colors/black",
+              "type": "color",
+              "isAlias": false,
+              "value": "#000000"
+            },
+            {
+              "name": "colors/white",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "colors/gray/100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F7FAFC"
+            },
+            {
+              "name": "colors/gray/200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#EDF2F7"
+            },
+            {
+              "name": "colors/gray/300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E2E8F0"
+            },
+            {
+              "name": "colors/gray/400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#CBD5E0"
+            },
+            {
+              "name": "colors/gray/500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#A0AEC0"
+            },
+            {
+              "name": "colors/gray/600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#718096"
+            },
+            {
+              "name": "colors/gray/700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#4A5568"
+            },
+            {
+              "name": "colors/gray/800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2D3748"
+            },
+            {
+              "name": "colors/gray/900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1A202C"
+            },
+            {
+              "name": "colors/red/100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFF5F5"
+            },
+            {
+              "name": "colors/red/200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FED7D7"
+            },
+            {
+              "name": "colors/red/300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FEB2B2"
+            },
+            {
+              "name": "colors/red/400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FC8181"
+            },
+            {
+              "name": "colors/red/500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F56565"
+            },
+            {
+              "name": "colors/red/600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E53E3E"
+            },
+            {
+              "name": "colors/red/700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#C53030"
+            },
+            {
+              "name": "colors/red/800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#9B2C2C"
+            },
+            {
+              "name": "colors/red/900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#742A2A"
+            },
+            {
+              "name": "colors/orange/100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFAF0"
+            },
+            {
+              "name": "colors/orange/200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FEEBC8"
+            },
+            {
+              "name": "colors/orange/300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FBD38D"
+            },
+            {
+              "name": "colors/orange/400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F6AD55"
+            },
+            {
+              "name": "colors/orange/500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#ED8936"
+            },
+            {
+              "name": "colors/orange/600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#DD6B20"
+            },
+            {
+              "name": "colors/orange/700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#C05621"
+            },
+            {
+              "name": "colors/orange/800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#9C4221"
+            },
+            {
+              "name": "colors/orange/900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#7B341E"
+            },
+            {
+              "name": "colors/yellow/100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFF0"
+            },
+            {
+              "name": "colors/yellow/200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FEFCBF"
+            },
+            {
+              "name": "colors/yellow/300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAF089"
+            },
+            {
+              "name": "colors/yellow/400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F6E05E"
+            },
+            {
+              "name": "colors/yellow/500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#ECC94B"
+            },
+            {
+              "name": "colors/yellow/600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D69E2E"
+            },
+            {
+              "name": "colors/yellow/700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#B7791F"
+            },
+            {
+              "name": "colors/yellow/800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#975A16"
+            },
+            {
+              "name": "colors/yellow/900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#744210"
+            },
+            {
+              "name": "colors/green/100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F0FFF4"
+            },
+            {
+              "name": "colors/green/200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#C6F6D5"
+            },
+            {
+              "name": "colors/green/300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#9AE6B4"
+            },
+            {
+              "name": "colors/green/400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#68D391"
+            },
+            {
+              "name": "colors/green/500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#48BB78"
+            },
+            {
+              "name": "colors/green/600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#38A169"
+            },
+            {
+              "name": "colors/green/700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2F855A"
+            },
+            {
+              "name": "colors/green/800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#276749"
+            },
+            {
+              "name": "colors/green/900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#22543D"
+            },
+            {
+              "name": "colors/teal/100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E6FFFA"
+            },
+            {
+              "name": "colors/teal/200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#B2F5EA"
+            },
+            {
+              "name": "colors/teal/300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#81E6D9"
+            },
+            {
+              "name": "colors/teal/400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#4FD1C5"
+            },
+            {
+              "name": "colors/teal/500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#38B2AC"
+            },
+            {
+              "name": "colors/teal/600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#319795"
+            },
+            {
+              "name": "colors/teal/700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2C7A7B"
+            },
+            {
+              "name": "colors/teal/800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#285E61"
+            },
+            {
+              "name": "colors/teal/900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#234E52"
+            },
+            {
+              "name": "colors/blue/100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#EBF8FF"
+            },
+            {
+              "name": "colors/blue/200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#BEE3F8"
+            },
+            {
+              "name": "colors/blue/300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#90CDF4"
+            },
+            {
+              "name": "colors/blue/400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#63B3ED"
+            },
+            {
+              "name": "colors/blue/500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#4299E1"
+            },
+            {
+              "name": "colors/blue/600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#3182CE"
+            },
+            {
+              "name": "colors/blue/700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2B6CB0"
+            },
+            {
+              "name": "colors/blue/800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2C5282"
+            },
+            {
+              "name": "colors/blue/900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2A4365"
+            },
+            {
+              "name": "colors/indigo/100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#EBF4FF"
+            },
+            {
+              "name": "colors/indigo/200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#C3DAFE"
+            },
+            {
+              "name": "colors/indigo/300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#A3BFFA"
+            },
+            {
+              "name": "colors/indigo/400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#7F9CF5"
+            },
+            {
+              "name": "colors/indigo/500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#667EEA"
+            },
+            {
+              "name": "colors/indigo/600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#5A67D8"
+            },
+            {
+              "name": "colors/indigo/700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#4C51BF"
+            },
+            {
+              "name": "colors/indigo/800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#434190"
+            },
+            {
+              "name": "colors/indigo/900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#3C366B"
+            },
+            {
+              "name": "colors/purple/100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FAF5FF"
+            },
+            {
+              "name": "colors/purple/200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E9D8FD"
+            },
+            {
+              "name": "colors/purple/300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D6BCFA"
+            },
+            {
+              "name": "colors/purple/400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#B794F4"
+            },
+            {
+              "name": "colors/purple/500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#9F7AEA"
+            },
+            {
+              "name": "colors/purple/600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#805AD5"
+            },
+            {
+              "name": "colors/purple/700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#6B46C1"
+            },
+            {
+              "name": "colors/purple/800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#553C9A"
+            },
+            {
+              "name": "colors/purple/900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#44337A"
+            },
+            {
+              "name": "colors/pink/100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFF5F7"
+            },
+            {
+              "name": "colors/pink/200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FED7E2"
+            },
+            {
+              "name": "colors/pink/300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FBB6CE"
+            },
+            {
+              "name": "colors/pink/400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F687B3"
+            },
+            {
+              "name": "colors/pink/500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#ED64A6"
+            },
+            {
+              "name": "colors/pink/600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D53F8C"
+            },
+            {
+              "name": "colors/pink/700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#B83280"
+            },
+            {
+              "name": "colors/pink/800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#97266D"
+            },
+            {
+              "name": "colors/pink/900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#702459"
+            },
+            {
+              "name": "opacity/low",
+              "type": "number",
+              "isAlias": false,
+              "value": 10
+            },
+            {
+              "name": "opacity/md",
+              "type": "number",
+              "isAlias": false,
+              "value": 50
+            },
+            {
+              "name": "opacity/high",
+              "type": "number",
+              "isAlias": false,
+              "value": 90
+            },
+            {
+              "name": "fontFamilies/heading",
+              "type": "string",
+              "isAlias": false,
+              "value": "Inter"
+            },
+            {
+              "name": "fontFamilies/body",
+              "type": "string",
+              "isAlias": false,
+              "value": "Roboto"
+            },
+            {
+              "name": "letterSpacing/default",
+              "type": "number",
+              "isAlias": false,
+              "value": 0
+            },
+            {
+              "name": "paragraphSpacing/h1",
+              "type": "number",
+              "isAlias": false,
+              "value": 32
+            },
+            {
+              "name": "paragraphSpacing/h2",
+              "type": "number",
+              "isAlias": false,
+              "value": 26
+            },
+            {
+              "name": "fontWeights/headingRegular",
+              "type": "string",
+              "isAlias": false,
+              "value": "Regular"
+            },
+            {
+              "name": "fontWeights/headingBold",
+              "type": "string",
+              "isAlias": false,
+              "value": "Bold"
+            },
+            {
+              "name": "fontWeights/bodyRegular",
+              "type": "string",
+              "isAlias": false,
+              "value": "Regular"
+            },
+            {
+              "name": "fontWeights/bodyBold",
+              "type": "string",
+              "isAlias": false,
+              "value": "Bold"
+            },
+            {
+              "name": "fontSizes/h1",
+              "type": "number",
+              "isAlias": false,
+              "value": 49
+            },
+            {
+              "name": "fontSizes/h2",
+              "type": "number",
+              "isAlias": false,
+              "value": 39
+            },
+            {
+              "name": "fontSizes/h3",
+              "type": "number",
+              "isAlias": false,
+              "value": 31
+            },
+            {
+              "name": "fontSizes/h4",
+              "type": "number",
+              "isAlias": false,
+              "value": 25
+            },
+            {
+              "name": "fontSizes/h5",
+              "type": "number",
+              "isAlias": false,
+              "value": 20
+            },
+            {
+              "name": "fontSizes/h6",
+              "type": "number",
+              "isAlias": true,
+              "value": {
+                "collection": "core",
+                "name": "fontSizes/body"
+              }
+            },
+            {
+              "name": "fontSizes/body",
+              "type": "number",
+              "isAlias": false,
+              "value": 16
+            },
+            {
+              "name": "fontSizes/sm",
+              "type": "number",
+              "isAlias": false,
+              "value": 13.600000381469727
+            },
+            {
+              "name": "fontSizes/xs",
+              "type": "number",
+              "isAlias": false,
+              "value": 10.399999618530273
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Driply/Dark theme values/Mode 1",
+      "modes": [
+        {
+          "name": "Driply/Dark theme values/Mode 1",
+          "variables": [
+            {
+              "name": "bg-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            },
+            {
+              "name": "bg-surface",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1A1A1A"
+            },
+            {
+              "name": "text-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "text/bg-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            },
+            {
+              "name": "border-default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#333333"
+            },
+            {
+              "name": "text/bg-surface",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1A1A1A"
+            },
+            {
+              "name": "text/Text-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "text/Text-secondary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#B3B3B3"
+            },
+            {
+              "name": "text/Text-inverse",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            },
+            {
+              "name": "text/Border",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Driply Typography/mobile/Mode 1",
+      "modes": [
+        {
+          "name": "Driply Typography/mobile/Mode 1",
+          "variables": [
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Display text",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Bold"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "40"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "32"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.5"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/H1",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "32"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.25"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "24"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font family/mobile/H2",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font family/mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "Font Family",
+              "type": "string",
+              "isAlias": false,
+              "value": "Outfit"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font family/mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "28"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font family/mobile/Font size",
+              "type": "string",
+              "isAlias": false,
+              "value": "20"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Font family/mobile/Font family/mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Font family/Mobile/H3",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Font family/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "26"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Font family/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "New group/Font family/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Mobile/Body lg/Font family/Mobile/size",
+              "type": "string",
+              "isAlias": false,
+              "value": "18"
+            },
+            {
+              "name": "Font family/Mobile/Body L",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Font family/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "26"
+            },
+            {
+              "name": "Font family/Mobile/Letters spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Font family/Mobile/Size",
+              "type": "string",
+              "isAlias": false,
+              "value": "18"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Body",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "26"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/size",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Body sm",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "20"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.25"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/size",
+              "type": "string",
+              "isAlias": false,
+              "value": "14"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/button",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semi bold"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "24px"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.25"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/size",
+              "type": "string",
+              "isAlias": false,
+              "value": "14"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Secondary button",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plius Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "24"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "-0.25"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Size",
+              "type": "string",
+              "isAlias": false,
+              "value": "14"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/label",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Semibold"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "20"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.25"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/size",
+              "type": "string",
+              "isAlias": false,
+              "value": "14"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Nav",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "medium"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.4"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Size",
+              "type": "string",
+              "isAlias": false,
+              "value": "12"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Meta",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Line Height",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.4"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/captions",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "regular"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.4"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/overline",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font family/mobile/overline",
+              "type": "string",
+              "isAlias": false,
+              "value": "Plus Jakarta sans"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font family/mobile/font weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "medium"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font family/mobile/line height",
+              "type": "string",
+              "isAlias": false,
+              "value": "16"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font family/mobile/letter spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.8"
+            },
+            {
+              "name": "Font family/Mobile/Font family/Mobile/Font family/Mobile/Font faily/mobile/Font family/Mobile/Font family/Mobile/Font famiy/Mobile/Font family/Mobile/Font family/captions/Font family/mobile/Size",
+              "type": "string",
+              "isAlias": false,
+              "value": "10"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Driply Typography/Desktop/Mode 1",
+      "modes": [
+        {
+          "name": "Driply Typography/Desktop/Mode 1",
+          "variables": [
+            {
+              "name": "Font family/Desktop/Display large",
+              "type": "string",
+              "isAlias": false,
+              "value": "String value"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Collection",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "MYCUT/DESKTOP/Display Large",
+              "type": "string",
+              "isAlias": false,
+              "value": "Outfit "
+            },
+            {
+              "name": "MYCUT/DESKTOP/Font Weight",
+              "type": "string",
+              "isAlias": false,
+              "value": "Bold"
+            },
+            {
+              "name": "MYCUT/DESKTOP/Font Size",
+              "type": "string",
+              "isAlias": false,
+              "value": "40"
+            },
+            {
+              "name": "MYCUT/DESKTOP/Line Height",
+              "type": "string",
+              "isAlias": false,
+              "value": "48"
+            },
+            {
+              "name": "MYCUT/DESKTOP/Letter Spacing",
+              "type": "string",
+              "isAlias": false,
+              "value": "0.75"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Collection 2",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "String",
+              "type": "string",
+              "isAlias": false,
+              "value": "String value"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Variable collection",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "Primary white",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F5FFFF"
+            },
+            {
+              "name": "Primary black",
+              "type": "color",
+              "isAlias": false,
+              "value": "#000000"
+            },
+            {
+              "name": "Inactive Gray",
+              "type": "color",
+              "isAlias": false,
+              "value": "#737373"
+            },
+            {
+              "name": "Pending Red",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D10202"
+            },
+            {
+              "name": "Pending Yellow",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D18902"
+            },
+            {
+              "name": "MyCut green",
+              "type": "color",
+              "isAlias": false,
+              "value": "#103128"
+            },
+            {
+              "name": "MyCut White",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F8EDD9"
+            },
+            {
+              "name": "MyCut White alt",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFF9EE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Collection 3",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "New group/Color System",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Collection 4",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "My Cut/theme/dark/dark",
+              "type": "color",
+              "isAlias": false,
+              "value": "#000000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Mycut/theme/dark",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "bg-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            },
+            {
+              "name": "bg-surface",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1A1A1A"
+            },
+            {
+              "name": "text-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "border-default",
+              "type": "color",
+              "isAlias": false,
+              "value": "#333333"
+            },
+            {
+              "name": "Text/bg-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            },
+            {
+              "name": "Text/bg-surface",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1A1A1A"
+            },
+            {
+              "name": "Text/Text-primary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "Text/Text-secondary",
+              "type": "color",
+              "isAlias": false,
+              "value": "#B3B3B3"
+            },
+            {
+              "name": "Text/Text-inverse",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            },
+            {
+              "name": "Text/Border",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0E0E0E"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Typography",
+      "modes": [
+        {
+          "name": "Style",
+          "variables": [
+            {
+              "name": "Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Sidebar Section Label",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 11,
+                "fontFamily": "Inter",
+                "fontWeight": "Medium",
+                "lineHeight": 20,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Buttons & Inputs",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 16,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.800000011920929,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Secondary button",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 16,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.800000011920929,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "input text",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 16,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.800000011920929,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Helper text",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 12,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 16,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.800000011920929,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H1/Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 24,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 32,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H1/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 24,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 32,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H1/Regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 24,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 32,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H1/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 24,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 32,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Display large/Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 32,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Display large/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 32,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Display large/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 40,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Display large/Regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 40,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Display large/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 32,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H2/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PIXELS",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H2/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H2/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H2/Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H3/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 26,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PIXELS",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H3/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 26,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H3/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 26,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "H3/bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 26,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body large/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 26,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body large/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 26,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body large/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 26,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body large/bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 26,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body/Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body sm/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 20,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body sm/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 20,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body sm/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 20,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Body sm/Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 20,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Button L/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Label/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 20,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Nav/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 12,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 16,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.4000000059604645,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "meta/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 12,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 16,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.4000000059604645,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "captions/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 12,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 16,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.4000000059604645,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "overline/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 10,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 14,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.4000000059604645,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Disply large/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 40,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 48,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.75,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/metric large",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 28,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 36,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Sidebar item",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 18,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.30000001192092896,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Dashboard",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Inter",
+                "fontWeight": "Semi Bold",
+                "lineHeight": 16,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.4000000059604645,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Display/regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 40,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 48,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.75,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Display/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 40,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 48,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.75,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Display/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 40,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 48,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.75,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Display/Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 40,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 48,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.75,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Header/Regylar",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 40,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Header/Medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 40,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Header/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 40,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Header/Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 100,
+                "lineHeightUnit": "PERCENT",
+                "letterSpacing": -0.5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/H1/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 40,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Heading/Medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 24,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 32,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Heading/H2",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 24,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 32,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/H3/Reguar",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/H3/medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/H3/semibold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Body/Regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Body/Medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Body/Semi bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Body/Medium",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Body/Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Body/Regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Body/Regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Desktop/Bod/Regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Dashboard/Subsection",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Dashboard/card titles",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 18,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 26,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Dashboard/card body",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 14,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 22,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Dashboard/card label",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 12,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Medium",
+                "lineHeight": 18,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Dashboard/metric",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 28,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Dashboard/Display/page title",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 32,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Bold",
+                "lineHeight": 40,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Dashboard/User/dropdown text",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 11,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 16,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.800000011920929,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Dasboard/section title",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 24,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "SemiBold",
+                "lineHeight": 32,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": -0.25,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "Dahboard/input label",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 12,
+                "fontFamily": "Plus Jakarta Sans",
+                "fontWeight": "Regular",
+                "lineHeight": 16,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.800000011920929,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "typography/Body",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 16,
+                "fontFamily": "Roboto",
+                "fontWeight": "Regular",
+                "lineHeight": 110.00000238418579,
+                "lineHeightUnit": "PERCENT",
+                "letterSpacing": 0,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "typography/H1/Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 49,
+                "fontFamily": "Inter",
+                "fontWeight": "Bold",
+                "lineHeight": 110.00000238418579,
+                "lineHeightUnit": "PERCENT",
+                "letterSpacing": -5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "typography/H1/Regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 49,
+                "fontFamily": "Inter",
+                "fontWeight": "Regular",
+                "lineHeight": 110.00000238418579,
+                "lineHeightUnit": "PERCENT",
+                "letterSpacing": -5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "typography/H2/Bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 39,
+                "fontFamily": "Inter",
+                "fontWeight": "Bold",
+                "lineHeight": 110.00000238418579,
+                "lineHeightUnit": "PERCENT",
+                "letterSpacing": -5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "typography/H2/Regular",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 39,
+                "fontFamily": "Inter",
+                "fontWeight": "Regular",
+                "lineHeight": 110.00000238418579,
+                "lineHeightUnit": "PERCENT",
+                "letterSpacing": -5,
+                "letterSpacingUnit": "PERCENT",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Effects",
+      "modes": [
+        {
+          "name": "Style",
+          "variables": [
+            {
+              "name": "Inner showdow effect",
+              "type": "effect",
+              "isAlias": false,
+              "value": {
+                "effects": [
+                  {
+                    "type": "INNER_SHADOW",
+                    "color": {
+                      "r": 245,
+                      "g": 255,
+                      "b": 255,
+                      "a": 0.1
+                    },
+                    "offset": {
+                      "x": 0,
+                      "y": 8.800000190734863
+                    },
+                    "radius": 2.933333396911621,
+                    "spread": 0
+                  }
+                ]
+              }
+            },
+            {
+              "name": "boxShadow/default",
+              "type": "effect",
+              "isAlias": false,
+              "value": {
+                "effects": [
+                  {
+                    "type": "DROP_SHADOW",
+                    "color": {
+                      "r": 0,
+                      "g": 0,
+                      "b": 0,
+                      "a": 0.2
+                    },
+                    "offset": {
+                      "x": 4,
+                      "y": 4
+                    },
+                    "radius": 5,
+                    "spread": 6
+                  },
+                  {
+                    "type": "DROP_SHADOW",
+                    "color": {
+                      "r": 0,
+                      "g": 0,
+                      "b": 0,
+                      "a": 0.15
+                    },
+                    "offset": {
+                      "x": 5,
+                      "y": 5
+                    },
+                    "radius": 5,
+                    "spread": 3
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

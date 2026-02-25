@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merkado DS — Setup Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Lobster&family=EB+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0C0E12;
+    --bg-surface: #13161C;
+    --bg-card: #1A1E27;
+    --border: #252A36;
+    --border-light: #2E3444;
+    --text-primary: #F0F2F7;
+    --text-secondary: #8A90A0;
+    --text-muted: #555C70;
+    --accent: #4B7BF5;
+    --accent-soft: rgba(75,123,245,0.12);
+    --green: #2ECC71;
+    --orange: #E06C2B;
+    --red: #C0392B;
+    --purple: #6B48C8;
+
+    /* Font switcher */
+    --active-font: 'Inter', sans-serif;
+    --active-app-color: #4B7BF5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--active-font);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: font-family 0.3s ease;
+  }
+
+  /* Apply active font to all content except code blocks and sidebar labels */
+  .content-area, .content-area p, .content-area h1, .content-area h2,
+  .content-area h3, .content-area li, .section-title, .section-desc,
+  .card-title, .card-desc, .step-title, .step-desc, .callout,
+  .app-name, .font-name, .font-weights, .font-table td, .font-table th {
+    font-family: var(--active-font);
+    transition: font-family 0.3s ease;
+  }
+
+  /* ── Layout ── */
+  .shell {
+    display: grid;
+    grid-template-columns: 270px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .sidebar-logo {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo .logo-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+  }
+
+  .sidebar-logo .logo-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .sidebar-logo .logo-title span { color: var(--accent); }
+
+  /* ── Font Switcher ── */
+  .font-switcher {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(75,123,245,0.04);
+  }
+
+  .font-switcher-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .font-switcher-label::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--active-app-color);
+    display: inline-block;
+    transition: background 0.3s;
+  }
+
+  .font-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    margin-bottom: 4px;
+    transition: all 0.15s;
+    text-align: left;
+  }
+
+  .font-btn:hover { background: var(--bg-card); border-color: var(--border); }
+
+  .font-btn.active {
+    background: var(--bg-card);
+    border-color: var(--border-light);
+    box-shadow: 0 0 0 1px var(--active-app-color) inset;
+  }
+
+  .font-btn-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    font-weight: 700;
+    transition: background 0.3s;
+  }
+
+  .font-btn-info { flex: 1; min-width: 0; }
+
+  .font-btn-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .font-btn-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  .font-btn-sample {
+    font-size: 11px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  /* ── Nav ── */
+  .nav-section { padding: 16px 0; flex: 1; }
+
+  .nav-group-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 6px 20px 4px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-item:hover { color: var(--text-primary); background: var(--accent-soft); border-left-color: var(--accent); }
+  .nav-item.active { color: var(--accent); background: var(--accent-soft); border-left-color: var(--accent); }
+
+  .nav-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Main ── */
+  .main { padding: 52px 68px; max-width: 860px; }
+  .content-area {}
+
+  /* ── Sections ── */
+  .section { margin-bottom: 60px; }
+
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+    line-height: 1.25;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 580px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  /* ── Font preview banner ── */
+  .font-preview-banner {
+    background: linear-gradient(135deg, rgba(75,123,245,0.08), rgba(75,123,245,0.03));
+    border: 1px solid rgba(75,123,245,0.2);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .font-preview-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(75,123,245,0.04));
+    pointer-events: none;
+  }
+
+  .fpb-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .fpb-app-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--active-app-color);
+    line-height: 1.2;
+    margin-bottom: 4px;
+    transition: color 0.3s, font-family 0.3s;
+    font-family: var(--active-font);
+  }
+
+  .fpb-body {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-family: var(--active-font);
+    transition: font-family 0.3s;
+  }
+
+  .fpb-meta {
+    position: absolute;
+    top: 16px; right: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  .fpb-font-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--active-app-color);
+    transition: color 0.3s;
+  }
+
+  /* ── App cards ── */
+  .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
+
+  .app-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .app-card:hover { border-color: var(--border-light); transform: translateY(-1px); }
+
+  .app-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+
+  .app-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+
+  .app-name { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+  .app-tagline { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+  .font-row { display: flex; flex-direction: column; gap: 8px; }
+
+  .font-entry { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; }
+
+  .font-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 2px 6px; border-radius: 4px; flex-shrink: 0; margin-top: 2px;
+  }
+
+  .badge-primary { background: rgba(75,123,245,0.15); color: var(--accent); }
+  .badge-secondary { background: rgba(139,90,200,0.15); color: #A57AF5; }
+
+  .font-name { color: var(--text-primary); font-weight: 600; }
+  .font-weights { color: var(--text-muted); font-size: 11px; margin-top: 1px; font-family: 'DM Mono', monospace; }
+
+  /* ── Code blocks ── */
+  .code-block {
+    background: #090B0F;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 14px 0;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .code-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 16px;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-filename { font-size: 11px; font-weight: 500; color: var(--text-secondary); font-family: 'DM Mono', monospace; }
+  .code-lang { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .code-body {
+    padding: 16px 18px;
+    font-size: 12px; line-height: 1.8;
+    color: #C8D0E0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .c-comment { color: #434A5C; }
+  .c-key { color: #7BA3F5; }
+  .c-string { color: #98C379; }
+  .c-number { color: #E5C07B; }
+  .c-keyword { color: #C678DD; }
+  .c-class { color: #E5C07B; }
+  .c-fn { color: #61AFEF; }
+  .c-punct { color: #6A7285; }
+
+  /* ── File tree ── */
+  .tree {
+    background: #090B0F;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; line-height: 1.9;
+    color: #C8D0E0; margin: 14px 0;
+  }
+
+  .tree-dir { color: var(--accent); font-weight: 500; }
+  .tree-highlight { color: var(--green); }
+  .tree-comment { color: #434A5C; }
+  .tree-file { color: var(--text-secondary); }
+
+  /* ── Callouts ── */
+  .callout {
+    display: flex; gap: 12px;
+    padding: 13px 16px; border-radius: 10px;
+    margin: 14px 0; font-size: 13px; line-height: 1.6;
+  }
+
+  .callout-info { background: var(--accent-soft); border: 1px solid rgba(75,123,245,0.2); color: #A0B8F8; }
+  .callout-warn { background: rgba(229,192,123,0.07); border: 1px solid rgba(229,192,123,0.18); color: #E5C07B; }
+  .callout-success { background: rgba(46,204,113,0.07); border: 1px solid rgba(46,204,113,0.16); color: #7DEBB5; }
+  .callout-icon { font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+
+  /* ── Font table ── */
+  .font-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 14px 0; }
+
+  .font-table th {
+    text-align: left; padding: 9px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--text-muted); background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .font-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary); vertical-align: top;
+  }
+
+  .font-table tr:last-child td { border-bottom: none; }
+  .font-table tr:hover td { background: var(--bg-card); }
+  .font-table .fname { font-weight: 600; color: var(--text-primary); font-family: 'DM Mono', monospace; font-size: 12px; }
+
+  .app-tag {
+    display: inline-flex; align-items: center;
+    padding: 2px 7px; border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; font-weight: 600; margin: 1px 2px;
+  }
+
+  .tag-mycut { background: rgba(28,110,70,0.2); color: #2ECC71; }
+  .tag-haulway { background: rgba(224,108,43,0.15); color: #E06C2B; }
+  .tag-feastfeed { background: rgba(192,57,43,0.15); color: #E07A70; }
+  .tag-driply { background: rgba(107,72,200,0.15); color: #A57AF5; }
+  .tag-shared { background: rgba(75,123,245,0.15); color: #7BA3F5; }
+
+  .font-url { color: var(--accent); font-family: 'DM Mono', monospace; font-size: 11px; }
+
+  /* ── Steps ── */
+  .steps { list-style: none; display: flex; flex-direction: column; }
+
+  .step { display: flex; gap: 18px; position: relative; padding-bottom: 28px; }
+  .step:last-child { padding-bottom: 0; }
+
+  .step:not(:last-child)::before {
+    content: ''; position: absolute;
+    left: 14px; top: 34px; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+
+  .step-num {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--bg-card); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+    color: var(--accent); flex-shrink: 0; z-index: 1;
+  }
+
+  .step-content { flex: 1; padding-top: 4px; }
+  .step-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+  .step-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── Font-specific styles ── */
+  body[data-font="inter"] { --active-font: 'Inter', sans-serif; --active-app-color: #2ECC71; }
+  body[data-font="dm-sans"] { --active-font: 'DM Sans', sans-serif; --active-app-color: #E06C2B; }
+  body[data-font="outfit"] { --active-font: 'Outfit', sans-serif; --active-app-color: #A57AF5; }
+  body[data-font="manrope"] { --active-font: 'Manrope', sans-serif; --active-app-color: #C0392B; }
+  body[data-font="eb-garamond"] { --active-font: 'EB Garamond', serif; --active-app-color: #A57AF5; }
+  body[data-font="lobster"] { --active-font: 'Lobster', cursive; --active-app-color: #C0392B; }
+
+  /* Font btn swatches per app */
+  .swatch-inter { background: rgba(46,204,113,0.15); color: #2ECC71; font-family: 'Inter', sans-serif; }
+  .swatch-dmsans { background: rgba(224,108,43,0.15); color: #E06C2B; font-family: 'DM Sans', sans-serif; }
+  .swatch-outfit { background: rgba(165,122,245,0.15); color: #A57AF5; font-family: 'Outfit', sans-serif; }
+  .swatch-manrope { background: rgba(192,57,43,0.15); color: #C0392B; font-family: 'Manrope', sans-serif; }
+  .swatch-garamond { background: rgba(165,122,245,0.12); color: #A57AF5; font-family: 'EB Garamond', serif; font-size: 16px; }
+  .swatch-lobster { background: rgba(192,57,43,0.12); color: #C0392B; font-family: 'Lobster', cursive; font-size: 13px; }
+</style>
+</head>
+<body data-font="inter">
+
+<div class="shell">
+
+  <!-- ── Sidebar ── -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-label">Grascope Product Suite</div>
+      <div class="logo-title">Merkado <span>DS</span></div>
+    </div>
+
+    <!-- Font Switcher -->
+    <div class="font-switcher">
+      <div class="font-switcher-label" id="switcher-label">Previewing: MyCut — Inter</div>
+
+      <button class="font-btn active" data-font="inter" onclick="switchFont(this)">
+        <div class="font-btn-swatch swatch-inter">Aa</div>
+        <div class="font-btn-info">
+          <div class="font-btn-name">Inter</div>
+          <div class="font-btn-meta">MyCut · Shared UI</div>
+        </div>
+        <div class="font-btn-sample" style="font-family:'Inter',sans-serif">Aa</div>
+      </button>
+
+      <button class="font-btn" data-font="dm-sans" onclick="switchFont(this)">
+        <div class="font-btn-swatch swatch-dmsans">Aa</div>
+        <div class="font-btn-info">
+          <div class="font-btn-name">DM Sans</div>
+          <div class="font-btn-meta">Haulway · Primary</div>
+        </div>
+        <div class="font-btn-sample" style="font-family:'DM Sans',sans-serif">Aa</div>
+      </button>
+
+      <button class="font-btn" data-font="outfit" onclick="switchFont(this)">
+        <div class="font-btn-swatch swatch-outfit">Aa</div>
+        <div class="font-btn-info">
+          <div class="font-btn-name">Outfit</div>
+          <div class="font-btn-meta">Driply · Primary</div>
+        </div>
+        <div class="font-btn-sample" style="font-family:'Outfit',sans-serif">Aa</div>
+      </button>
+
+      <button class="font-btn" data-font="manrope" onclick="switchFont(this)">
+        <div class="font-btn-swatch swatch-manrope">Aa</div>
+        <div class="font-btn-info">
+          <div class="font-btn-name">Manrope</div>
+          <div class="font-btn-meta">FeastFeed · Primary</div>
+        </div>
+        <div class="font-btn-sample" style="font-family:'Manrope',sans-serif">Aa</div>
+      </button>
+
+      <button class="font-btn" data-font="eb-garamond" onclick="switchFont(this)">
+        <div class="font-btn-swatch swatch-garamond">Aa</div>
+        <div class="font-btn-info">
+          <div class="font-btn-name">EB Garamond</div>
+          <div class="font-btn-meta">Driply · Premium</div>
+        </div>
+        <div class="font-btn-sample" style="font-family:'EB Garamond',serif">Aa</div>
+      </button>
+
+      <button class="font-btn" data-font="lobster" onclick="switchFont(this)">
+        <div class="font-btn-swatch swatch-lobster">Aa</div>
+        <div class="font-btn-info">
+          <div class="font-btn-name">Lobster</div>
+          <div class="font-btn-meta">FeastFeed · Display</div>
+        </div>
+        <div class="font-btn-sample" style="font-family:'Lobster',cursive">Aa</div>
+      </button>
+    </div>
+
+    <!-- Nav -->
+    <div class="nav-section">
+      <div class="nav-group-label">Overview</div>
+      <a class="nav-item active" href="#architecture"><div class="nav-dot" style="background:#4B7BF5"></div>Architecture</a>
+      <a class="nav-item" href="#fonts"><div class="nav-dot" style="background:#E5C07B"></div>Font Strategy</a>
+
+      <div class="nav-group-label" style="margin-top:8px">Setup</div>
+      <a class="nav-item" href="#download"><div class="nav-dot" style="background:#2ECC71"></div>Download Fonts</a>
+      <a class="nav-item" href="#package-setup"><div class="nav-dot" style="background:#61AFEF"></div>Package pubspec</a>
+      <a class="nav-item" href="#app-setup"><div class="nav-dot" style="background:#C678DD"></div>App pubspecs</a>
+
+      <div class="nav-group-label" style="margin-top:8px">Theme System</div>
+      <a class="nav-item" href="#font-constants"><div class="nav-dot" style="background:#E06C2B"></div>Font Constants</a>
+      <a class="nav-item" href="#color-scheme"><div class="nav-dot" style="background:#4B7BF5"></div>AppColorScheme</a>
+      <a class="nav-item" href="#theme-builder"><div class="nav-dot" style="background:#A57AF5"></div>ThemeBuilder</a>
+      <a class="nav-item" href="#exports"><div class="nav-dot" style="background:#2ECC71"></div>Exports</a>
+      <a class="nav-item" href="#app-themes"><div class="nav-dot" style="background:#E5C07B"></div>App Themes</a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <main class="main">
+    <div class="content-area">
+
+    <!-- Live font preview -->
+    <div class="font-preview-banner" id="font-preview-banner">
+      <div class="fpb-meta">
+        <div style="color:var(--text-muted);font-size:9px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:2px">Active font</div>
+        <div class="fpb-font-name" id="fpb-font-name">Inter</div>
+        <div style="color:var(--text-muted);font-size:9px;font-family:'DM Mono',monospace;margin-top:2px" id="fpb-font-app">MyCut · Shared UI</div>
+      </div>
+      <div class="fpb-label">Font preview — content updates as you switch</div>
+      <div class="fpb-app-name" id="fpb-headline">Structured. Professional. No-Nonsense.</div>
+      <div class="fpb-body" id="fpb-body">Nigerian mobile data costs money — users need to scan and act quickly. Typography must support clarity over decoration at every size, from 12px captions to 28px display headings.</div>
+    </div>
+
+    <!-- Architecture -->
+    <section class="section" id="architecture">
+      <div class="section-eyebrow">01 — Overview</div>
+      <h1 class="section-title">Architecture Decision</h1>
+      <p class="section-desc">One shared package <code style="font-family:'DM Mono',monospace;font-size:13px;color:var(--accent)">merkado_ds</code> holds all tokens, fonts, theme builders, and Mix styles. Each app fills in one config object — that's its entire theme footprint.</p>
+
+      <div class="tree">
+<span class="tree-dir">merkado_ds/</span>                        <span class="tree-comment">← shared package (one copy of everything)</span>
+├── <span class="tree-dir">fonts/</span>                            <span class="tree-comment">← ALL .ttf files live here — never in apps</span>
+│   ├── Inter-Regular.ttf  Inter-Medium.ttf  Inter-SemiBold.ttf  Inter-Bold.ttf
+│   ├── DMMono-Regular.ttf  DMMono-Medium.ttf
+│   ├── DMSans-Regular.ttf  ...  DMSans-Bold.ttf
+│   ├── Outfit-Regular.ttf  ...  Outfit-Bold.ttf
+│   ├── Manrope-Regular.ttf  ...  Manrope-ExtraBold.ttf
+│   ├── Lobster-Regular.ttf
+│   └── EBGaramond-Regular.ttf  EBGaramond-SemiBold.ttf
+├── <span class="tree-dir">lib/</span>
+│   ├── <span class="tree-highlight">merkado_ds.dart</span>               <span class="tree-comment">← barrel — apps use one import</span>
+│   └── <span class="tree-dir">src/tokens/semantic/colors/</span>
+│       ├── <span class="tree-highlight">app_color_scheme.dart</span>      <span class="tree-comment">← key abstraction layer</span>
+│       ├── mycut_light.dart  mycut_dark.dart
+│       ├── haulway_light.dart  haulway_dark.dart
+│       ├── driply_light.dart  driply_dark.dart
+│       └── feastfeed_light.dart  feastfeed_dark.dart
+│
+<span class="tree-dir">mycut/lib/theme/mycut_theme.dart</span>   <span class="tree-comment">← only file each app writes</span>
+<span class="tree-dir">haulway/lib/theme/haulway_theme.dart</span>
+<span class="tree-dir">driply/lib/theme/driply_theme.dart</span>
+<span class="tree-dir">feastfeed/lib/theme/feastfeed_theme.dart</span></div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">💡</span>
+        <div>Typography and Spacing semantics are <strong>identical across all apps</strong>. Only color semantics differ per app. The theme builder never imports app-specific color classes directly — it reads through <code style="font-family:'DM Mono',monospace">AppColorScheme</code>.</div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- Font Strategy -->
+    <section class="section" id="fonts">
+      <div class="section-eyebrow">02 — Typography</div>
+      <h2 class="section-title">Font Strategy</h2>
+      <p class="section-desc">Each app has a distinct typographic personality. Shared UI components (buttons, forms, nav) use Inter across all apps for cross-product consistency.</p>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <div><strong>SF Pro (MyCut Figma):</strong> SF Pro is Apple's system font and cannot be bundled legally. Your typography doc resolves this — Inter achieves the same professional, neutral feel and is already used by Stripe, GitHub, and Linear. Confirm with your designer this was a Figma placeholder.</div>
+      </div>
+
+      <div class="app-grid">
+        <div class="app-card">
+          <div class="app-card-header">
+            <div class="app-icon" style="background:rgba(28,110,70,0.15)">✂️</div>
+            <div><div class="app-name">MyCut</div><div class="app-tagline">Deal Marketplace</div></div>
+          </div>
+          <div class="font-row">
+            <div class="font-entry">
+              <span class="font-badge badge-primary">Primary</span>
+              <div><div class="font-name">Inter</div><div class="font-weights">400 · 500 · 600 · 700 — same as shared UI</div></div>
+            </div>
+            <div class="font-entry">
+              <span class="font-badge badge-secondary">Mono</span>
+              <div><div class="font-name">DM Mono</div><div class="font-weights">400 · 500 — deal IDs, tx refs, wallet addresses</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-card-header">
+            <div class="app-icon" style="background:rgba(224,108,43,0.15)">👗</div>
+            <div><div class="app-name">Haulway</div><div class="app-tagline">Fashion Social Commerce</div></div>
+          </div>
+          <div class="font-row">
+            <div class="font-entry">
+              <span class="font-badge badge-primary">Primary</span>
+              <div><div class="font-name">DM Sans</div><div class="font-weights">400 · 500 · 600 · 700</div></div>
+            </div>
+            <div class="font-entry">
+              <span class="font-badge badge-secondary">Display</span>
+              <div><div class="font-name">Outfit</div><div class="font-weights">700 — hero sections, creator headers 24px+</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-card-header">
+            <div class="app-icon" style="background:rgba(107,72,200,0.15)">🪡</div>
+            <div><div class="app-name">Driply</div><div class="app-tagline">Custom Tailoring</div></div>
+          </div>
+          <div class="font-row">
+            <div class="font-entry">
+              <span class="font-badge badge-primary">Primary</span>
+              <div><div class="font-name">Outfit</div><div class="font-weights">400 · 500 · 600 · 700</div></div>
+            </div>
+            <div class="font-entry">
+              <span class="font-badge badge-secondary">Premium</span>
+              <div><div class="font-name">EB Garamond</div><div class="font-weights">400 · 600 — bridal & high-end project titles</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-card-header">
+            <div class="app-icon" style="background:rgba(192,57,43,0.15)">🍜</div>
+            <div><div class="app-name">FeastFeed</div><div class="app-tagline">Food Vendors & Creators</div></div>
+          </div>
+          <div class="font-row">
+            <div class="font-entry">
+              <span class="font-badge badge-primary">Primary</span>
+              <div><div class="font-name">Manrope</div><div class="font-weights">400 · 500 · 600 · 700 · 800</div></div>
+            </div>
+            <div class="font-entry">
+              <span class="font-badge badge-secondary">Display</span>
+              <div><div class="font-name">Lobster</div><div class="font-weights">400 — logo & category headers only, sparingly</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- Download -->
+    <section class="section" id="download">
+      <div class="section-eyebrow">03 — Setup</div>
+      <h2 class="section-title">Downloading the Fonts</h2>
+      <p class="section-desc">All fonts are on Google Fonts. Download → unzip → place all <code style="font-family:'DM Mono',monospace;font-size:13px">.ttf</code> files inside <code style="font-family:'DM Mono',monospace;font-size:13px;color:var(--green)">merkado_ds/fonts/</code>. Never put font files inside individual apps.</p>
+
+      <table class="font-table">
+        <thead>
+          <tr><th>Font</th><th>URL</th><th>Used By</th><th>Weights</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="fname">Inter</td>
+            <td class="font-url">fonts.google.com/specimen/Inter</td>
+            <td><span class="app-tag tag-shared">Shared UI</span><span class="app-tag tag-mycut">MyCut</span></td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px">400 · 500 · 600 · 700</td>
+          </tr>
+          <tr>
+            <td class="fname">DM Mono</td>
+            <td class="font-url">fonts.google.com/specimen/DM+Mono</td>
+            <td><span class="app-tag tag-mycut">MyCut</span></td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px">400 · 500</td>
+          </tr>
+          <tr>
+            <td class="fname">DM Sans</td>
+            <td class="font-url">fonts.google.com/specimen/DM+Sans</td>
+            <td><span class="app-tag tag-haulway">Haulway</span></td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px">400 · 500 · 600 · 700</td>
+          </tr>
+          <tr>
+            <td class="fname">Outfit</td>
+            <td class="font-url">fonts.google.com/specimen/Outfit</td>
+            <td><span class="app-tag tag-driply">Driply</span><span class="app-tag tag-haulway">Haulway</span></td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px">400 · 500 · 600 · 700</td>
+          </tr>
+          <tr>
+            <td class="fname">Manrope</td>
+            <td class="font-url">fonts.google.com/specimen/Manrope</td>
+            <td><span class="app-tag tag-feastfeed">FeastFeed</span></td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px">400 · 500 · 600 · 700 · 800</td>
+          </tr>
+          <tr>
+            <td class="fname">Lobster</td>
+            <td class="font-url">fonts.google.com/specimen/Lobster</td>
+            <td><span class="app-tag tag-feastfeed">FeastFeed</span></td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px">400</td>
+          </tr>
+          <tr>
+            <td class="fname">EB Garamond</td>
+            <td class="font-url">fonts.google.com/specimen/EB+Garamond</td>
+            <td><span class="app-tag tag-driply">Driply</span></td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px">400 · 600</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-success">
+        <span class="callout-icon">✅</span>
+        <div>If the zip contains a <strong>variable font</strong> (filename with brackets e.g. <code style="font-family:'DM Mono',monospace">DMSans[opsz,wght].ttf</code>), use it instead of individual weight files — one file covers all weights.</div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- Package pubspec -->
+    <section class="section" id="package-setup">
+      <div class="section-eyebrow">04 — Package</div>
+      <h2 class="section-title">Package pubspec.yaml</h2>
+      <p class="section-desc">Declare all fonts once here. Apps reference them via <code style="font-family:'DM Mono',monospace;font-size:13px">packages/merkado_ds/fonts/...</code></p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">merkado_ds/pubspec.yaml</span><span class="code-lang">yaml</span></div>
+        <div class="code-body"><span class="c-key">flutter</span><span class="c-punct">:</span>
+  <span class="c-key">fonts</span><span class="c-punct">:</span>
+    <span class="c-comment"># ── Shared UI + MyCut primary ──</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">Inter</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Inter-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Inter-Medium.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">500</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Inter-SemiBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">600</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Inter-Bold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">700</span>
+    <span class="c-comment"># ── MyCut mono ──</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">DM Mono</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/DMMono-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/DMMono-Medium.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">500</span>
+    <span class="c-comment"># ── Haulway primary ──</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">DM Sans</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/DMSans-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/DMSans-Medium.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">500</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/DMSans-SemiBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">600</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/DMSans-Bold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">700</span>
+    <span class="c-comment"># ── Driply primary + Haulway display ──</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">Outfit</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Outfit-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Outfit-Medium.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">500</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Outfit-SemiBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">600</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Outfit-Bold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">700</span>
+    <span class="c-comment"># ── FeastFeed primary ──</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">Manrope</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Manrope-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Manrope-Medium.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">500</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Manrope-SemiBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">600</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Manrope-Bold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">700</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Manrope-ExtraBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">800</span>
+    <span class="c-comment"># ── FeastFeed display ──</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">Lobster</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/Lobster-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+    <span class="c-comment"># ── Driply premium ──</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">EB Garamond</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/EBGaramond-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">fonts/EBGaramond-SemiBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">600</span></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- App pubspecs -->
+    <section class="section" id="app-setup">
+      <div class="section-eyebrow">05 — Apps</div>
+      <h2 class="section-title">Per-App pubspec.yaml</h2>
+      <p class="section-desc">Each app re-declares only its own fonts, referencing the package path. Flutter doesn't inherit font assets from packages automatically — one-time setup per app.</p>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <div>Each app declares only the fonts it actually uses. Driply doesn't pull in Lobster. MyCut doesn't pull in Manrope. Keep bundles lean.</div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">mycut/pubspec.yaml</span><span class="code-lang">yaml</span></div>
+        <div class="code-body"><span class="c-key">flutter</span><span class="c-punct">:</span>
+  <span class="c-key">fonts</span><span class="c-punct">:</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">Inter</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Inter-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Inter-Medium.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">500</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Inter-SemiBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">600</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Inter-Bold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">700</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">DM Mono</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/DMMono-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/DMMono-Medium.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">500</span></div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">haulway/pubspec.yaml</span><span class="code-lang">yaml</span></div>
+        <div class="code-body"><span class="c-key">flutter</span><span class="c-punct">:</span>
+  <span class="c-key">fonts</span><span class="c-punct">:</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">DM Sans</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/DMSans-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/DMSans-Medium.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">500</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/DMSans-SemiBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">600</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/DMSans-Bold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">700</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">Outfit</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Outfit-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Outfit-Bold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">700</span></div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">driply/pubspec.yaml</span><span class="code-lang">yaml</span></div>
+        <div class="code-body"><span class="c-key">flutter</span><span class="c-punct">:</span>
+  <span class="c-key">fonts</span><span class="c-punct">:</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">Outfit</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Outfit-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Outfit-Medium.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">500</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Outfit-SemiBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">600</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Outfit-Bold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">700</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">EB Garamond</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/EBGaramond-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/EBGaramond-SemiBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">600</span></div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">feastfeed/pubspec.yaml</span><span class="code-lang">yaml</span></div>
+        <div class="code-body"><span class="c-key">flutter</span><span class="c-punct">:</span>
+  <span class="c-key">fonts</span><span class="c-punct">:</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">Manrope</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Manrope-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Manrope-Medium.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">500</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Manrope-SemiBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">600</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Manrope-Bold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">700</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Manrope-ExtraBold.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">800</span>
+    - <span class="c-key">family</span><span class="c-punct">:</span> <span class="c-string">Lobster</span>
+      <span class="c-key">fonts</span><span class="c-punct">:</span>
+        - <span class="c-key">asset</span><span class="c-punct">:</span> <span class="c-string">packages/merkado_ds/fonts/Lobster-Regular.ttf</span>
+          <span class="c-key">weight</span><span class="c-punct">:</span> <span class="c-number">400</span></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- Font constants -->
+    <section class="section" id="font-constants">
+      <div class="section-eyebrow">06 — Theme System</div>
+      <h2 class="section-title">Font Family Constants</h2>
+      <p class="section-desc">Never hardcode font name strings anywhere. One file, one source of truth. Change a font in one place.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">merkado_ds/lib/src/tokens/font_families.dart</span><span class="code-lang">dart</span></div>
+        <div class="code-body"><span class="c-keyword">class</span> <span class="c-class">MerkadoFonts</span> <span class="c-punct">{</span>
+  <span class="c-class">MerkadoFonts</span><span class="c-punct">._();</span>
+
+  <span class="c-comment">// Shared UI — buttons, forms, nav across all apps</span>
+  <span class="c-keyword">static const</span> <span class="c-class">String</span> ui   <span class="c-punct">=</span> <span class="c-string">'Inter'</span><span class="c-punct">;</span>
+  <span class="c-keyword">static const</span> <span class="c-class">String</span> mono <span class="c-punct">=</span> <span class="c-string">'DM Mono'</span><span class="c-punct">;</span>
+
+  <span class="c-comment">// Product primary fonts — pass to fontFamilyOverride</span>
+  <span class="c-keyword">static const</span> <span class="c-class">String</span> mycut     <span class="c-punct">=</span> <span class="c-string">'Inter'</span><span class="c-punct">;</span>    <span class="c-comment">// same as UI, explicit</span>
+  <span class="c-keyword">static const</span> <span class="c-class">String</span> haulway   <span class="c-punct">=</span> <span class="c-string">'DM Sans'</span><span class="c-punct">;</span>
+  <span class="c-keyword">static const</span> <span class="c-class">String</span> feastfeed <span class="c-punct">=</span> <span class="c-string">'Manrope'</span><span class="c-punct">;</span>
+  <span class="c-keyword">static const</span> <span class="c-class">String</span> driply    <span class="c-punct">=</span> <span class="c-string">'Outfit'</span><span class="c-punct">;</span>
+
+  <span class="c-comment">// Secondary / display — used in specific widgets only, not ThemeData</span>
+  <span class="c-keyword">static const</span> <span class="c-class">String</span> haulwayDisplay  <span class="c-punct">=</span> <span class="c-string">'Outfit'</span><span class="c-punct">;</span>      <span class="c-comment">// hero / creator 24px+</span>
+  <span class="c-keyword">static const</span> <span class="c-class">String</span> feastfeedDisplay <span class="c-punct">=</span> <span class="c-string">'Lobster'</span><span class="c-punct">;</span>     <span class="c-comment">// logo / category headers</span>
+  <span class="c-keyword">static const</span> <span class="c-class">String</span> driplyPremium   <span class="c-punct">=</span> <span class="c-string">'EB Garamond'</span><span class="c-punct">;</span>  <span class="c-comment">// bridal / high-end</span>
+  <span class="c-keyword">static const</span> <span class="c-class">String</span> mycutMono       <span class="c-punct">=</span> <span class="c-string">'DM Mono'</span><span class="c-punct">;</span>      <span class="c-comment">// deal IDs, tx refs</span>
+<span class="c-punct">}</span></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- AppColorScheme -->
+    <section class="section" id="color-scheme">
+      <div class="section-eyebrow">07 — Theme System</div>
+      <h2 class="section-title">AppColorScheme</h2>
+      <p class="section-desc">The normalized color contract. The theme builder reads only this — it never imports app-specific classes like <code style="font-family:'DM Mono',monospace;font-size:13px">MycutLightColors</code> directly. That's the whole point.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">merkado_ds/lib/src/tokens/semantic/colors/app_color_scheme.dart</span><span class="code-lang">dart</span></div>
+        <div class="code-body"><span class="c-keyword">class</span> <span class="c-class">AppColorScheme</span> <span class="c-punct">{</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> brandPrimary<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> brandSecondary<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> backgroundPrimary<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> backgroundSurface<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> textPrimary<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> textSecondary<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> textDisabled<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> borderDefault<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> borderFocused<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> stateSuccess<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> stateWarning<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> stateError<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> surfaceContainer<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">Color</span> surfaceCard<span class="c-punct">;</span>
+
+  <span class="c-keyword">const</span> <span class="c-class">AppColorScheme</span><span class="c-punct">({</span>
+    <span class="c-keyword">required</span> <span class="c-keyword">this</span><span class="c-punct">.</span>brandPrimary<span class="c-punct">,</span>
+    <span class="c-keyword">this</span><span class="c-punct">.</span>brandSecondary <span class="c-punct">=</span> <span class="c-keyword">const</span> <span class="c-class">Color</span><span class="c-punct">(</span><span class="c-number">0xFF000000</span><span class="c-punct">),</span>
+    <span class="c-keyword">required</span> <span class="c-keyword">this</span><span class="c-punct">.</span>backgroundPrimary<span class="c-punct">,</span>
+    <span class="c-comment">// ... all other required fields</span>
+  <span class="c-punct">});</span>
+
+  <span class="c-comment">// One factory per app — maps semantic tokens into this contract</span>
+  <span class="c-keyword">factory</span> <span class="c-class">AppColorScheme</span><span class="c-punct">.</span><span class="c-fn">fromMycut</span><span class="c-punct">({</span><span class="c-keyword">required bool</span> isDark<span class="c-punct">})</span> <span class="c-punct">{</span> <span class="c-comment">/* ... */</span> <span class="c-punct">}</span>
+  <span class="c-keyword">factory</span> <span class="c-class">AppColorScheme</span><span class="c-punct">.</span><span class="c-fn">fromHaulway</span><span class="c-punct">({</span><span class="c-keyword">required bool</span> isDark<span class="c-punct">})</span> <span class="c-punct">{</span> <span class="c-comment">/* ... */</span> <span class="c-punct">}</span>
+  <span class="c-keyword">factory</span> <span class="c-class">AppColorScheme</span><span class="c-punct">.</span><span class="c-fn">fromDriply</span><span class="c-punct">({</span><span class="c-keyword">required bool</span> isDark<span class="c-punct">})</span> <span class="c-punct">{</span> <span class="c-comment">/* ... */</span> <span class="c-punct">}</span>
+  <span class="c-keyword">factory</span> <span class="c-class">AppColorScheme</span><span class="c-punct">.</span><span class="c-fn">fromFeastfeed</span><span class="c-punct">({</span><span class="c-keyword">required bool</span> isDark<span class="c-punct">})</span> <span class="c-punct">{</span> <span class="c-comment">/* ... */</span> <span class="c-punct">}</span>
+<span class="c-punct">}</span></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ThemeBuilder -->
+    <section class="section" id="theme-builder">
+      <div class="section-eyebrow">08 — Theme System</div>
+      <h2 class="section-title">MerkadoThemeConfig + Builder</h2>
+      <p class="section-desc">Config is what each app fills in. Builder assembles ThemeData. Pass an override in config to replace any sub-theme — null means use the default.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">merkado_ds/lib/src/theme/merkado_theme_config.dart</span><span class="code-lang">dart</span></div>
+        <div class="code-body"><span class="c-keyword">class</span> <span class="c-class">MerkadoThemeConfig</span> <span class="c-punct">{</span>
+  <span class="c-keyword">final</span> <span class="c-class">AppColorScheme</span> colors<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">String</span><span class="c-punct">?</span> fontFamilyOverride<span class="c-punct">;</span>
+  <span class="c-keyword">final double</span> borderRadius<span class="c-punct">;</span>
+
+  <span class="c-comment">// Sub-theme overrides — null = use package default</span>
+  <span class="c-keyword">final</span> <span class="c-class">AppBarTheme</span><span class="c-punct">?</span>             appBarThemeOverride<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">ElevatedButtonThemeData</span><span class="c-punct">?</span>  elevatedButtonOverride<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">InputDecorationTheme</span><span class="c-punct">?</span>    inputDecorationOverride<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">BottomSheetThemeData</span><span class="c-punct">?</span>    bottomSheetOverride<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">ChipThemeData</span><span class="c-punct">?</span>           chipOverride<span class="c-punct">;</span>
+  <span class="c-keyword">final</span> <span class="c-class">CheckboxThemeData</span><span class="c-punct">?</span>       checkboxOverride<span class="c-punct">;</span>
+
+  <span class="c-keyword">const</span> <span class="c-class">MerkadoThemeConfig</span><span class="c-punct">({</span>
+    <span class="c-keyword">required</span> <span class="c-keyword">this</span><span class="c-punct">.</span>colors<span class="c-punct">,</span>
+    <span class="c-keyword">this</span><span class="c-punct">.</span>fontFamilyOverride<span class="c-punct">,</span>
+    <span class="c-keyword">this</span><span class="c-punct">.</span>borderRadius <span class="c-punct">=</span> <span class="c-number">12.0</span><span class="c-punct">,</span>
+    <span class="c-keyword">this</span><span class="c-punct">.</span>appBarThemeOverride<span class="c-punct">,</span>
+    <span class="c-keyword">this</span><span class="c-punct">.</span>elevatedButtonOverride<span class="c-punct">,</span>
+    <span class="c-keyword">this</span><span class="c-punct">.</span>inputDecorationOverride<span class="c-punct">,</span>
+    <span class="c-keyword">this</span><span class="c-punct">.</span>bottomSheetOverride<span class="c-punct">,</span>
+    <span class="c-keyword">this</span><span class="c-punct">.</span>chipOverride<span class="c-punct">,</span>
+    <span class="c-keyword">this</span><span class="c-punct">.</span>checkboxOverride<span class="c-punct">,</span>
+  <span class="c-punct">});</span>
+<span class="c-punct">}</span></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- Exports -->
+    <section class="section" id="exports">
+      <div class="section-eyebrow">09 — Exports</div>
+      <h2 class="section-title">Barrel File</h2>
+      <p class="section-desc">Single import in every app. Apps never import from <code style="font-family:'DM Mono',monospace;font-size:13px">src/</code> directly.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">merkado_ds/lib/merkado_ds.dart</span><span class="code-lang">dart</span></div>
+        <div class="code-body"><span class="c-keyword">library</span> merkado_ds<span class="c-punct">;</span>
+
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/primitives/colors.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/primitives/typography.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/primitives/spacing.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/typography.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/spacing.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/font_families.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/colors/app_color_scheme.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/colors/mycut_light.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/colors/mycut_dark.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/colors/haulway_light.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/colors/haulway_dark.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/colors/driply_light.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/colors/driply_dark.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/colors/feastfeed_light.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/tokens/semantic/colors/feastfeed_dark.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/theme/merkado_theme_config.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/theme/merkado_theme_builder.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/mix/mix_token_provider.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/mix/styles/button_style.dart'</span><span class="c-punct">;</span>
+<span class="c-keyword">export</span> <span class="c-string">'src/mix/styles/card_style.dart'</span><span class="c-punct">;</span></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- App themes -->
+    <section class="section" id="app-themes">
+      <div class="section-eyebrow">10 — Done</div>
+      <h2 class="section-title">Each App's Theme File</h2>
+      <p class="section-desc">One import. Fill in the config. This is the entire theme footprint per app.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">haulway/lib/theme/haulway_theme.dart</span><span class="code-lang">dart</span></div>
+        <div class="code-body"><span class="c-keyword">import</span> <span class="c-string">'package:merkado_ds/merkado_ds.dart'</span><span class="c-punct">;</span>
+
+<span class="c-keyword">class</span> <span class="c-class">HaulwayTheme</span> <span class="c-punct">{</span>
+  <span class="c-class">HaulwayTheme</span><span class="c-punct">._();</span>
+
+  <span class="c-keyword">static</span> <span class="c-class">ThemeData</span> <span class="c-keyword">get</span> light <span class="c-punct">=></span> <span class="c-class">MerkadoThemeBuilder</span><span class="c-punct">.</span><span class="c-fn">build</span><span class="c-punct">(</span>
+    isDark<span class="c-punct">:</span> <span class="c-keyword">false</span><span class="c-punct">,</span>
+    config<span class="c-punct">:</span> <span class="c-class">MerkadoThemeConfig</span><span class="c-punct">(</span>
+      colors<span class="c-punct">:</span> <span class="c-class">AppColorScheme</span><span class="c-punct">.</span><span class="c-fn">fromHaulway</span><span class="c-punct">(</span>isDark<span class="c-punct">:</span> <span class="c-keyword">false</span><span class="c-punct">),</span>
+      fontFamilyOverride<span class="c-punct">:</span> <span class="c-class">MerkadoFonts</span><span class="c-punct">.</span>haulway<span class="c-punct">,</span>
+      borderRadius<span class="c-punct">:</span> <span class="c-number">12.0</span><span class="c-punct">,</span>
+    <span class="c-punct">),</span>
+  <span class="c-punct">);</span>
+
+  <span class="c-keyword">static</span> <span class="c-class">ThemeData</span> <span class="c-keyword">get</span> dark <span class="c-punct">=></span> <span class="c-class">MerkadoThemeBuilder</span><span class="c-punct">.</span><span class="c-fn">build</span><span class="c-punct">(</span>
+    isDark<span class="c-punct">:</span> <span class="c-keyword">true</span><span class="c-punct">,</span>
+    config<span class="c-punct">:</span> <span class="c-class">MerkadoThemeConfig</span><span class="c-punct">(</span>
+      colors<span class="c-punct">:</span> <span class="c-class">AppColorScheme</span><span class="c-punct">.</span><span class="c-fn">fromHaulway</span><span class="c-punct">(</span>isDark<span class="c-punct">:</span> <span class="c-keyword">true</span><span class="c-punct">),</span>
+      fontFamilyOverride<span class="c-punct">:</span> <span class="c-class">MerkadoFonts</span><span class="c-punct">.</span>haulway<span class="c-punct">,</span>
+      borderRadius<span class="c-punct">:</span> <span class="c-number">12.0</span><span class="c-punct">,</span>
+    <span class="c-punct">),</span>
+  <span class="c-punct">);</span>
+<span class="c-punct">}</span></div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">any_app/lib/main.dart — wiring it up</span><span class="code-lang">dart</span></div>
+        <div class="code-body"><span class="c-class">MaterialApp</span><span class="c-punct">(</span>
+  theme<span class="c-punct">:</span>      <span class="c-class">HaulwayTheme</span><span class="c-punct">.</span>light<span class="c-punct">,</span>
+  darkTheme<span class="c-punct">:</span>  <span class="c-class">HaulwayTheme</span><span class="c-punct">.</span>dark<span class="c-punct">,</span>
+  themeMode<span class="c-punct">:</span> <span class="c-class">ThemeMode</span><span class="c-punct">.</span>system<span class="c-punct">,</span>
+  <span class="c-comment">// Mix 2.0 token provider — wraps entire tree</span>
+  builder<span class="c-punct">: (</span>context<span class="c-punct">,</span> child<span class="c-punct">) =></span> <span class="c-class">MixTokenProvider</span><span class="c-punct">(</span>
+    colors<span class="c-punct">:</span> <span class="c-class">AppColorScheme</span><span class="c-punct">.</span><span class="c-fn">fromHaulway</span><span class="c-punct">(</span>
+      isDark<span class="c-punct">:</span> <span class="c-class">Theme</span><span class="c-punct">.</span><span class="c-fn">of</span><span class="c-punct">(</span>context<span class="c-punct">).</span>brightness <span class="c-punct">==</span> <span class="c-class">Brightness</span><span class="c-punct">.</span>dark<span class="c-punct">,</span>
+    <span class="c-punct">),</span>
+    child<span class="c-punct">:</span> child<span class="c-punct">!,</span>
+  <span class="c-punct">),</span>
+<span class="c-punct">)</span></div>
+      </div>
+
+      <div class="callout callout-success">
+        <span class="callout-icon">🎉</span>
+        <div>Adding a new app (e.g. ItsYourDay) means: add its Figma-generated color files, write one <code style="font-family:'DM Mono',monospace">AppColorScheme.fromItsYourDay()</code> factory, and a 15-line theme file. Nothing else in the package changes.</div>
+      </div>
+    </section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const fontData = {
+    'inter':      { name: 'Inter', app: 'MyCut · Shared UI',        headline: 'Structured. Professional. No-Nonsense.', body: 'Nigerian mobile data costs money — users need to scan and act quickly. Typography must support clarity over decoration at every size, from 12px captions to 28px display headings.' },
+    'dm-sans':    { name: 'DM Sans', app: 'Haulway · Primary',       headline: 'Trendy. Energetic. Aspirational.', body: 'Social-first, visual-heavy, fast-paced. Modern geometric shapes with slightly rounded forms feel friendlier and more lifestyle-forward — built for creators and shoppers.' },
+    'outfit':     { name: 'Outfit', app: 'Driply · Primary',         headline: 'Precise. Crafted. Premium Quality.', body: 'Geometric precision echoes the exactness of a tailor\'s craft — clean, confident strokes that communicate quality without coldness, from measurements to milestone completions.' },
+    'manrope':    { name: 'Manrope', app: 'FeastFeed · Primary',     headline: 'Appetizing. Local. Authentic.', body: 'Geometric with slight warmth — rounded terminals that feel like a chalkboard menu or a hand-written recipe card. Built for dish names, vendor profiles, and descriptions that make you hungry.' },
+    'eb-garamond':{ name: 'EB Garamond', app: 'Driply · Premium',    headline: 'Bridal Gown Commission.', body: 'A serif for premium, high-touch contexts only. Wedding dress commissions and verified designer profiles earn this level of elegance. Never for body text — exclusively for display at 24px and above.' },
+    'lobster':    { name: 'Lobster', app: 'FeastFeed · Display',     headline: 'Street Food', body: 'Script display font for logos and category headers only. Never at small sizes, never for body text. Maximum one or two uses per screen — the equivalent of a chalk illustration on a food truck.' },
+  };
+
+  function switchFont(btn) {
+    const font = btn.dataset.font;
+    document.body.setAttribute('data-font', font);
+    document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const data = fontData[font];
+    document.getElementById('switcher-label').textContent = `Previewing: ${data.app}`;
+    document.getElementById('fpb-font-name').textContent = data.name;
+    document.getElementById('fpb-font-app').textContent = data.app;
+    document.getElementById('fpb-headline').textContent = data.headline;
+    document.getElementById('fpb-body').textContent = data.body;
+  }
+
+  // Nav active on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navItems.forEach(i => i.classList.remove('active'));
+        const match = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { threshold: 0.25 });
+
+  sections.forEach(s => observer.observe(s));
+
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(item.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

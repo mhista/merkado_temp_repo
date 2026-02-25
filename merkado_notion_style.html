@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merkado DS — Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-hover: #f7f7f5;
+    --bg-sidebar: #f7f6f3;
+    --bg-code: #f0eeea;
+    --bg-callout: #f1f1ef;
+    --border: #e8e6e1;
+    --border-mid: #d3d0cb;
+    --text-primary: #1a1a1a;
+    --text-secondary: #6b6b6b;
+    --text-muted: #9b9b9b;
+    --text-code: #eb5757;
+    --accent: #2e7cf6;
+    --accent-soft: rgba(46,124,246,0.08);
+    --green: #0f7b4b;
+    --green-bg: #edfaf2;
+    --orange: #c75600;
+    --orange-bg: #fff3ec;
+    --red: #c03232;
+    --red-bg: #fff0f0;
+    --purple: #5c3bc7;
+    --purple-bg: #f3f0fb;
+    --yellow-bg: #fef9e6;
+    --yellow: #7a5c00;
+    --sidebar-w: 260px;
+  }
+
+  [data-theme="dark"] {
+    --bg: #191919;
+    --bg-hover: #222222;
+    --bg-sidebar: #1a1a1a;
+    --bg-code: #252525;
+    --bg-callout: #252525;
+    --border: #2f2f2f;
+    --border-mid: #3d3d3d;
+    --text-primary: #e8e8e6;
+    --text-secondary: #9b9b9b;
+    --text-muted: #6b6b6b;
+    --text-code: #ff8080;
+    --accent: #4a9eff;
+    --accent-soft: rgba(74,158,255,0.1);
+    --green-bg: rgba(15,123,75,0.12);
+    --green: #4cca8a;
+    --orange-bg: rgba(199,86,0,0.12);
+    --orange: #ff9352;
+    --red-bg: rgba(192,50,50,0.12);
+    --red: #ff7070;
+    --purple-bg: rgba(92,59,199,0.14);
+    --purple: #9b7ef8;
+    --yellow-bg: rgba(122,92,0,0.12);
+    --yellow: #f5c518;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  /* ── Shell ── */
+  .shell { display: flex; min-height: 100vh; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .sidebar-top {
+    padding: 14px 12px 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  .workspace-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  .workspace-row:hover { background: var(--border); }
+
+  .workspace-icon {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #2e7cf6, #7b3bf5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+
+  .workspace-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .workspace-plan { font-size: 11px; color: var(--text-muted); }
+  .workspace-chevron { margin-left: auto; color: var(--text-muted); font-size: 11px; }
+
+  .sidebar-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 10px 6px;
+  }
+
+  .sa-btn {
+    display: flex; align-items: center; gap: 5px;
+    padding: 4px 6px; border-radius: 5px; border: none;
+    background: transparent; cursor: pointer; color: var(--text-muted);
+    font-size: 12px; transition: all 0.1s;
+  }
+
+  .sa-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+  .sidebar-section { padding: 6px 0; }
+
+  .sidebar-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 6px 14px 3px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border-radius: 5px;
+    margin: 0 6px;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    transition: all 0.1s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .nav-item.active { background: var(--bg-hover); color: var(--text-primary); font-weight: 500; }
+
+  .nav-item .icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+
+  .nav-item.indent { padding-left: 28px; }
+
+  .sidebar-bottom {
+    margin-top: auto;
+    padding: 10px 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .theme-toggle {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; border-radius: 6px;
+    cursor: pointer; transition: background 0.1s;
+    font-size: 12px; color: var(--text-muted);
+  }
+
+  .theme-toggle:hover { background: var(--bg-hover); }
+
+  .toggle-pill {
+    width: 32px; height: 18px;
+    background: var(--border-mid);
+    border-radius: 9px;
+    position: relative;
+    transition: background 0.2s;
+    margin-left: auto;
+  }
+
+  .toggle-pill.on { background: var(--accent); }
+
+  .toggle-knob {
+    width: 14px; height: 14px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px; left: 2px;
+    transition: left 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  .toggle-pill.on .toggle-knob { left: 16px; }
+
+  /* ── Main ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    max-width: 900px;
+    padding: 0 96px 120px;
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    padding: 60px 0 8px;
+    margin-bottom: 8px;
+  }
+
+  .page-emoji { font-size: 52px; margin-bottom: 10px; display: block; line-height: 1; }
+
+  .page-title {
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .page-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .page-meta-item {
+    display: flex; align-items: center; gap: 5px;
+    padding: 3px 8px; border-radius: 4px;
+    font-size: 12px; color: var(--text-muted);
+    cursor: default; transition: background 0.1s;
+  }
+
+  .page-meta-item:hover { background: var(--bg-hover); }
+  .page-meta-label { font-weight: 500; color: var(--text-secondary); }
+
+  .page-divider { border: none; border-top: 1px solid var(--border); margin: 6px 0 32px; }
+
+  /* ── Notion blocks ── */
+  .block { margin-bottom: 2px; position: relative; }
+  .block:hover .block-handle { opacity: 1; }
+
+  .block-handle {
+    position: absolute;
+    left: -28px; top: 4px;
+    opacity: 0;
+    transition: opacity 0.1s;
+    display: flex; align-items: center; gap: 2px;
+  }
+
+  .bh-btn {
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px; cursor: pointer;
+    color: var(--text-muted); font-size: 12px;
+    border: none; background: transparent;
+    transition: background 0.1s;
+  }
+
+  .bh-btn:hover { background: var(--bg-hover); }
+
+  /* ── Text blocks ── */
+  .n-p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+    padding: 2px 0;
+  }
+
+  .n-h1 {
+    font-size: 28px; font-weight: 700;
+    color: var(--text-primary);
+    margin: 28px 0 4px;
+    letter-spacing: -0.3px;
+    line-height: 1.25;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .n-h2 {
+    font-size: 20px; font-weight: 600;
+    color: var(--text-primary);
+    margin: 22px 0 3px;
+    letter-spacing: -0.2px;
+  }
+
+  .n-h3 {
+    font-size: 16px; font-weight: 600;
+    color: var(--text-primary);
+    margin: 16px 0 2px;
+  }
+
+  /* ── Inline styles ── */
+  .n-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    background: var(--bg-code);
+    color: var(--text-code);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  .n-bold { font-weight: 600; }
+  .n-muted { color: var(--text-secondary); }
+  .n-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+  .n-link:hover { border-bottom-color: var(--accent); }
+
+  /* ── Callouts ── */
+  .n-callout {
+    display: flex; gap: 10px;
+    padding: 14px 16px;
+    border-radius: 6px;
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .nc-info    { background: var(--accent-soft); color: var(--text-primary); border: 1px solid rgba(46,124,246,0.15); }
+  .nc-warn    { background: var(--yellow-bg); color: var(--yellow); border: 1px solid rgba(122,92,0,0.15); }
+  .nc-success { background: var(--green-bg); color: var(--green); border: 1px solid rgba(15,123,75,0.15); }
+  .nc-danger  { background: var(--red-bg); color: var(--red); border: 1px solid rgba(192,50,50,0.15); }
+  .nc-neutral { background: var(--bg-callout); color: var(--text-primary); }
+
+  .nc-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .nc-body { flex: 1; }
+
+  /* ── Code block ── */
+  .n-codeblock {
+    background: var(--bg-code);
+    border-radius: 6px;
+    margin: 8px 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .ncb-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 14px;
+    background: var(--border);
+    opacity: 0.8;
+  }
+
+  .ncb-lang {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  .ncb-copy {
+    font-size: 11px; color: var(--text-muted);
+    background: transparent; border: none;
+    cursor: pointer; padding: 2px 6px;
+    border-radius: 3px; transition: all 0.1s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .ncb-copy:hover { background: var(--border-mid); color: var(--text-primary); }
+
+  .ncb-body {
+    padding: 14px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.75;
+    color: var(--text-primary);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .syn-key    { color: #2e7cf6; }
+  .syn-str    { color: #0f7b4b; }
+  .syn-num    { color: #c75600; }
+  .syn-kw     { color: #5c3bc7; }
+  .syn-cls    { color: #c75600; }
+  .syn-fn     { color: #2e7cf6; }
+  .syn-cm     { color: var(--text-muted); font-style: italic; }
+  .syn-pu     { color: var(--text-muted); }
+
+  [data-theme="dark"] .syn-key { color: #4a9eff; }
+  [data-theme="dark"] .syn-str { color: #4cca8a; }
+  [data-theme="dark"] .syn-num { color: #ff9352; }
+  [data-theme="dark"] .syn-kw  { color: #9b7ef8; }
+  [data-theme="dark"] .syn-cls { color: #ff9352; }
+  [data-theme="dark"] .syn-fn  { color: #4a9eff; }
+
+  /* ── Toggles ── */
+  .n-toggle {
+    margin: 4px 0;
+  }
+
+  .toggle-header {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 8px; border-radius: 5px;
+    cursor: pointer; transition: background 0.1s;
+    font-size: 14px; font-weight: 500; color: var(--text-primary);
+    user-select: none;
+  }
+
+  .toggle-header:hover { background: var(--bg-hover); }
+
+  .toggle-arrow {
+    font-size: 10px; color: var(--text-muted);
+    transition: transform 0.15s;
+    flex-shrink: 0;
+  }
+
+  .n-toggle.open .toggle-arrow { transform: rotate(90deg); }
+
+  .toggle-body {
+    display: none;
+    padding: 4px 0 4px 22px;
+  }
+
+  .n-toggle.open .toggle-body { display: block; }
+
+  /* ── Lists ── */
+  .n-ul { list-style: none; margin: 2px 0; }
+  .n-ol { list-style: none; counter-reset: ol-counter; margin: 2px 0; }
+
+  .n-li {
+    display: flex; gap: 8px;
+    padding: 3px 0;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+
+  .n-li-bullet {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    margin-top: 2px;
+    width: 16px;
+    text-align: center;
+  }
+
+  .n-li-bullet::before { content: '•'; }
+
+  .n-ol .n-li { counter-increment: ol-counter; }
+  .n-ol .n-li .n-li-bullet { color: var(--text-muted); }
+  .n-ol .n-li .n-li-bullet::before { content: counter(ol-counter) '.'; }
+
+  /* ── Divider ── */
+  .n-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+  /* ── Table of contents ── */
+  .n-toc {
+    background: var(--bg-callout);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 12px 0 24px;
+    border: 1px solid var(--border);
+  }
+
+  .toc-title {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-muted); margin-bottom: 10px;
+  }
+
+  .toc-item {
+    display: block;
+    font-size: 13px; color: var(--accent);
+    text-decoration: none; padding: 3px 0;
+    transition: opacity 0.1s;
+  }
+
+  .toc-item:hover { opacity: 0.7; }
+  .toc-item.indent { padding-left: 14px; font-size: 12.5px; color: var(--text-secondary); }
+
+  /* ── Properties / database-style ── */
+  .n-properties {
+    background: var(--bg-callout);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0 20px;
+    border: 1px solid var(--border);
+  }
+
+  .prop-row {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .prop-row:last-child { border-bottom: none; }
+
+  .prop-key {
+    font-size: 12px; font-weight: 500;
+    color: var(--text-muted);
+    width: 110px; flex-shrink: 0;
+    display: flex; align-items: center; gap: 5px;
+  }
+
+  .prop-key-icon { font-size: 12px; }
+
+  .prop-val {
+    font-size: 13px;
+    color: var(--text-primary);
+    flex: 1;
+  }
+
+  /* ── Tags / chips ── */
+  .tag {
+    display: inline-flex; align-items: center;
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 500;
+    margin: 1px 2px;
+  }
+
+  .tag-blue   { background: rgba(46,124,246,0.12); color: #2e7cf6; }
+  .tag-green  { background: rgba(15,123,75,0.12); color: #0f7b4b; }
+  .tag-orange { background: rgba(199,86,0,0.12); color: #c75600; }
+  .tag-purple { background: rgba(92,59,199,0.12); color: #5c3bc7; }
+  .tag-red    { background: rgba(192,50,50,0.12); color: #c03232; }
+  .tag-gray   { background: var(--bg-hover); color: var(--text-secondary); }
+
+  [data-theme="dark"] .tag-blue   { background: rgba(74,158,255,0.14); color: #4a9eff; }
+  [data-theme="dark"] .tag-green  { background: rgba(76,202,138,0.14); color: #4cca8a; }
+  [data-theme="dark"] .tag-orange { background: rgba(255,147,82,0.14); color: #ff9352; }
+  [data-theme="dark"] .tag-purple { background: rgba(155,126,248,0.14); color: #9b7ef8; }
+  [data-theme="dark"] .tag-red    { background: rgba(255,112,112,0.14); color: #ff7070; }
+
+  /* ── Quote ── */
+  .n-quote {
+    border-left: 3px solid var(--border-mid);
+    padding: 4px 0 4px 14px;
+    margin: 8px 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  /* ── App card grid ── */
+  .app-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+
+  .app-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: all 0.15s;
+    cursor: default;
+  }
+
+  .app-card:hover { border-color: var(--border-mid); background: var(--bg-hover); }
+
+  .ac-header { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; }
+  .ac-icon { font-size: 20px; }
+  .ac-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .ac-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+  .ac-font-row { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+
+  .ac-badge {
+    font-size: 10px; font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    padding: 2px 6px; border-radius: 3px;
+    background: var(--bg-code); color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .ac-font-name { font-size: 12.5px; color: var(--text-primary); font-weight: 500; }
+  .ac-font-weights { font-size: 11px; color: var(--text-muted); margin-left: auto; font-family: 'DM Mono', monospace; }
+
+  /* ── Table ── */
+  .n-table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13.5px; }
+
+  .n-table th {
+    text-align: left; padding: 8px 12px;
+    font-size: 12px; font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-callout);
+  }
+
+  .n-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+    vertical-align: top;
+  }
+
+  .n-table tr:last-child td { border-bottom: none; }
+  .n-table tr:hover td { background: var(--bg-hover); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="workspace-row">
+        <div class="workspace-icon">🏗</div>
+        <div>
+          <div class="workspace-name">Grascope</div>
+          <div class="workspace-plan">Design System Docs</div>
+        </div>
+        <div class="workspace-chevron">⌄</div>
+      </div>
+    </div>
+
+    <div class="sidebar-actions">
+      <button class="sa-btn">🔍 Search</button>
+      <button class="sa-btn">🏠 Home</button>
+      <button class="sa-btn">+ New</button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Merkado DS</div>
+      <a class="nav-item active" href="#overview"><span class="icon">📋</span>Overview</a>
+      <a class="nav-item" href="#architecture"><span class="icon">🏛</span>Architecture</a>
+      <a class="nav-item" href="#fonts"><span class="icon">🔤</span>Typography Strategy</a>
+      <a class="nav-item indent" href="#font-mycut"><span class="icon">✂️</span>MyCut</a>
+      <a class="nav-item indent" href="#font-haulway"><span class="icon">👗</span>Haulway</a>
+      <a class="nav-item indent" href="#font-driply"><span class="icon">🪡</span>Driply</a>
+      <a class="nav-item indent" href="#font-feastfeed"><span class="icon">🍜</span>FeastFeed</a>
+      <a class="nav-item" href="#setup"><span class="icon">⚙️</span>Setup Guide</a>
+      <a class="nav-item indent" href="#download-fonts"><span class="icon">⬇️</span>Download Fonts</a>
+      <a class="nav-item indent" href="#package-pubspec"><span class="icon">📦</span>Package pubspec</a>
+      <a class="nav-item indent" href="#app-pubspecs"><span class="icon">📱</span>App pubspecs</a>
+      <a class="nav-item" href="#theme-system"><span class="icon">🎨</span>Theme System</a>
+      <a class="nav-item indent" href="#font-constants"><span class="icon">🔑</span>Font Constants</a>
+      <a class="nav-item indent" href="#color-scheme"><span class="icon">🎭</span>AppColorScheme</a>
+      <a class="nav-item indent" href="#theme-builder"><span class="icon">🔧</span>ThemeBuilder</a>
+      <a class="nav-item indent" href="#barrel"><span class="icon">📤</span>Exports</a>
+      <a class="nav-item" href="#app-themes"><span class="icon">📱</span>App Theme Files</a>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <span>🌙</span>
+        <span style="font-size:12px">Dark mode</span>
+        <div class="toggle-pill" id="theme-pill">
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main content ── -->
+  <main class="main">
+
+    <!-- Page header -->
+    <div class="page-header" id="overview">
+      <span class="page-emoji">🏗</span>
+      <h1 class="page-title">Merkado Design System</h1>
+    </div>
+
+    <div class="page-meta">
+      <div class="page-meta-item"><span class="page-meta-label">Owner</span> UI/UX Design Team</div>
+      <div class="page-meta-item"><span class="page-meta-label">Updated</span> Feb 2026</div>
+      <div class="page-meta-item"><span class="page-meta-label">Status</span> <span class="tag tag-green">Active</span></div>
+      <div class="page-meta-item"><span class="page-meta-label">Version</span> 1.0</div>
+    </div>
+
+    <hr class="page-divider">
+
+    <!-- Properties -->
+    <div class="n-properties">
+      <div class="prop-row">
+        <div class="prop-key"><span class="prop-key-icon">📦</span> Package</div>
+        <div class="prop-val"><span class="n-code">merkado_ds</span> — shared Flutter package</div>
+      </div>
+      <div class="prop-row">
+        <div class="prop-key"><span class="prop-key-icon">📱</span> Apps</div>
+        <div class="prop-val">
+          <span class="tag tag-green">MyCut</span>
+          <span class="tag tag-orange">Haulway</span>
+          <span class="tag tag-purple">Driply</span>
+          <span class="tag tag-red">FeastFeed</span>
+        </div>
+      </div>
+      <div class="prop-row">
+        <div class="prop-key"><span class="prop-key-icon">🎨</span> Components</div>
+        <div class="prop-val">Mix 2.0 · Flutter ThemeData · Figma Variables</div>
+      </div>
+      <div class="prop-row">
+        <div class="prop-key"><span class="prop-key-icon">🔤</span> Fonts</div>
+        <div class="prop-val">Inter · DM Mono · DM Sans · Outfit · Manrope · Lobster · EB Garamond</div>
+      </div>
+    </div>
+
+    <!-- Table of contents -->
+    <div class="n-toc">
+      <div class="toc-title">On this page</div>
+      <a class="toc-item" href="#architecture">Architecture Decision</a>
+      <a class="toc-item" href="#fonts">Typography Strategy</a>
+      <a class="toc-item indent" href="#font-mycut">↳ MyCut — Inter</a>
+      <a class="toc-item indent" href="#font-haulway">↳ Haulway — DM Sans</a>
+      <a class="toc-item indent" href="#font-driply">↳ Driply — Outfit</a>
+      <a class="toc-item indent" href="#font-feastfeed">↳ FeastFeed — Manrope</a>
+      <a class="toc-item" href="#setup">Setup Guide</a>
+      <a class="toc-item indent" href="#download-fonts">↳ Downloading Fonts</a>
+      <a class="toc-item indent" href="#package-pubspec">↳ Package pubspec.yaml</a>
+      <a class="toc-item indent" href="#app-pubspecs">↳ Per-App pubspecs</a>
+      <a class="toc-item" href="#theme-system">Theme System</a>
+      <a class="toc-item indent" href="#font-constants">↳ Font Constants</a>
+      <a class="toc-item indent" href="#color-scheme">↳ AppColorScheme</a>
+      <a class="toc-item indent" href="#theme-builder">↳ ThemeConfig + Builder</a>
+      <a class="toc-item indent" href="#barrel">↳ Barrel Export</a>
+      <a class="toc-item" href="#app-themes">App Theme Files</a>
+    </div>
+
+    <div class="block">
+      <p class="n-p">This document covers the full typography and theming strategy for the <span class="n-bold">Grascope Product Suite</span>, built on the Merkado OS shared design system. Four apps share one package — each with a distinct visual identity configured through a minimal config object.</p>
+    </div>
+
+    <hr class="n-divider">
+
+    <!-- Architecture -->
+    <h1 class="n-h1" id="architecture">🏛 Architecture Decision</h1>
+
+    <p class="n-p">One shared package (<span class="n-code">merkado_ds</span>) holds all tokens, font files, theme builders, and Mix 2.0 styles. Each app fills in a single config object — that's the entire theme footprint per app.</p>
+
+    <div class="n-callout nc-info">
+      <span class="nc-icon">💡</span>
+      <div class="nc-body"><span class="n-bold">Why one package?</span> Typography and Spacing semantics are identical across all apps. Only color semantics differ. A shared package prevents copy-paste drift — no more one app with <span class="n-code">borderRadius: 12</span> and another with <span class="n-code">borderRadius: 14</span> six months later.</div>
+    </div>
+
+    <h2 class="n-h2">Package structure</h2>
+
+    <div class="n-codeblock">
+      <div class="ncb-header"><span class="ncb-lang">directory</span><button class="ncb-copy">Copy</button></div>
+      <div class="ncb-body"><span class="syn-fn">merkado_ds/</span>
+├── <span class="syn-fn">fonts/</span>                         <span class="syn-cm">← ALL .ttf files — never in individual apps</span>
+├── <span class="syn-fn">lib/</span>
+│   ├── <span class="syn-str">merkado_ds.dart</span>              <span class="syn-cm">← barrel (apps use one import)</span>
+│   └── <span class="syn-fn">src/</span>
+│       ├── <span class="syn-fn">tokens/primitives/</span>
+│       │   ├── colors.dart  typography.dart  spacing.dart
+│       ├── <span class="syn-fn">tokens/semantic/</span>
+│       │   ├── <span class="syn-str">typography.dart</span>          <span class="syn-cm">← shared all apps</span>
+│       │   ├── <span class="syn-str">spacing.dart</span>             <span class="syn-cm">← shared all apps</span>
+│       │   ├── <span class="syn-str">font_families.dart</span>       <span class="syn-cm">← string constants</span>
+│       │   └── <span class="syn-fn">colors/</span>
+│       │       ├── <span class="syn-str">app_color_scheme.dart</span>  <span class="syn-cm">← key abstraction</span>
+│       │       ├── mycut_light.dart  mycut_dark.dart
+│       │       ├── haulway_light.dart  haulway_dark.dart
+│       │       ├── driply_light.dart  driply_dark.dart
+│       │       └── feastfeed_light.dart  feastfeed_dark.dart
+│       ├── <span class="syn-fn">theme/</span>
+│       │   ├── <span class="syn-str">merkado_theme_config.dart</span>
+│       │   └── <span class="syn-str">merkado_theme_builder.dart</span>
+│       └── <span class="syn-fn">mix/</span>
+│           ├── mix_token_provider.dart
+│           └── styles/  button_style.dart  card_style.dart
+
+<span class="syn-cm">Each app writes exactly one file:</span>
+mycut/lib/theme/<span class="syn-str">mycut_theme.dart</span>
+haulway/lib/theme/<span class="syn-str">haulway_theme.dart</span>
+driply/lib/theme/<span class="syn-str">driply_theme.dart</span>
+feastfeed/lib/theme/<span class="syn-str">feastfeed_theme.dart</span></div>
+    </div>
+
+    <hr class="n-divider">
+
+    <!-- Typography Strategy -->
+    <h1 class="n-h1" id="fonts">🔤 Typography Strategy</h1>
+
+    <p class="n-p">Each product serves a different emotional and functional context. Typography reflects this while maintaining enough consistency for users to recognize the ecosystem. All shared UI components — buttons, forms, navigation — use <span class="n-bold">Inter</span> across all four apps.</p>
+
+    <div class="n-callout nc-warn">
+      <span class="nc-icon">⚠️</span>
+      <div class="nc-body"><span class="n-bold">SF Pro Note (MyCut):</span> SF Pro appears in the Figma as MyCut's font. It is Apple's system font and <span class="n-bold">cannot be bundled legally</span>. The typography doc already resolves this — Inter achieves the same professional, neutral feel and is used by Stripe, GitHub, and Linear. Confirm with your designer this was a Figma placeholder.</div>
+    </div>
+
+    <div class="app-cards">
+      <!-- MyCut -->
+      <div class="app-card" id="font-mycut">
+        <div class="ac-header">
+          <span class="ac-icon">✂️</span>
+          <div>
+            <div class="ac-name">MyCut</div>
+            <div class="ac-sub">Deal Marketplace</div>
+          </div>
+        </div>
+        <div class="ac-font-row">
+          <span class="ac-badge">Primary</span>
+          <span class="ac-font-name">Inter</span>
+          <span class="ac-font-weights">400 · 500 · 600 · 700</span>
+        </div>
+        <div class="ac-font-row">
+          <span class="ac-badge">Mono</span>
+          <span class="ac-font-name">DM Mono</span>
+          <span class="ac-font-weights">400 · 500</span>
+        </div>
+      </div>
+
+      <!-- Haulway -->
+      <div class="app-card" id="font-haulway">
+        <div class="ac-header">
+          <span class="ac-icon">👗</span>
+          <div>
+            <div class="ac-name">Haulway</div>
+            <div class="ac-sub">Fashion Social Commerce</div>
+          </div>
+        </div>
+        <div class="ac-font-row">
+          <span class="ac-badge">Primary</span>
+          <span class="ac-font-name">DM Sans</span>
+          <span class="ac-font-weights">400 · 500 · 600 · 700</span>
+        </div>
+        <div class="ac-font-row">
+          <span class="ac-badge">Display</span>
+          <span class="ac-font-name">Outfit</span>
+          <span class="ac-font-weights">700 only</span>
+        </div>
+      </div>
+
+      <!-- Driply -->
+      <div class="app-card" id="font-driply">
+        <div class="ac-header">
+          <span class="ac-icon">🪡</span>
+          <div>
+            <div class="ac-name">Driply</div>
+            <div class="ac-sub">Custom Tailoring</div>
+          </div>
+        </div>
+        <div class="ac-font-row">
+          <span class="ac-badge">Primary</span>
+          <span class="ac-font-name">Outfit</span>
+          <span class="ac-font-weights">400 · 500 · 600 · 700</span>
+        </div>
+        <div class="ac-font-row">
+          <span class="ac-badge">Premium</span>
+          <span class="ac-font-name">EB Garamond</span>
+          <span class="ac-font-weights">400 · 600</span>
+        </div>
+      </div>
+
+      <!-- FeastFeed -->
+      <div class="app-card" id="font-feastfeed">
+        <div class="ac-header">
+          <span class="ac-icon">🍜</span>
+          <div>
+            <div class="ac-name">FeastFeed</div>
+            <div class="ac-sub">Food Vendors & Creators</div>
+          </div>
+        </div>
+        <div class="ac-font-row">
+          <span class="ac-badge">Primary</span>
+          <span class="ac-font-name">Manrope</span>
+          <span class="ac-font-weights">400 · 500 · 600 · 700 · 800</span>
+        </div>
+        <div class="ac-font-row">
+          <span class="ac-badge">Display</span>
+          <span class="ac-font-name">Lobster</span>
+          <span class="ac-font-weights">400 only · sparingly</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="n-h2">Font personality rationale</h2>
+
+    <div class="n-toggle open">
+      <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="toggle-arrow">▶</span> ✂️ MyCut — Inter
+      </div>
+      <div class="toggle-body">
+        <p class="n-p" style="margin-bottom:6px">Trustworthy, professional, no-nonsense. This is about money and contracts — not a lifestyle app.</p>
+        <ul class="n-ul">
+          <li class="n-li"><span class="n-li-bullet"></span><div>Designed for UI readability from 12px upward</div></li>
+          <li class="n-li"><span class="n-li-bullet"></span><div>Excellent tabular figures for money amounts, deal IDs, dates</div></li>
+          <li class="n-li"><span class="n-li-bullet"></span><div>9 weights — full hierarchy from display to caption</div></li>
+          <li class="n-li"><span class="n-li-bullet"></span><div><span class="n-bold">DM Mono</span> secondary for deal IDs (<span class="n-code">MYCUT-12345</span>), wallet addresses, transaction references</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="n-toggle">
+      <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="toggle-arrow">▶</span> 👗 Haulway — DM Sans
+      </div>
+      <div class="toggle-body">
+        <p class="n-p" style="margin-bottom:6px">Trendy, energetic, aspirational. Social-first, visual-heavy, fast-paced — evokes TikTok, Instagram, Pinterest.</p>
+        <ul class="n-ul">
+          <li class="n-li"><span class="n-li-bullet"></span><div>Modern geometric, slightly rounded — friendlier than Inter</div></li>
+          <li class="n-li"><span class="n-li-bullet"></span><div>Designed for low x-height mobile screens</div></li>
+          <li class="n-li"><span class="n-li-bullet"></span><div>Clean at small sizes for product tags on video</div></li>
+          <li class="n-li"><span class="n-li-bullet"></span><div><span class="n-bold">Outfit</span> secondary for hero sections and creator profile headers at 24px+</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="n-toggle">
+      <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="toggle-arrow">▶</span> 🪡 Driply — Outfit
+      </div>
+      <div class="toggle-body">
+        <p class="n-p" style="margin-bottom:6px">Precise, crafted, premium quality. Evokes fabric labels, measurement charts, bespoke tailoring.</p>
+        <ul class="n-ul">
+          <li class="n-li"><span class="n-li-bullet"></span><div>Geometric, clean, modern — evokes precision like measuring tape increments</div></li>
+          <li class="n-li"><span class="n-li-bullet"></span><div>Good for specifications, measurements, sizes, fabric types</div></li>
+          <li class="n-li"><span class="n-li-bullet"></span><div><span class="n-bold">EB Garamond</span> secondary for premium/luxury contexts — bridal gown commissions, verified designer profiles only</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="n-toggle">
+      <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="toggle-arrow">▶</span> 🍜 FeastFeed — Manrope
+      </div>
+      <div class="toggle-body">
+        <p class="n-p" style="margin-bottom:6px">Appetizing, local, authentic. Celebrates street food, home cooking, cultural food.</p>
+        <ul class="n-ul">
+          <li class="n-li"><span class="n-li-bullet"></span><div>Geometric with slight warmth — rounded corners, modern but not cold</div></li>
+          <li class="n-li"><span class="n-li-bullet"></span><div>7 weights including ExtraBold — strong vendor names, bold dish names</div></li>
+          <li class="n-li"><span class="n-li-bullet"></span><div><span class="n-bold">Lobster</span> secondary for the logo and category headers only. Script/handwritten feel evokes food trucks and chalkboard menus. Never for body text. Never small.</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="n-divider">
+
+    <!-- Setup Guide -->
+    <h1 class="n-h1" id="setup">⚙️ Setup Guide</h1>
+
+    <h2 class="n-h2" id="download-fonts">Downloading the Fonts</h2>
+
+    <p class="n-p">All fonts are on Google Fonts — free and open-source. Download each, unzip, and place the <span class="n-code">.ttf</span> files inside <span class="n-code">merkado_ds/fonts/</span>. <span class="n-bold">Never put font files inside individual app directories.</span></p>
+
+    <div class="n-callout nc-neutral">
+      <span class="nc-icon">📎</span>
+      <div class="nc-body">If the zip contains a variable font (e.g. <span class="n-code">DMSans[opsz,wght].ttf</span>), use it instead — one file covers all weights and simplifies your pubspec declarations.</div>
+    </div>
+
+    <table class="n-table">
+      <thead>
+        <tr><th>Font</th><th>URL</th><th>Apps</th><th>Weights</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="n-bold">Inter</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)">fonts.google.com/specimen/Inter</span></td>
+          <td><span class="tag tag-gray">Shared UI</span> <span class="tag tag-green">MyCut</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:11px">400 · 500 · 600 · 700</span></td>
+        </tr>
+        <tr>
+          <td><span class="n-bold">DM Mono</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)">fonts.google.com/specimen/DM+Mono</span></td>
+          <td><span class="tag tag-green">MyCut</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:11px">400 · 500</span></td>
+        </tr>
+        <tr>
+          <td><span class="n-bold">DM Sans</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)">fonts.google.com/specimen/DM+Sans</span></td>
+          <td><span class="tag tag-orange">Haulway</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:11px">400 · 500 · 600 · 700</span></td>
+        </tr>
+        <tr>
+          <td><span class="n-bold">Outfit</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)">fonts.google.com/specimen/Outfit</span></td>
+          <td><span class="tag tag-purple">Driply</span> <span class="tag tag-orange">Haulway</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:11px">400 · 500 · 600 · 700</span></td>
+        </tr>
+        <tr>
+          <td><span class="n-bold">Manrope</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)">fonts.google.com/specimen/Manrope</span></td>
+          <td><span class="tag tag-red">FeastFeed</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:11px">400 · 500 · 600 · 700 · 800</span></td>
+        </tr>
+        <tr>
+          <td><span class="n-bold">Lobster</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)">fonts.google.com/specimen/Lobster</span></td>
+          <td><span class="tag tag-red">FeastFeed</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:11px">400</span></td>
+        </tr>
+        <tr>
+          <td><span class="n-bold">EB Garamond</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)">fonts.google.com/specimen/EB+Garamond</span></td>
+          <td><span class="tag tag-purple">Driply</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:11px">400 · 600</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="n-h2" id="package-pubspec">Package pubspec.yaml</h2>
+
+    <p class="n-p">All fonts declared once here. Apps reference them via <span class="n-code">packages/merkado_ds/fonts/...</span></p>
+
+    <div class="n-codeblock">
+      <div class="ncb-header"><span class="ncb-lang">yaml — merkado_ds/pubspec.yaml</span><button class="ncb-copy">Copy</button></div>
+      <div class="ncb-body"><span class="syn-key">flutter</span>:
+  <span class="syn-key">fonts</span>:
+    <span class="syn-cm"># ── Shared UI + MyCut ──</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">Inter</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Inter-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Inter-Medium.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">500</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Inter-SemiBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">600</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Inter-Bold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">700</span>
+    <span class="syn-cm"># ── MyCut mono ──</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">DM Mono</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/DMMono-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/DMMono-Medium.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">500</span>
+    <span class="syn-cm"># ── Haulway primary ──</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">DM Sans</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/DMSans-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/DMSans-Medium.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">500</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/DMSans-SemiBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">600</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/DMSans-Bold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">700</span>
+    <span class="syn-cm"># ── Driply primary + Haulway display ──</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">Outfit</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Outfit-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Outfit-Medium.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">500</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Outfit-SemiBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">600</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Outfit-Bold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">700</span>
+    <span class="syn-cm"># ── FeastFeed primary ──</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">Manrope</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Manrope-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Manrope-Medium.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">500</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Manrope-SemiBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">600</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Manrope-Bold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">700</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Manrope-ExtraBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">800</span>
+    <span class="syn-cm"># ── FeastFeed display ──</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">Lobster</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/Lobster-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+    <span class="syn-cm"># ── Driply premium ──</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">EB Garamond</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/EBGaramond-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">fonts/EBGaramond-SemiBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">600</span></div>
+    </div>
+
+    <h2 class="n-h2" id="app-pubspecs">Per-App pubspecs</h2>
+
+    <p class="n-p">Each app re-declares only its own fonts, referencing the package path. Flutter doesn't inherit font assets from packages automatically — one-time copy per app. Each app only pulls in what it uses.</p>
+
+    <div class="n-callout nc-warn">
+      <span class="nc-icon">⚠️</span>
+      <div class="nc-body">Driply does not declare Lobster. MyCut does not declare Manrope. Declare only what your app actually renders — keep bundle sizes lean.</div>
+    </div>
+
+    <div class="n-toggle open">
+      <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="toggle-arrow">▶</span> ✂️ mycut/pubspec.yaml
+      </div>
+      <div class="toggle-body">
+        <div class="n-codeblock">
+          <div class="ncb-header"><span class="ncb-lang">yaml</span><button class="ncb-copy">Copy</button></div>
+          <div class="ncb-body"><span class="syn-key">flutter</span>:
+  <span class="syn-key">fonts</span>:
+    - <span class="syn-key">family</span>: <span class="syn-str">Inter</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Inter-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Inter-Medium.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">500</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Inter-SemiBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">600</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Inter-Bold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">700</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">DM Mono</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/DMMono-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/DMMono-Medium.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">500</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n-toggle">
+      <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="toggle-arrow">▶</span> 👗 haulway/pubspec.yaml
+      </div>
+      <div class="toggle-body">
+        <div class="n-codeblock">
+          <div class="ncb-header"><span class="ncb-lang">yaml</span><button class="ncb-copy">Copy</button></div>
+          <div class="ncb-body"><span class="syn-key">flutter</span>:
+  <span class="syn-key">fonts</span>:
+    - <span class="syn-key">family</span>: <span class="syn-str">DM Sans</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/DMSans-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/DMSans-Medium.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">500</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/DMSans-SemiBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">600</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/DMSans-Bold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">700</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">Outfit</span>  <span class="syn-cm"># display only</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Outfit-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Outfit-Bold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">700</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n-toggle">
+      <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="toggle-arrow">▶</span> 🪡 driply/pubspec.yaml
+      </div>
+      <div class="toggle-body">
+        <div class="n-codeblock">
+          <div class="ncb-header"><span class="ncb-lang">yaml</span><button class="ncb-copy">Copy</button></div>
+          <div class="ncb-body"><span class="syn-key">flutter</span>:
+  <span class="syn-key">fonts</span>:
+    - <span class="syn-key">family</span>: <span class="syn-str">Outfit</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Outfit-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Outfit-Medium.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">500</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Outfit-SemiBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">600</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Outfit-Bold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">700</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">EB Garamond</span>  <span class="syn-cm"># premium contexts only</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/EBGaramond-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/EBGaramond-SemiBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">600</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n-toggle">
+      <div class="toggle-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="toggle-arrow">▶</span> 🍜 feastfeed/pubspec.yaml
+      </div>
+      <div class="toggle-body">
+        <div class="n-codeblock">
+          <div class="ncb-header"><span class="ncb-lang">yaml</span><button class="ncb-copy">Copy</button></div>
+          <div class="ncb-body"><span class="syn-key">flutter</span>:
+  <span class="syn-key">fonts</span>:
+    - <span class="syn-key">family</span>: <span class="syn-str">Manrope</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Manrope-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Manrope-Medium.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">500</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Manrope-SemiBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">600</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Manrope-Bold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">700</span>
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Manrope-ExtraBold.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">800</span>
+    - <span class="syn-key">family</span>: <span class="syn-str">Lobster</span>  <span class="syn-cm"># logo / category headers only</span>
+      <span class="syn-key">fonts</span>:
+        - <span class="syn-key">asset</span>: <span class="syn-str">packages/merkado_ds/fonts/Lobster-Regular.ttf</span>
+          <span class="syn-key">weight</span>: <span class="syn-num">400</span></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="n-divider">
+
+    <!-- Theme System -->
+    <h1 class="n-h1" id="theme-system">🎨 Theme System</h1>
+
+    <h2 class="n-h2" id="font-constants">Font Family Constants</h2>
+    <p class="n-p">Never hardcode font name strings anywhere in the codebase. Change a font in one place and it propagates everywhere.</p>
+
+    <div class="n-codeblock">
+      <div class="ncb-header"><span class="ncb-lang">dart — font_families.dart</span><button class="ncb-copy">Copy</button></div>
+      <div class="ncb-body"><span class="syn-kw">class</span> <span class="syn-cls">MerkadoFonts</span> <span class="syn-pu">{</span>
+  <span class="syn-cls">MerkadoFonts</span><span class="syn-pu">._();</span>
+
+  <span class="syn-cm">// Shared UI — all buttons, forms, nav across every app</span>
+  <span class="syn-kw">static const</span> <span class="syn-cls">String</span> ui   <span class="syn-pu">=</span> <span class="syn-str">'Inter'</span><span class="syn-pu">;</span>
+  <span class="syn-kw">static const</span> <span class="syn-cls">String</span> mono <span class="syn-pu">=</span> <span class="syn-str">'DM Mono'</span><span class="syn-pu">;</span>
+
+  <span class="syn-cm">// Product primary fonts — pass to fontFamilyOverride</span>
+  <span class="syn-kw">static const</span> <span class="syn-cls">String</span> mycut     <span class="syn-pu">=</span> <span class="syn-str">'Inter'</span><span class="syn-pu">;</span>    <span class="syn-cm">// same as UI, explicit</span>
+  <span class="syn-kw">static const</span> <span class="syn-cls">String</span> haulway   <span class="syn-pu">=</span> <span class="syn-str">'DM Sans'</span><span class="syn-pu">;</span>
+  <span class="syn-kw">static const</span> <span class="syn-cls">String</span> feastfeed <span class="syn-pu">=</span> <span class="syn-str">'Manrope'</span><span class="syn-pu">;</span>
+  <span class="syn-kw">static const</span> <span class="syn-cls">String</span> driply    <span class="syn-pu">=</span> <span class="syn-str">'Outfit'</span><span class="syn-pu">;</span>
+
+  <span class="syn-cm">// Secondary / display — used in widgets, NOT in ThemeData</span>
+  <span class="syn-kw">static const</span> <span class="syn-cls">String</span> haulwayDisplay  <span class="syn-pu">=</span> <span class="syn-str">'Outfit'</span><span class="syn-pu">;</span>       <span class="syn-cm">// hero 24px+</span>
+  <span class="syn-kw">static const</span> <span class="syn-cls">String</span> feastfeedDisplay <span class="syn-pu">=</span> <span class="syn-str">'Lobster'</span><span class="syn-pu">;</span>      <span class="syn-cm">// logo only</span>
+  <span class="syn-kw">static const</span> <span class="syn-cls">String</span> driplyPremium   <span class="syn-pu">=</span> <span class="syn-str">'EB Garamond'</span><span class="syn-pu">;</span>   <span class="syn-cm">// bridal</span>
+  <span class="syn-kw">static const</span> <span class="syn-cls">String</span> mycutMono       <span class="syn-pu">=</span> <span class="syn-str">'DM Mono'</span><span class="syn-pu">;</span>       <span class="syn-cm">// IDs, refs</span>
+<span class="syn-pu">}</span></div>
+    </div>
+
+    <h2 class="n-h2" id="color-scheme">AppColorScheme</h2>
+    <p class="n-p">The normalized color contract. The theme builder only ever reads from this class — it never imports <span class="n-code">MycutLightColors</span> or <span class="n-code">DriplyDarkColors</span> directly. That layer of indirection is what makes the builder reusable.</p>
+
+    <div class="n-quote">Each app's semantic color file provides a factory method that maps its tokens into the shared contract.</div>
+
+    <div class="n-codeblock">
+      <div class="ncb-header"><span class="ncb-lang">dart — app_color_scheme.dart</span><button class="ncb-copy">Copy</button></div>
+      <div class="ncb-body"><span class="syn-kw">class</span> <span class="syn-cls">AppColorScheme</span> <span class="syn-pu">{</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> brandPrimary<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> brandSecondary<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> backgroundPrimary<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> backgroundSurface<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> textPrimary<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> textSecondary<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> textDisabled<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> borderDefault<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> borderFocused<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> stateSuccess<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> stateWarning<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> stateError<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> surfaceContainer<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">Color</span> surfaceCard<span class="syn-pu">;</span>
+
+  <span class="syn-cm">// One factory per app</span>
+  <span class="syn-kw">factory</span> <span class="syn-cls">AppColorScheme</span><span class="syn-pu">.</span><span class="syn-fn">fromMycut</span><span class="syn-pu">({</span><span class="syn-kw">required bool</span> isDark<span class="syn-pu">})</span> <span class="syn-pu">{...}</span>
+  <span class="syn-kw">factory</span> <span class="syn-cls">AppColorScheme</span><span class="syn-pu">.</span><span class="syn-fn">fromHaulway</span><span class="syn-pu">({</span><span class="syn-kw">required bool</span> isDark<span class="syn-pu">})</span> <span class="syn-pu">{...}</span>
+  <span class="syn-kw">factory</span> <span class="syn-cls">AppColorScheme</span><span class="syn-pu">.</span><span class="syn-fn">fromDriply</span><span class="syn-pu">({</span><span class="syn-kw">required bool</span> isDark<span class="syn-pu">})</span> <span class="syn-pu">{...}</span>
+  <span class="syn-kw">factory</span> <span class="syn-cls">AppColorScheme</span><span class="syn-pu">.</span><span class="syn-fn">fromFeastfeed</span><span class="syn-pu">({</span><span class="syn-kw">required bool</span> isDark<span class="syn-pu">})</span> <span class="syn-pu">{...}</span>
+<span class="syn-pu">}</span></div>
+    </div>
+
+    <h2 class="n-h2" id="theme-builder">MerkadoThemeConfig + Builder</h2>
+    <p class="n-p">Config is what each app fills in. Builder assembles the ThemeData. Every sub-theme is a modular private function — pass an override in the config to replace any slot, or leave it null to use the package default.</p>
+
+    <div class="n-codeblock">
+      <div class="ncb-header"><span class="ncb-lang">dart — merkado_theme_config.dart</span><button class="ncb-copy">Copy</button></div>
+      <div class="ncb-body"><span class="syn-kw">class</span> <span class="syn-cls">MerkadoThemeConfig</span> <span class="syn-pu">{</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">AppColorScheme</span> colors<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">String</span><span class="syn-pu">?</span> fontFamilyOverride<span class="syn-pu">;</span>      <span class="syn-cm">// use MerkadoFonts.xxx</span>
+  <span class="syn-kw">final double</span> borderRadius<span class="syn-pu">;</span>
+
+  <span class="syn-cm">// Sub-theme overrides — null = use package default</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">AppBarTheme</span><span class="syn-pu">?</span>            appBarThemeOverride<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">ElevatedButtonThemeData</span><span class="syn-pu">?</span> elevatedButtonOverride<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">InputDecorationTheme</span><span class="syn-pu">?</span>   inputDecorationOverride<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">BottomSheetThemeData</span><span class="syn-pu">?</span>   bottomSheetOverride<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">ChipThemeData</span><span class="syn-pu">?</span>          chipOverride<span class="syn-pu">;</span>
+  <span class="syn-kw">final</span> <span class="syn-cls">CheckboxThemeData</span><span class="syn-pu">?</span>      checkboxOverride<span class="syn-pu">;</span>
+
+  <span class="syn-kw">const</span> <span class="syn-cls">MerkadoThemeConfig</span><span class="syn-pu">({</span>
+    <span class="syn-kw">required</span> <span class="syn-kw">this</span><span class="syn-pu">.</span>colors<span class="syn-pu">,</span>
+    <span class="syn-kw">this</span><span class="syn-pu">.</span>fontFamilyOverride<span class="syn-pu">,</span>
+    <span class="syn-kw">this</span><span class="syn-pu">.</span>borderRadius <span class="syn-pu">=</span> <span class="syn-num">12.0</span><span class="syn-pu">,</span>
+    <span class="syn-cm">// all overrides default to null</span>
+  <span class="syn-pu">});</span>
+<span class="syn-pu">}</span></div>
+    </div>
+
+    <h2 class="n-h2" id="barrel">Barrel Export</h2>
+    <p class="n-p">One import in every app. Apps never reference <span class="n-code">src/</span> paths directly.</p>
+
+    <div class="n-codeblock">
+      <div class="ncb-header"><span class="ncb-lang">dart — merkado_ds.dart</span><button class="ncb-copy">Copy</button></div>
+      <div class="ncb-body"><span class="syn-kw">library</span> merkado_ds<span class="syn-pu">;</span>
+
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/primitives/colors.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/primitives/typography.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/primitives/spacing.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/typography.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/spacing.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/font_families.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/colors/app_color_scheme.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/colors/mycut_light.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/colors/mycut_dark.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/colors/haulway_light.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/colors/haulway_dark.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/colors/driply_light.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/colors/driply_dark.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/colors/feastfeed_light.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/tokens/semantic/colors/feastfeed_dark.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/theme/merkado_theme_config.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/theme/merkado_theme_builder.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/mix/mix_token_provider.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/mix/styles/button_style.dart'</span><span class="syn-pu">;</span>
+<span class="syn-kw">export</span> <span class="syn-str">'src/mix/styles/card_style.dart'</span><span class="syn-pu">;</span></div>
+    </div>
+
+    <hr class="n-divider">
+
+    <!-- App Themes -->
+    <h1 class="n-h1" id="app-themes">📱 App Theme Files</h1>
+
+    <p class="n-p">This is the entire theme footprint each app writes. One import, fill in the config, wire into <span class="n-code">MaterialApp</span>.</p>
+
+    <div class="n-codeblock">
+      <div class="ncb-header"><span class="ncb-lang">dart — haulway_theme.dart (example)</span><button class="ncb-copy">Copy</button></div>
+      <div class="ncb-body"><span class="syn-kw">import</span> <span class="syn-str">'package:merkado_ds/merkado_ds.dart'</span><span class="syn-pu">;</span>
+
+<span class="syn-kw">class</span> <span class="syn-cls">HaulwayTheme</span> <span class="syn-pu">{</span>
+  <span class="syn-cls">HaulwayTheme</span><span class="syn-pu">._();</span>
+
+  <span class="syn-kw">static</span> <span class="syn-cls">ThemeData</span> <span class="syn-kw">get</span> light <span class="syn-pu">=></span> <span class="syn-cls">MerkadoThemeBuilder</span><span class="syn-pu">.</span><span class="syn-fn">build</span><span class="syn-pu">(</span>
+    isDark<span class="syn-pu">:</span> <span class="syn-kw">false</span><span class="syn-pu">,</span>
+    config<span class="syn-pu">:</span> <span class="syn-cls">MerkadoThemeConfig</span><span class="syn-pu">(</span>
+      colors<span class="syn-pu">:</span> <span class="syn-cls">AppColorScheme</span><span class="syn-pu">.</span><span class="syn-fn">fromHaulway</span><span class="syn-pu">(</span>isDark<span class="syn-pu">:</span> <span class="syn-kw">false</span><span class="syn-pu">),</span>
+      fontFamilyOverride<span class="syn-pu">:</span> <span class="syn-cls">MerkadoFonts</span><span class="syn-pu">.</span>haulway<span class="syn-pu">,</span>
+      borderRadius<span class="syn-pu">:</span> <span class="syn-num">12.0</span><span class="syn-pu">,</span>
+    <span class="syn-pu">),</span>
+  <span class="syn-pu">);</span>
+
+  <span class="syn-kw">static</span> <span class="syn-cls">ThemeData</span> <span class="syn-kw">get</span> dark <span class="syn-pu">=></span> <span class="syn-cls">MerkadoThemeBuilder</span><span class="syn-pu">.</span><span class="syn-fn">build</span><span class="syn-pu">(</span>
+    isDark<span class="syn-pu">:</span> <span class="syn-kw">true</span><span class="syn-pu">,</span>
+    config<span class="syn-pu">:</span> <span class="syn-cls">MerkadoThemeConfig</span><span class="syn-pu">(</span>
+      colors<span class="syn-pu">:</span> <span class="syn-cls">AppColorScheme</span><span class="syn-pu">.</span><span class="syn-fn">fromHaulway</span><span class="syn-pu">(</span>isDark<span class="syn-pu">:</span> <span class="syn-kw">true</span><span class="syn-pu">),</span>
+      fontFamilyOverride<span class="syn-pu">:</span> <span class="syn-cls">MerkadoFonts</span><span class="syn-pu">.</span>haulway<span class="syn-pu">,</span>
+      borderRadius<span class="syn-pu">:</span> <span class="syn-num">12.0</span><span class="syn-pu">,</span>
+    <span class="syn-pu">),</span>
+  <span class="syn-pu">);</span>
+<span class="syn-pu">}</span></div>
+    </div>
+
+    <div class="n-codeblock">
+      <div class="ncb-header"><span class="ncb-lang">dart — main.dart</span><button class="ncb-copy">Copy</button></div>
+      <div class="ncb-body"><span class="syn-cls">MaterialApp</span><span class="syn-pu">(</span>
+  theme<span class="syn-pu">:</span>     <span class="syn-cls">HaulwayTheme</span><span class="syn-pu">.</span>light<span class="syn-pu">,</span>
+  darkTheme<span class="syn-pu">:</span> <span class="syn-cls">HaulwayTheme</span><span class="syn-pu">.</span>dark<span class="syn-pu">,</span>
+  themeMode<span class="syn-pu">:</span> <span class="syn-cls">ThemeMode</span><span class="syn-pu">.</span>system<span class="syn-pu">,</span>
+  <span class="syn-cm">// Mix 2.0 token provider — wraps entire widget tree</span>
+  builder<span class="syn-pu">: (</span>context<span class="syn-pu">,</span> child<span class="syn-pu">) =></span> <span class="syn-cls">MixTokenProvider</span><span class="syn-pu">(</span>
+    colors<span class="syn-pu">:</span> <span class="syn-cls">AppColorScheme</span><span class="syn-pu">.</span><span class="syn-fn">fromHaulway</span><span class="syn-pu">(</span>
+      isDark<span class="syn-pu">:</span> <span class="syn-cls">Theme</span><span class="syn-pu">.</span><span class="syn-fn">of</span><span class="syn-pu">(</span>context<span class="syn-pu">).</span>brightness <span class="syn-pu">==</span> <span class="syn-cls">Brightness</span><span class="syn-pu">.</span>dark<span class="syn-pu">,</span>
+    <span class="syn-pu">),</span>
+    child<span class="syn-pu">:</span> child<span class="syn-pu">!,</span>
+  <span class="syn-pu">),</span>
+<span class="syn-pu">)</span></div>
+    </div>
+
+    <div class="n-callout nc-success">
+      <span class="nc-icon">🎉</span>
+      <div class="nc-body"><span class="n-bold">Adding a new app</span> (e.g. ItsYourDay) means: add its Figma-generated color files, write one <span class="n-code">AppColorScheme.fromItsYourDay()</span> factory, and a 15-line theme file. Nothing else in <span class="n-code">merkado_ds</span> changes.</div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  let dark = false;
+
+  function toggleTheme() {
+    dark = !dark;
+    document.body.setAttribute('data-theme', dark ? 'dark' : '');
+    document.getElementById('theme-pill').classList.toggle('on', dark);
+  }
+
+  // Copy button
+  document.querySelectorAll('.ncb-copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.closest('.n-codeblock').querySelector('.ncb-body').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 1500);
+      });
+    });
+  });
+
+  // Nav highlight on scroll
+  const sections = document.querySelectorAll('[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navItems.forEach(i => i.classList.remove('active'));
+        const match = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => observer.observe(s));
+
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(item.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
