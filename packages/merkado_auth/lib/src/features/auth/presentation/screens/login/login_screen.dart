@@ -206,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   orElse: () => () {
                                     _submit(cubit);
                                   },
-                                  loading: null,
+                                  loading: ()=>null,
                                 ),
                                 child: state.maybeWhen(
                                   orElse: () => const Text(

@@ -25,27 +25,29 @@ import '../styles.dart';
 class OtpScreen extends StatefulWidget {
   final String email;
   final MerkadoAuthConfig config;
-  final bool canResend;
+  final bool canResend, isAuthReset;
 
-  const OtpScreen({super.key, required this.email, required this.config,  this.canResend = true});
+  const OtpScreen({
+    super.key,
+    required this.email,
+    required this.config,
+    this.canResend = true,
+    this.isAuthReset = false,
+  });
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  bool _resendEnabled = false;
+  // bool _resendEnabled = false;
   String _otp = '';
   bool loading = false;
 
   @override
   void initState() {
     super.initState();
-    _resendEnabled = widget.canResend;
-    // Enable resend after 30 seconds
-    Future.delayed(const Duration(seconds: 30), () {
-      if (mounted) setState(() => _resendEnabled = true);
-    });
+    // _resendEnabled = widget.canResend;
   }
 
   @override
@@ -134,13 +136,13 @@ class _OtpScreenState extends State<OtpScreen> {
                         },
                       ),
                       // DIDN'T RECEIVE OTP
-                      if(_resendEnabled)
-                      OtpResendTimer(
-                        duration: Duration(seconds: 50),
-                        onResend: () async {
-                          await cubit.resendOtp(email: widget.email);
-                        },
-                      ),
+                      if (widget.canResend)
+                        OtpResendTimer(
+                          duration: Duration(seconds: 50),
+                          onResend: () async {
+                            await cubit.resendOtp(email: widget.email);
+                          },
+                        ),
 
                       // VERIFY BUTTON
                       SizedBox(
@@ -150,12 +152,19 @@ class _OtpScreenState extends State<OtpScreen> {
                             return ElevatedButton(
                               onPressed: state.maybeWhen(
                                 orElse: () => () {
-                                  cubit.verifyEmail(
-                                    email: widget.email,
-                                    otp: _otp,
-                                  );
+                                  if (widget.isAuthReset) {
+                                    cubit.verifyResetPasswordRequest(
+                                      email: widget.email,
+                                      otp: _otp,
+                                    );
+                                  } else {
+                                    cubit.verifyEmail(
+                                      email: widget.email,
+                                      otp: _otp,
+                                    );
+                                  }
                                 },
-                                loading: null,
+                                loading: () => null,
                               ),
                               child: state.maybeWhen(
                                 orElse: () => const Text('Verify'),

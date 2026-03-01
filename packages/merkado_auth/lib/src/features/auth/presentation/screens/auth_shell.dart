@@ -177,7 +177,12 @@ class _AuthShellState extends State<AuthShell> {
             widget.cubit,
           );
         }
-        return OtpScreen(config: widget.config, canResend: false, email: email);
+        return OtpScreen(
+          config: widget.config,
+          canResend: false,
+          email: email,
+          isAuthReset: true,
+        );
       },
 
       passwordResetSent: (token) {
