@@ -17,7 +17,9 @@
       "name": "merkado_ds",
       "version": "0.0.1",
       "dependencies": [
-        "flutter"
+        "common_designs",
+        "flutter",
+        "hugeicons"
       ],
       "devDependencies": [
         "flutter_lints",
@@ -29,8 +31,10 @@
       "version": "0.0.1",
       "dependencies": [
         "bloc",
+        "common_designs",
         "common_utils2",
         "dio",
+        "dotted_border",
         "equatable",
         "flutter",
         "flutter_bloc",
@@ -38,7 +42,10 @@
         "get_it",
         "go_router",
         "injectable",
+        "loading_animation_widget",
         "local_auth",
+        "mix",
+        "pinput",
         "rxdart"
       ],
       "devDependencies": [
@@ -193,6 +200,49 @@
       ]
     },
     {
+      "name": "loading_animation_widget",
+      "version": "1.3.0",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "mix",
+      "version": "2.0.0-rc.1",
+      "dependencies": [
+        "flutter",
+        "mix_annotations"
+      ]
+    },
+    {
+      "name": "dotted_border",
+      "version": "3.1.0",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "pinput",
+      "version": "6.0.2",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "common_designs",
+      "version": "1.1.1",
+      "dependencies": [
+        "cached_network_image",
+        "common_utils2",
+        "flutter",
+        "flutter_animate",
+        "google_fonts",
+        "modal_bottom_sheet",
+        "shimmer",
+        "smooth_page_indicator"
+      ]
+    },
+    {
       "name": "rxdart",
       "version": "0.28.0",
       "dependencies": []
@@ -284,7 +334,7 @@
     },
     {
       "name": "common_utils2",
-      "version": "1.0.3",
+      "version": "2.0.0",
       "dependencies": [
         "bloc",
         "cached_network_image",
@@ -334,6 +384,14 @@
         "meta",
         "sky_engine",
         "vector_math"
+      ]
+    },
+    {
+      "name": "hugeicons",
+      "version": "1.1.5",
+      "dependencies": [
+        "flutter",
+        "flutter_svg"
       ]
     },
     {
@@ -829,6 +887,61 @@
       ]
     },
     {
+      "name": "mix_annotations",
+      "version": "2.0.0-rc.1",
+      "dependencies": []
+    },
+    {
+      "name": "cached_network_image",
+      "version": "3.4.1",
+      "dependencies": [
+        "cached_network_image_platform_interface",
+        "cached_network_image_web",
+        "flutter",
+        "flutter_cache_manager",
+        "octo_image"
+      ]
+    },
+    {
+      "name": "smooth_page_indicator",
+      "version": "2.0.1",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "shimmer",
+      "version": "3.0.0",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "modal_bottom_sheet",
+      "version": "3.0.0",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "google_fonts",
+      "version": "8.0.2",
+      "dependencies": [
+        "crypto",
+        "flutter",
+        "http",
+        "path_provider"
+      ]
+    },
+    {
+      "name": "flutter_animate",
+      "version": "4.5.2",
+      "dependencies": [
+        "flutter",
+        "flutter_shaders"
+      ]
+    },
+    {
       "name": "local_auth_windows",
       "version": "2.0.1",
       "dependencies": [
@@ -950,17 +1063,6 @@
         "rxdart",
         "sqflite",
         "uuid"
-      ]
-    },
-    {
-      "name": "cached_network_image",
-      "version": "3.4.1",
-      "dependencies": [
-        "cached_network_image_platform_interface",
-        "cached_network_image_web",
-        "flutter",
-        "flutter_cache_manager",
-        "octo_image"
       ]
     },
     {
@@ -1226,6 +1328,17 @@
       "dependencies": []
     },
     {
+      "name": "flutter_svg",
+      "version": "2.2.3",
+      "dependencies": [
+        "flutter",
+        "http",
+        "vector_graphics",
+        "vector_graphics_codec",
+        "vector_graphics_compiler"
+      ]
+    },
+    {
       "name": "source_span",
       "version": "1.10.2",
       "dependencies": [
@@ -1360,6 +1473,39 @@
       ]
     },
     {
+      "name": "octo_image",
+      "version": "2.1.0",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "cached_network_image_web",
+      "version": "1.3.1",
+      "dependencies": [
+        "cached_network_image_platform_interface",
+        "flutter",
+        "flutter_cache_manager",
+        "web"
+      ]
+    },
+    {
+      "name": "cached_network_image_platform_interface",
+      "version": "4.1.1",
+      "dependencies": [
+        "flutter",
+        "flutter_cache_manager"
+      ]
+    },
+    {
+      "name": "flutter_shaders",
+      "version": "0.1.3",
+      "dependencies": [
+        "flutter",
+        "vector_math"
+      ]
+    },
+    {
       "name": "plugin_platform_interface",
       "version": "2.1.8",
       "dependencies": [
@@ -1465,31 +1611,6 @@
         "sqflite_common",
         "sqflite_darwin",
         "sqflite_platform_interface"
-      ]
-    },
-    {
-      "name": "octo_image",
-      "version": "2.1.0",
-      "dependencies": [
-        "flutter"
-      ]
-    },
-    {
-      "name": "cached_network_image_web",
-      "version": "1.3.1",
-      "dependencies": [
-        "cached_network_image_platform_interface",
-        "flutter",
-        "flutter_cache_manager",
-        "web"
-      ]
-    },
-    {
-      "name": "cached_network_image_platform_interface",
-      "version": "4.1.1",
-      "dependencies": [
-        "flutter",
-        "flutter_cache_manager"
       ]
     },
     {
@@ -2097,6 +2218,32 @@
       ]
     },
     {
+      "name": "vector_graphics_compiler",
+      "version": "1.2.0",
+      "dependencies": [
+        "args",
+        "meta",
+        "path",
+        "path_parsing",
+        "vector_graphics_codec",
+        "xml"
+      ]
+    },
+    {
+      "name": "vector_graphics_codec",
+      "version": "1.1.13",
+      "dependencies": []
+    },
+    {
+      "name": "vector_graphics",
+      "version": "1.1.19",
+      "dependencies": [
+        "flutter",
+        "http",
+        "vector_graphics_codec"
+      ]
+    },
+    {
       "name": "vm_service",
       "version": "15.0.2",
       "dependencies": []
@@ -2322,6 +2469,14 @@
       "dependencies": [
         "dbus",
         "meta"
+      ]
+    },
+    {
+      "name": "path_parsing",
+      "version": "1.1.0",
+      "dependencies": [
+        "meta",
+        "vector_math"
       ]
     },
     {

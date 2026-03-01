@@ -41,7 +41,7 @@ class MerkadoAuthConfig {
 
   /// Logo image displayed on login/signup screens.
   /// Accepts any [ImageProvider] — asset, network, memory, etc.
-  final ImageProvider? appLogo;
+  final String? appLogo;
 
   /// Height of the logo widget on auth screens. Default: 80.
   final double logoHeight;

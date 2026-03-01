@@ -16,7 +16,10 @@ class MerkadoThemeBuilder {
     required bool isDark,
   }) {
     final colors = config.colors;
-    final radius = config.borderRadius;
+    final radius = config.buttonBorderRadius;
+    final inputRadius = config.inputBorderRadius;
+    final bottomSheetRadius = config.bottomSheetBorderRadius;
+    final checkBoxRadius = config.checkBoxBorderRadius;
 
     return ThemeData(
       fontFamily: config.fontFamilyOverride ?? 'inter',
@@ -25,12 +28,20 @@ class MerkadoThemeBuilder {
       scaffoldBackgroundColor: colors.backgroundPrimary,
       colorScheme: _buildColorScheme(colors, isDark),
       textTheme: _buildTextTheme(colors),
-      appBarTheme: config.appBarThemeOverride ?? _buildAppBarTheme(colors, isDark),
-      elevatedButtonTheme: config.elevatedButtonOverride ?? _buildElevatedButton(colors, radius),
-      inputDecorationTheme: config.inputDecorationOverride ?? _buildInputDecoration(colors, radius),
-      bottomSheetTheme: config.bottomSheetOverride ?? _buildBottomSheet(colors, radius),
+      appBarTheme:
+          config.appBarThemeOverride ?? _buildAppBarTheme(colors, isDark),
+      elevatedButtonTheme:
+          config.elevatedButtonOverride ?? _buildElevatedButton(colors, radius),
+      inputDecorationTheme:
+          config.inputDecorationOverride ??
+          _buildInputDecoration(colors, inputRadius),
+      bottomSheetTheme:
+          config.bottomSheetOverride ??
+          _buildBottomSheet(colors, bottomSheetRadius),
+      outlinedButtonTheme:
+          config.outlinedButtonOverride ?? _buildOutlinedButton(colors, radius),
       chipTheme: config.chipOverride ?? _buildChip(colors),
-      checkboxTheme: config.checkboxOverride ?? _buildCheckbox(colors),
+      checkboxTheme: config.checkboxOverride ?? _buildCheckbox(colors, checkBoxRadius),
     );
   }
 
@@ -56,68 +67,89 @@ class MerkadoThemeBuilder {
         fontSize: SemanticTypography.displayLargeFontSize,
         fontWeight: FontWeight.w600,
         letterSpacing: SemanticTypography.displayLargeLetterSpacing,
-        height: SemanticTypography.displayLargeLineHeight / SemanticTypography.displayLargeFontSize,
+        height:
+            SemanticTypography.displayLargeLineHeight /
+            SemanticTypography.displayLargeFontSize,
         color: colors.textPrimary,
       ),
       headlineLarge: TextStyle(
         fontFamily: SemanticTypography.headingH1FontFamily,
         fontSize: SemanticTypography.headingH1FontSize,
-        fontWeight: FontWeight.values[SemanticTypography.headingH1FontWeight ~/ 100 - 1],
+        fontWeight: FontWeight
+            .values[SemanticTypography.headingH1FontWeight ~/ 100 - 1],
         letterSpacing: SemanticTypography.headingH1LetterSpacing,
-        height: SemanticTypography.headingH1LineHeight / SemanticTypography.headingH1FontSize,
+        height:
+            SemanticTypography.headingH1LineHeight /
+            SemanticTypography.headingH1FontSize,
         color: colors.textPrimary,
       ),
       headlineMedium: TextStyle(
         fontFamily: SemanticTypography.headingH2FontFamily,
         fontSize: SemanticTypography.headingH2FontSize,
-        fontWeight: FontWeight.values[SemanticTypography.headingH2FontWeight ~/ 100 - 1],
+        fontWeight: FontWeight
+            .values[SemanticTypography.headingH2FontWeight ~/ 100 - 1],
         letterSpacing: SemanticTypography.headingH2LetterSpacing,
-        height: SemanticTypography.headingH2LineHeight / SemanticTypography.headingH2FontSize,
+        height:
+            SemanticTypography.headingH2LineHeight /
+            SemanticTypography.headingH2FontSize,
         color: colors.textPrimary,
       ),
       headlineSmall: TextStyle(
         fontFamily: SemanticTypography.headingH3FontFamily,
         fontSize: SemanticTypography.headingH3FontSize,
-        fontWeight: FontWeight.values[SemanticTypography.headingH3FontWeight ~/ 100 - 1],
+        fontWeight: FontWeight
+            .values[SemanticTypography.headingH3FontWeight ~/ 100 - 1],
         letterSpacing: SemanticTypography.headingH3LetterSpacing,
-        height: SemanticTypography.headingH3LineHeight / SemanticTypography.headingH3FontSize,
+        height:
+            SemanticTypography.headingH3LineHeight /
+            SemanticTypography.headingH3FontSize,
         color: colors.textPrimary,
       ),
       bodyLarge: TextStyle(
         fontFamily: SemanticTypography.bodyLargeFontFamily,
         fontSize: SemanticTypography.bodyLargeFontSize,
-        fontWeight: FontWeight.values[SemanticTypography.bodyLargeFontWeight ~/ 100 - 1],
+        fontWeight: FontWeight
+            .values[SemanticTypography.bodyLargeFontWeight ~/ 100 - 1],
         letterSpacing: SemanticTypography.bodyLargeLetterSpacing,
-        height: SemanticTypography.bodyLargeLineHeight / SemanticTypography.bodyLargeFontSize,
+        height:
+            SemanticTypography.bodyLargeLineHeight /
+            SemanticTypography.bodyLargeFontSize,
         color: colors.textPrimary,
       ),
       bodyMedium: TextStyle(
         fontFamily: SemanticTypography.bodyFontFamily,
         fontSize: SemanticTypography.bodyFontSize,
-        fontWeight: FontWeight.values[SemanticTypography.bodyFontWeight ~/ 100 - 1],
+        fontWeight:
+            FontWeight.values[SemanticTypography.bodyFontWeight ~/ 100 - 1],
         letterSpacing: SemanticTypography.bodyLetterSpacing,
-        height: SemanticTypography.bodyLineHeight / SemanticTypography.bodyFontSize,
+        height:
+            SemanticTypography.bodyLineHeight / SemanticTypography.bodyFontSize,
         color: colors.textPrimary,
       ),
       bodySmall: TextStyle(
         fontFamily: SemanticTypography.bodySmallFontFamily,
         fontSize: SemanticTypography.bodySmallFontSize,
-        fontWeight: FontWeight.values[SemanticTypography.bodySmallFontWeight ~/ 100 - 1],
+        fontWeight: FontWeight
+            .values[SemanticTypography.bodySmallFontWeight ~/ 100 - 1],
         letterSpacing: SemanticTypography.bodySmallLetterSpacing,
-        height: SemanticTypography.bodySmallLineHeight / SemanticTypography.bodySmallFontSize,
+        height:
+            SemanticTypography.bodySmallLineHeight /
+            SemanticTypography.bodySmallFontSize,
         color: colors.textSecondary,
       ),
       labelLarge: TextStyle(
         fontFamily: SemanticTypography.labelFontFamily,
         fontSize: SemanticTypography.labelFontSize,
-        fontWeight: FontWeight.values[SemanticTypography.labelFontWeight ~/ 100 - 1],
+        fontWeight:
+            FontWeight.values[SemanticTypography.labelFontWeight ~/ 100 - 1],
         letterSpacing: SemanticTypography.labelLetterSpacing,
         color: colors.textPrimary,
       ),
       labelSmall: TextStyle(
         fontFamily: SemanticTypography.captionFontFamily,
         fontSize: SemanticTypography.captionFontSize,
-        fontWeight: FontWeight.values[SemanticTypography.captionFontWeight ~/ 100 - 1],
+        fontWeight:
+            FontWeight.values[SemanticTypography.captionFontWeight ~/ 100 - 1],
         color: colors.textSecondary,
       ),
     );
@@ -125,7 +157,9 @@ class MerkadoThemeBuilder {
 
   static AppBarTheme _buildAppBarTheme(AppColorScheme colors, bool isDark) {
     return AppBarTheme(
-      systemOverlayStyle: isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+      systemOverlayStyle: isDark
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
       elevation: 0,
       centerTitle: false,
       scrolledUnderElevation: 0,
@@ -136,13 +170,17 @@ class MerkadoThemeBuilder {
       titleTextStyle: TextStyle(
         fontFamily: SemanticTypography.headingH3FontFamily,
         fontSize: SemanticTypography.headingH3FontSize,
-        fontWeight: FontWeight.values[SemanticTypography.headingH3FontWeight ~/ 100 - 1],
+        fontWeight: FontWeight
+            .values[SemanticTypography.headingH3FontWeight ~/ 100 - 1],
         color: colors.textPrimary,
       ),
     );
   }
 
-  static ElevatedButtonThemeData _buildElevatedButton(AppColorScheme colors, double radius) {
+  static ElevatedButtonThemeData _buildElevatedButton(
+    AppColorScheme colors,
+    double radius,
+  ) {
     return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         elevation: 0,
@@ -150,18 +188,51 @@ class MerkadoThemeBuilder {
         backgroundColor: colors.brandPrimary,
         disabledForegroundColor: colors.textDisabled,
         disabledBackgroundColor: colors.borderDefault,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         textStyle: TextStyle(
           fontFamily: SemanticTypography.buttonFontFamily,
           fontSize: SemanticTypography.buttonFontSize,
-          fontWeight: FontWeight.values[SemanticTypography.buttonFontWeight ~/ 100 - 1],
+          fontWeight:
+              FontWeight.values[SemanticTypography.buttonFontWeight ~/ 100 - 1],
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
+        ),
       ),
     );
   }
 
-  static InputDecorationTheme _buildInputDecoration(AppColorScheme colors, double radius) {
+  static OutlinedButtonThemeData _buildOutlinedButton(
+    AppColorScheme colors,
+    double radius,
+  ) {
+    return OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        elevation: 0,
+        foregroundColor: Colors.white,
+        backgroundColor: colors.backgroundPrimary,
+        disabledForegroundColor: colors.textDisabled,
+        disabledBackgroundColor: colors.borderDefault,
+        
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        textStyle: TextStyle(
+          fontFamily: SemanticTypography.buttonFontFamily,
+          fontSize: SemanticTypography.buttonFontSize,
+          fontWeight:
+              FontWeight.values[SemanticTypography.buttonFontWeight ~/ 100 - 1],
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
+          side: BorderSide(color: colors.brandPrimary)
+        ),
+      ),
+    );
+  }
+
+  static InputDecorationTheme _buildInputDecoration(
+    AppColorScheme colors,
+    double inputRadius,
+  ) {
     return InputDecorationTheme(
       errorMaxLines: 3,
       prefixIconColor: colors.textSecondary,
@@ -177,36 +248,41 @@ class MerkadoThemeBuilder {
         color: colors.textDisabled,
       ),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(inputRadius),
         borderSide: BorderSide(color: colors.borderDefault),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(inputRadius),
         borderSide: BorderSide(color: colors.borderDefault),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(inputRadius),
         borderSide: BorderSide(color: colors.borderFocused, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(inputRadius),
         borderSide: BorderSide(color: colors.stateError),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(inputRadius),
         borderSide: BorderSide(color: colors.stateError, width: 1.5),
       ),
     );
   }
 
-  static BottomSheetThemeData _buildBottomSheet(AppColorScheme colors, double radius) {
+  static BottomSheetThemeData _buildBottomSheet(
+    AppColorScheme colors,
+    double bottomSheetRadius,
+  ) {
     return BottomSheetThemeData(
       showDragHandle: true,
       backgroundColor: colors.backgroundSurface,
       modalBackgroundColor: colors.backgroundSurface,
       constraints: const BoxConstraints(minWidth: double.infinity),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(radius * 1.5)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(bottomSheetRadius * 1.5),
+        ),
       ),
     );
   }
@@ -216,17 +292,27 @@ class MerkadoThemeBuilder {
       disabledColor: colors.textDisabled.withValues(alpha: 0.3),
       labelStyle: TextStyle(color: colors.textPrimary),
       selectedColor: colors.brandPrimary,
-      padding: const EdgeInsets.symmetric(vertical: SemanticSpacing.chipPadding, horizontal: SemanticSpacing.chipPadding),
+      padding: const EdgeInsets.symmetric(
+        vertical: SemanticSpacing.chipPadding,
+        horizontal: SemanticSpacing.chipPadding,
+      ),
       checkmarkColor: Colors.white,
     );
   }
 
-  static CheckboxThemeData _buildCheckbox(AppColorScheme colors) {
+  static CheckboxThemeData _buildCheckbox(
+    AppColorScheme colors,
+    double checkBoxRadius,
+  ) {
     return CheckboxThemeData(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(checkBoxRadius),
+      ),
       checkColor: WidgetStateProperty.resolveWith((_) => Colors.white),
       fillColor: WidgetStateProperty.resolveWith((states) {
-        return states.contains(WidgetState.selected) ? colors.brandPrimary : Colors.transparent;
+        return states.contains(WidgetState.selected)
+            ? colors.brandPrimary
+            : Colors.transparent;
       }),
     );
   }

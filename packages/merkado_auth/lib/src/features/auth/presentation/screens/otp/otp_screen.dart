@@ -3,18 +3,25 @@
 // lib/src/features/auth/presentation/screens/otp_screen.dart
 // ════════════════════════════════════════════════════════════════════════════
 
+import 'package:common_designs/common_designs.dart';
+import 'package:common_utils2/common_utils2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/merkado_auth.dart';
+import 'package:merkado_auth/src/features/auth/presentation/screens/otp/otp_timer.dart';
+import 'package:mix/mix.dart';
+import 'package:pinput/pinput.dart';
 
 import '../../cubit/auth_cubit.dart';
-
+import '../styles.dart';
 
 /// OtpScreen
 /// =========
 /// Shown after signup when the user needs to verify their email.
 /// Submits the 6-digit OTP and optionally shows a resend button.
-/// Controlled by [AuthFeatures.emailOtpVerification] and [AuthFeatures.resendOtp].
+/// Controlled by [AuthFeatures.emailOtpVerification] and [AuthFeatures.resendOtp]
+
 class OtpScreen extends StatefulWidget {
   final String email;
   final MerkadoAuthConfig config;
@@ -26,8 +33,9 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  final _otpController = TextEditingController();
   bool _resendEnabled = false;
+  String _otp = '';
+  bool loading = false;
 
   @override
   void initState() {
@@ -39,18 +47,10 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   @override
-  void dispose() {
-    _otpController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final cubit = context.read<AuthCubit>();
-    final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Verify your email'), elevation: 0),
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           state.whenOrNull(
@@ -62,65 +62,118 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'We sent a verification code to\n${widget.email}',
-                style: theme.textTheme.bodyLarge,
-              ),
-              const SizedBox(height: 32),
-              TextFormField(
-                controller: _otpController,
-                keyboardType: TextInputType.number,
-                maxLength: 6,
-                decoration: const InputDecoration(
-                  labelText: 'Enter 6-digit code',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: () => cubit.verifyEmail(
-                    email: widget.email,
-                    otp: _otpController.text.trim(),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: widget.config.primaryColor,
-                  ),
-                  child: const Text('Verify'),
-                ),
-              ),
-              // ── Resend OTP ─────────────────────────────────────────────
-              if (widget.config.features.resendOtp) ...[
-                const SizedBox(height: 16),
-                Center(
-                  child: TextButton(
-                    onPressed: _resendEnabled
-                        ? () {
-                            cubit.resendOtp(email: widget.email);
-                            setState(() => _resendEnabled = false);
-                            Future.delayed(const Duration(seconds: 30), () {
-                              if (mounted) setState(() => _resendEnabled = true);
-                            });
-                          }
-                        : null,
-                    child: Text(
-                      _resendEnabled ? 'Resend code' : 'Resend available in 30s',
+        child: SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+
+            child: Box(
+              style: LoginPageStyler.onboardingBg().paddingY(kToolbarHeight),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: AppSpacing.huge + AppSpacing.xxs,
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      DeviceInfoHelper.instance.isIOS
+                          ? Icons.arrow_back_ios_new
+                          : Icons.arrow_back,
+                      size: 20,
                     ),
                   ),
-                ),
-              ],
-            ],
+                  Column(
+                    spacing: AppSpacing.sm,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    // mainAxisSize: MainAxisSize.min ,
+                    children: [
+                      StyledText(
+                        'Verify Your Email',
+                        style: LoginPageStyler.textStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                        ).textAlign(TextAlign.center),
+                      ),
+                      StyledText(
+                        'We emailed you a 6 digit code to ${widget.email}',
+                        style: LoginPageStyler.textStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ).textAlign(TextAlign.center),
+                      ),
+                      Pinput(
+                        length: 6,
+                        defaultPinTheme: PinTheme(
+                          width: 48,
+                          height: 56,
+                          textStyle: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Color(0xffe5e7eb)),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onCompleted: (pin) async {
+                          // Handle OTP completion
+                          setState(() {
+                            loading = true;
+                            _otp = pin;
+                          });
+                          await cubit.verifyEmail(
+                            email: widget.email,
+                            otp: pin,
+                          );
+                          setState(() {
+                            loading = false;
+                          });
+                        },
+                      ),
+                      // DIDN'T RECEIVE OTP
+                      OtpResendTimer(
+                        duration: Duration(seconds: 50),
+                        onResend: () async {
+                          await cubit.resendOtp(email: widget.email);
+                        },
+                      ),
+
+                      // VERIFY BUTTON
+                      SizedBox(
+                        width: double.infinity,
+                        child: BlocBuilder<AuthCubit, AuthState>(
+                          builder: (context, state) {
+                            return ElevatedButton(
+                              onPressed: state.maybeWhen(
+                                orElse: () => () {
+                                  cubit.verifyEmail(
+                                    email: widget.email,
+                                    otp: _otp,
+                                  );
+                                },
+                                loading: null,
+                              ),
+                              child: state.maybeWhen(
+                                orElse: () => const Text('Verify'),
+                                loading: () =>
+                                    LoadingAnimationWidget.fallingDot(
+                                      color: Colors.white,
+                                      size: 24,
+                                    ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 }
-

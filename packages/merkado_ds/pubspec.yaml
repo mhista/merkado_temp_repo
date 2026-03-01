@@ -12,6 +12,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  common_designs: 1.1.1
+    # path: ../../../packages/common_designs
+  hugeicons: ^1.1.5
 
 dev_dependencies:
   flutter_test:
@@ -22,6 +25,8 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+flutter:
+  uses-material-design: true
   fonts:
     # ── Shared UI + MyCut primary ──
     - family: Inter

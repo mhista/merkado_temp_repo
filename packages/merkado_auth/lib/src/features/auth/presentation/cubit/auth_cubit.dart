@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:common_utils2/common_utils2.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -606,17 +607,34 @@ class AuthCubit extends Cubit<AuthState> {
     required String lastName,
     required String country,
     required String phone,
-    String? avatarUrl,
+    File? avatarUrl,
   }) async {
     _log?.info('[AuthCubit] Completing onboarding — $firstName $lastName, country: $country, phone: $phone');
     _emit(const AuthState.loading());
+
+    // UPLOAD AVATAR FIRST (if provided) to get the URL, which is needed for both onboarding and SSO hint
+    String? uploadedAvatarUrl;
+    // if (avatarUrl != null) {
+    //   _log?.info('[AuthCubit] Uploading avatar image');
+    //   final uploadResult = await _completeOnboardingUseCase.uploadAvatar(avatarUrl);
+    //   uploadedAvatarUrl = uploadResult.fold(
+    //     (error) {
+    //       _log?.error('[AuthCubit] Avatar upload failed — $error');
+    //       throw error;
+    //     },
+    //     (url) {
+    //       _log?.info('[AuthCubit] Avatar uploaded successfully — $url');
+    //       return url;
+    //     },
+    //   );
+    // }
 
     final result = await _completeOnboardingUseCase(
       firstName: firstName,
       lastName: lastName,
       country: country,
       phone: phone,
-      avatarUrl: avatarUrl,
+      avatarUrl: uploadedAvatarUrl,
     );
 
     result.when(
@@ -633,7 +651,7 @@ class AuthCubit extends Cubit<AuthState> {
         await _storage.updateSharedAccountHint(
           userId: userId,
           displayName: displayName,
-          avatarUrl: avatarUrl ?? '',
+          avatarUrl: uploadedAvatarUrl ?? '',
           refreshToken: refreshToken,
         );
 

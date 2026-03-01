@@ -41,7 +41,7 @@ class AccountPickerScreen extends StatelessWidget {
               if (config.appLogo != null)
                 Center(
                   child: Image(
-                    image: config.appLogo!,
+                    image: Image.asset( config.appLogo!).image,
                     height: config.logoHeight,
                   ),
                 ),

@@ -18,144 +18,189 @@ import 'password/forgot_password_screen.dart';
 /// call [MerkadoAuth.instance.pushAuth(context)] and listen to authStream.
 ///
 /// Screen routing table:
-///   initial / loading              → _LoadingScreen
+///   initial                        → _LoadingScreen (first-load only)
+///   loading                        → stays on last visible screen (button handles indicator)
 ///   unauthenticated                → LoginScreen (or custom)
 ///   accountsDetected               → AccountPickerScreen (or custom)
 ///   emailNotVerified               → OtpScreen (or custom)
-///   onboardingRequired             → OnboardingScreen (or custom)   ← rendered here
+///   onboardingRequired             → OnboardingScreen (or custom)
 ///   mfaRequired                    → TwoFactorScreen (or custom)
 ///   passwordResetSent              → ForgotPasswordScreen (or custom)
 ///   passwordResetSuccess           → LoginScreen with success banner
 ///   sessionExpiredForAccount       → LoginScreen with expiry message
 ///   authenticated                  → shell pops (listener)
-///   error                          → LoginScreen with error message
+///   error                          → stays on current screen (snackbar shown)
+///   otpVerified / otpResent        → stays on current screen (transient)
 ///
 /// If [MerkadoAuthConfig.customScreens] supplies a builder for a given
 /// state, that builder is used instead of the built-in screen.
-class AuthShell extends StatelessWidget {
+///
+/// LOADING BEHAVIOUR:
+/// `loading` and other transient states (otpVerified, otpResent, error) do NOT
+/// replace the current screen with a fullscreen spinner. The last stable screen
+/// is cached in [_lastStableScreen] and re-rendered during transient states.
+/// Each screen's own button handles its local loading indicator via BlocBuilder.
+/// The fullscreen spinner only appears for the very first [initial] state before
+/// any screen has been shown.
+class AuthShell extends StatefulWidget {
   final MerkadoAuthConfig config;
   final AuthCubit cubit;
 
   const AuthShell({super.key, required this.config, required this.cubit});
 
   @override
+  State<AuthShell> createState() => _AuthShellState();
+}
+
+class _AuthShellState extends State<AuthShell> {
+  /// The last screen widget produced by a stable (non-transient) state.
+  /// Re-used during loading/transient states so the UI doesn't flash.
+  Widget? _lastStableScreen;
+
+  /// States that produce a real, stable screen the user interacts with.
+  /// Any other state is transient — we hold the last stable screen instead.
+  bool _isStableState(AuthState state) {
+    return state.maybeWhen(
+      unauthenticated: () => true,
+      accountsDetected: (_) => true,
+      emailNotVerified: (_) => true,
+      onboardingRequired: () => true,
+      mfaRequired: (_, __) => true,
+      passwordResetSent: () => true,
+      passwordResetSuccess: () => true,
+      sessionExpiredForAccount: (_, __) => true,
+      orElse: () => false,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: cubit,
+      value: widget.cubit,
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          // Pop the entire auth shell once the user is fully authenticated.
-          // All other states are handled by the builder below.
           state.maybeWhen(
             authenticated: () => Navigator.of(context).pop(),
             orElse: () {},
           );
         },
-        builder: (context, state) => _buildScreen(context, state),
+        builder: (context, state) {
+          final screen = _buildScreen(context, state);
+
+          // Cache the screen if this is a stable state
+          if (_isStableState(state)) {
+            _lastStableScreen = screen;
+          }
+
+          return screen;
+        },
       ),
     );
   }
 
   Widget _buildScreen(BuildContext context, AuthState state) {
     return state.when(
-      // ── Transient / loading states ─────────────────────────────────────────
-      initial:    () => const _LoadingScreen(),
-      loading:    () => const _LoadingScreen(),
-      otpVerified: (_) => const _LoadingScreen(),
-      otpResent:  () => const _LoadingScreen(),
-      authenticated: () => const _LoadingScreen(), // actual pop is in listener
+      // ── First-load only: no stable screen cached yet ──────────────────────
+      initial: () => _lastStableScreen ?? const _LoadingScreen(),
 
-      // ── Account picker (cross-app SSO) ──────────────────────────────────
+      // ── Transient states: hold the last stable screen ─────────────────────
+      // The button already shows its own loading indicator via BlocBuilder.
+      // Replacing the whole screen here would cause a jarring flash.
+      loading:     () => _lastStableScreen ?? const _LoadingScreen(),
+      otpVerified: (_) => _lastStableScreen ?? const _LoadingScreen(),
+      otpResent:   () => _lastStableScreen ?? const _LoadingScreen(),
+      authenticated: () => _lastStableScreen ?? const _LoadingScreen(), // pop is in listener
+      error: (message) {
+        // Stay on the current screen — the screen's own BlocConsumer listener
+        // shows the snackbar. We don't rebuild to a new screen for errors.
+        return _lastStableScreen ?? _buildLoginScreen(context);
+      },
+
+      // ── Stable screens ────────────────────────────────────────────────────
+
       accountsDetected: (accounts) {
-        if (config.customScreens?.accountPickerScreenBuilder != null) {
-          return config.customScreens!.accountPickerScreenBuilder!(
-            context, cubit, accounts,
+        if (widget.config.customScreens?.accountPickerScreenBuilder != null) {
+          return widget.config.customScreens!.accountPickerScreenBuilder!(
+            context, widget.cubit, accounts,
           );
         }
-        return AccountPickerScreen(accounts: accounts, config: config);
+        return AccountPickerScreen(accounts: accounts, config: widget.config);
       },
 
-      // ── Unauthenticated → login ──────────────────────────────────────────
-      unauthenticated: () {
-        if (config.customScreens?.loginScreenBuilder != null) {
-          return config.customScreens!.loginScreenBuilder!(context, cubit);
-        }
-        return LoginScreen(config: config);
-      },
+      unauthenticated: () => _buildLoginScreen(context),
 
-      // ── Email not verified → OTP ─────────────────────────────────────────
       emailNotVerified: (email) {
-        if (config.customScreens?.otpScreenBuilder != null) {
-          return config.customScreens!.otpScreenBuilder!(context, cubit, email);
+        if (widget.config.customScreens?.otpScreenBuilder != null) {
+          return widget.config.customScreens!.otpScreenBuilder!(
+            context, widget.cubit, email,
+          );
         }
-        return OtpScreen(email: email, config: config);
+        return OtpScreen(email: email, config: widget.config);
       },
 
-      // ── Onboarding required → OnboardingScreen ───────────────────────────
-      //
-      // PREVIOUSLY BROKEN: this branch was calling Navigator.pop() and
-      // returning a _LoadingScreen, which left the app stuck on splash.
-      //
-      // FIX: render OnboardingScreen (or the custom builder) directly inside
-      // the shell, exactly like every other state. When completeOnboarding()
-      // succeeds, the cubit emits authenticated → listener pops the shell.
-      // No manual navigation needed.
       onboardingRequired: () {
-        if (config.customScreens?.onboardingScreenBuilder != null) {
-          return config.customScreens!.onboardingScreenBuilder!(context, cubit);
+        if (widget.config.customScreens?.onboardingScreenBuilder != null) {
+          return widget.config.customScreens!.onboardingScreenBuilder!(
+            context, widget.cubit,
+          );
         }
-        return OnboardingScreen(config: config);
+        return OnboardingScreen(config: widget.config);
       },
 
-      // ── 2FA ─────────────────────────────────────────────────────────────
       mfaRequired: (userId, message) {
-        if (config.customScreens?.twoFactorScreenBuilder != null) {
-          return config.customScreens!.twoFactorScreenBuilder!(
-            context, cubit, userId, message,
+        if (widget.config.customScreens?.twoFactorScreenBuilder != null) {
+          return widget.config.customScreens!.twoFactorScreenBuilder!(
+            context, widget.cubit, userId, message,
           );
         }
-        return TwoFactorScreen(userId: userId, message: message, config: config);
+        return TwoFactorScreen(
+          userId: userId, message: message, config: widget.config,
+        );
       },
 
-      // ── Forgot password — show confirmation state ─────────────────────────
       passwordResetSent: () {
-        if (config.customScreens?.forgotPasswordScreenBuilder != null) {
-          return config.customScreens!.forgotPasswordScreenBuilder!(
-            context, cubit,
+        if (widget.config.customScreens?.forgotPasswordScreenBuilder != null) {
+          return widget.config.customScreens!.forgotPasswordScreenBuilder!(
+            context, widget.cubit,
           );
         }
-        return ForgotPasswordScreen(config: config, resetSent: true);
+        return ForgotPasswordScreen(config: widget.config, resetSent: true);
       },
 
-      // ── Reset password success → back to login ────────────────────────────
       passwordResetSuccess: () {
-        if (config.customScreens?.loginScreenBuilder != null) {
-          return config.customScreens!.loginScreenBuilder!(context, cubit);
-        }
-        return LoginScreen(config: config, showPasswordResetSuccess: true);
-      },
-
-      // ── Session expired for a specific account ────────────────────────────
-      sessionExpiredForAccount: (userId, displayName) {
-        if (config.customScreens?.loginScreenBuilder != null) {
-          return config.customScreens!.loginScreenBuilder!(context, cubit);
+        if (widget.config.customScreens?.loginScreenBuilder != null) {
+          return widget.config.customScreens!.loginScreenBuilder!(
+            context, widget.cubit,
+          );
         }
         return LoginScreen(
-          config: config,
+          config: widget.config, showPasswordResetSuccess: true,
+        );
+      },
+
+      sessionExpiredForAccount: (userId, displayName) {
+        if (widget.config.customScreens?.loginScreenBuilder != null) {
+          return widget.config.customScreens!.loginScreenBuilder!(
+            context, widget.cubit,
+          );
+        }
+        return LoginScreen(
+          config: widget.config,
           sessionExpiredMessage: displayName != null
               ? 'Your session for $displayName has expired. Please log in again.'
               : 'Your session has expired. Please log in again.',
         );
       },
-
-      // ── Error — stay on login with inline message ─────────────────────────
-      error: (message) {
-        if (config.customScreens?.loginScreenBuilder != null) {
-          return config.customScreens!.loginScreenBuilder!(context, cubit);
-        }
-        return LoginScreen(config: config, errorMessage: message);
-      },
     );
+  }
+
+  Widget _buildLoginScreen(BuildContext context) {
+    if (widget.config.customScreens?.loginScreenBuilder != null) {
+      return widget.config.customScreens!.loginScreenBuilder!(
+        context, widget.cubit,
+      );
+    }
+    return LoginScreen(config: widget.config);
   }
 }
 
