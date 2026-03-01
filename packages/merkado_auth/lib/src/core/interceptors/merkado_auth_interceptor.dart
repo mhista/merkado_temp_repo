@@ -45,8 +45,10 @@ class MerkadoAuthInterceptor extends Interceptor {
   static const _publicPaths = [
     '/auth/login',
     '/auth/register',
-    '/auth/forgot-password',
-    '/auth/reset-password',
+    '/auth/password-reset/reset',
+    'auth/password-reset/request',
+    'auth/password-reset/verify-otp',
+    // '/auth/reset-password',
     '/auth/social/google',
     '/auth/social/apple',
     '/.well-known/jwks.json',
