@@ -126,10 +126,14 @@ class _OtpScreenState extends State<OtpScreen> {
                             loading = true;
                             _otp = pin;
                           });
-                          await cubit.verifyEmail(
-                            email: widget.email,
-                            otp: pin,
-                          );
+                          if (widget.isAuthReset) {
+                           await cubit.verifyResetPasswordRequest(
+                              email: widget.email,
+                              otp: _otp,
+                            );
+                          } else {
+                           await cubit.verifyEmail(email: widget.email, otp: _otp);
+                          }
                           setState(() {
                             loading = false;
                           });
