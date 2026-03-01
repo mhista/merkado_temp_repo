@@ -44,9 +44,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         // view underneath. Pop here so the confirmation becomes visible.
         listener: (context, state) {
           state.whenOrNull(
-            passwordResetSent: () {
-              if (Navigator.of(context).canPop()) Navigator.of(context).pop();
-            },
             error: (msg) => ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(msg), backgroundColor: Colors.red),
             ),
@@ -121,7 +118,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     fieldName: 'Password',
                     labelText: 'Your new password',
                     useSuffixIcon: true,
-                    validator: CommonValidators.passwordValidator,
+                    validator: CommonValidators.strongPasswordValidator,
                     enabled: true,
                     obscureText: true,
                   ),
@@ -144,7 +141,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   Column(
                     children: [
                       SizedBox(height: (24).toDouble()),
-                      // LOGIN BUTTON
+                      // RESET PASSWORD BUTTON
                       SizedBox(
                         width: double.infinity,
                         child: BlocBuilder<AuthCubit, AuthState>(

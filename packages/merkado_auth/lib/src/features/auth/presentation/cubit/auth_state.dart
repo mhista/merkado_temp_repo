@@ -47,8 +47,11 @@ class AuthState with _$AuthState {
     required String message,
   }) = _MfaRequired;
 
+    /// Password reset request sent successfully.
+  const factory AuthState.passwordResetRequestSent({required String email}) = _PasswordResetRequestSent;
+
   /// Password reset email/OTP sent successfully.
-  const factory AuthState.passwordResetSent() = _PasswordResetSent;
+  const factory AuthState.passwordResetSent({required String token}) = _PasswordResetSent;
 
   /// Password successfully reset. Show login with success banner.
   const factory AuthState.passwordResetSuccess() = _PasswordResetSuccess;

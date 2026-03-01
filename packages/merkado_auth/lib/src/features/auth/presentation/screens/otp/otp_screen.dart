@@ -25,8 +25,9 @@ import '../styles.dart';
 class OtpScreen extends StatefulWidget {
   final String email;
   final MerkadoAuthConfig config;
+  final bool canResend;
 
-  const OtpScreen({super.key, required this.email, required this.config});
+  const OtpScreen({super.key, required this.email, required this.config,  this.canResend = true});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -40,6 +41,7 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void initState() {
     super.initState();
+    _resendEnabled = widget.canResend;
     // Enable resend after 30 seconds
     Future.delayed(const Duration(seconds: 30), () {
       if (mounted) setState(() => _resendEnabled = true);
@@ -132,6 +134,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         },
                       ),
                       // DIDN'T RECEIVE OTP
+                      if(_resendEnabled)
                       OtpResendTimer(
                         duration: Duration(seconds: 50),
                         onResend: () async {

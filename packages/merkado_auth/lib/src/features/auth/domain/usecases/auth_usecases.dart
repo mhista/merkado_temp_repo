@@ -92,12 +92,25 @@ class CompleteOnboardingUseCase {
 // ── Password Reset ─────────────────────────────────────────────────────────
 
 @lazySingleton
-class ForgotPasswordUseCase {
+class RequestPasswordResetUseCase {
   final AuthRepository _repository;
-  ForgotPasswordUseCase(this._repository);
+  RequestPasswordResetUseCase(this._repository);
 
   Future<Result<Map<String, dynamic>>> call({required String email}) async {
-    return await _repository.forgotPassword(email: email);
+    return await _repository.requestPasswordReset(email: email);
+  }
+}
+
+@lazySingleton
+class VerifyPasswordResetUseCase {
+  final AuthRepository _repository;
+  VerifyPasswordResetUseCase(this._repository);
+
+  Future<Result<Map<String, dynamic>>> call({
+    required String email,
+    required String otp,
+  }) async {
+    return await _repository.verifyPasswordResetOtp(email: email, otp: otp);
   }
 }
 
@@ -111,7 +124,9 @@ class ResetPasswordUseCase {
     required String newPassword,
   }) async {
     return await _repository.resetPassword(
-        token: token, newPassword: newPassword);
+      token: token,
+      newPassword: newPassword,
+    );
   }
 }
 

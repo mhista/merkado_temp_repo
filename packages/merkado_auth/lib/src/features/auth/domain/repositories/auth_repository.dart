@@ -1,4 +1,3 @@
-
 /// AuthRepository
 /// ==============
 /// Contract for all authentication data operations.
@@ -57,7 +56,18 @@ abstract interface class AuthRepository {
   Future<Result<void>> logout({required String sessionId});
 
   /// Request a password reset email.
-  Future<Result<Map<String, dynamic>>> forgotPassword({required String email});
+  // Future<Result<Map<String, dynamic>>> forgotPassword({required String email});
+
+  /// Request password reset.
+  Future<Result<Map<String, dynamic>>> requestPasswordReset({
+    required String email,
+  });
+
+  /// Verify password reset otp sent to email
+  Future<Result<Map<String, dynamic>>> verifyPasswordResetOtp({
+    required String email,
+    required String otp,
+  });
 
   /// Reset password using the token from the reset email.
   Future<Result<Map<String, dynamic>>> resetPassword({

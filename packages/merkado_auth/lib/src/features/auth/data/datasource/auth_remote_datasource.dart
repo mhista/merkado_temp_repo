@@ -22,7 +22,14 @@ abstract interface class AuthRemoteDatasource {
 
   Future<String> logout({required String sessionId});
 
-  Future<Map<String, dynamic>> forgotPassword({required String email});
+  // Future<Map<String, dynamic>> forgotPassword({required String email});
+
+  Future<Map<String, dynamic>> requestPasswordReset({required String email});
+
+  Future<Map<String, dynamic>> verifyPasswordResetOtp({
+    required String email,
+    required String otp,
+  });
 
   Future<Map<String, dynamic>> resetPassword({
     required String token,
@@ -79,17 +86,22 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   }) async {
     _log?.info('[AuthDatasource] POST /auth/register — $email $deviceInfo');
     try {
-      final result = await _http.post('/auth/register', data: {
-        'email': email,
-        'password': password,
-        // ...deviceInfo,
-      });
+      final result = await _http.post(
+        '/auth/register',
+        data: {
+          'email': email,
+          'password': password,
+          // ...deviceInfo,
+        },
+      );
 
       if (_isSuccess(result.statusCode)) {
         _log?.debug('[AuthDatasource] /auth/register ✅ ${result.statusCode}');
         return result.data;
       }
-      _log?.error('[AuthDatasource] /auth/register ❌ ${result.statusCode} — ${result.message}');
+      _log?.error(
+        '[AuthDatasource] /auth/register ❌ ${result.statusCode} — ${result.message}',
+      );
       throw Exception('Sign up failed: ${result.message}');
     } catch (e, st) {
       _log?.error('[AuthDatasource] /auth/register threw', e, st);
@@ -107,10 +119,13 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     _log?.info('[AuthDatasource] POST /auth/verify-email — $email');
     try {
       // _http.
-      final result = await _http.post('/auth/verify-email', data: {
-        // 'email': email,
-        'code': otp,
-      });
+      final result = await _http.post(
+        '/auth/verify-email',
+        data: {
+          // 'email': email,
+          'code': otp,
+        },
+      );
 
       if (_isSuccess(result.statusCode)) {
         _log?.debug('[AuthDatasource] /auth/verify-email ✅');
@@ -147,7 +162,9 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   // ── POST /auth/login ──────────────────────────────────────────────────────
 
   @override
-  Future<Map<String, dynamic>> login({required Map<String, dynamic> data}) async {
+  Future<Map<String, dynamic>> login({
+    required Map<String, dynamic> data,
+  }) async {
     final email = data['email'] ?? 'unknown';
     _log?.info('[AuthDatasource] POST /auth/login — $email');
     try {
@@ -157,7 +174,9 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         _log?.debug('[AuthDatasource] /auth/login ✅ ${result.statusCode}');
         return result.data;
       }
-      _log?.error('[AuthDatasource] /auth/login ❌ ${result.statusCode} — ${result.message}');
+      _log?.error(
+        '[AuthDatasource] /auth/login ❌ ${result.statusCode} — ${result.message}',
+      );
       throw Exception('Login failed: ${result.message}');
     } catch (e, st) {
       _log?.error('[AuthDatasource] /auth/login threw', e, st);
@@ -171,64 +190,137 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   Future<String> logout({required String sessionId}) async {
     _log?.info('[AuthDatasource] POST /auth/logout — sessionId: $sessionId');
     try {
-      final result = await _http.post('/auth/logout', data: {'sessionId': sessionId});
+      final result = await _http.post(
+        '/auth/logout',
+        data: {'sessionId': sessionId},
+      );
 
       if (_isSuccess(result.statusCode)) {
         _log?.debug('[AuthDatasource] /auth/logout ✅');
         return 'Logout successful';
       }
-      _log?.warning('[AuthDatasource] /auth/logout returned ${result.statusCode} — treating as success');
+      _log?.warning(
+        '[AuthDatasource] /auth/logout returned ${result.statusCode} — treating as success',
+      );
       return 'Logout completed';
     } catch (e, st) {
       // Logout errors are non-critical — storage is cleared regardless.
       // Log as warning rather than error so it doesn't trigger alerts.
-      _log?.warning('[AuthDatasource] /auth/logout threw (non-critical)', e, st);
+      _log?.warning(
+        '[AuthDatasource] /auth/logout threw (non-critical)',
+        e,
+        st,
+      );
       return 'Logout completed with remote error';
     }
   }
 
   // ── POST /auth/forgot-password ────────────────────────────────────────────
 
+  // @override
+  // Future<Map<String, dynamic>> forgotPassword({required String email}) async {
+  //   _log?.info('[AuthDatasource] POST /auth/forgot-password — $email');
+  //   try {
+  //     final result = await _http.post(
+  //       '/auth/forgot-password',
+  //       data: {'email': email},
+  //     );
+
+  //     if (_isSuccess(result.statusCode)) {
+  //       _log?.debug('[AuthDatasource] /auth/forgot-password ✅');
+  //       return result.data;
+  //     }
+  //     _log?.error(
+  //       '[AuthDatasource] /auth/forgot-password ❌ ${result.statusCode}',
+  //     );
+  //     throw Exception('Forgot password failed: ${result.message}');
+  //   } catch (e, st) {
+  //     _log?.error('[AuthDatasource] /auth/forgot-password threw', e, st);
+  //     rethrow;
+  //   }
+  // }
+
+  // ── POST /auth/reset-password ─────────────────────────────────────────────
+
   @override
-  Future<Map<String, dynamic>> forgotPassword({required String email}) async {
-    _log?.info('[AuthDatasource] POST /auth/forgot-password — $email');
+  Future<Map<String, dynamic>> requestPasswordReset({
+    required String email,
+  }) async {
+    _log?.info('[AuthDatasource] POST /auth/password-reset/request');
     try {
-      final result = await _http.post('/auth/forgot-password', data: {'email': email});
+      final result = await _http.post(
+        '/auth/password-reset/request',
+        data: {'email': email},
+      );
 
       if (_isSuccess(result.statusCode)) {
-        _log?.debug('[AuthDatasource] /auth/forgot-password ✅');
+        _log?.debug('[AuthDatasource] /auth/password-reset/request ✅');
         return result.data;
       }
-      _log?.error('[AuthDatasource] /auth/forgot-password ❌ ${result.statusCode}');
-      throw Exception('Forgot password failed: ${result.message}');
+      _log?.error(
+        '[AuthDatasource] /auth/password-reset/request ❌ ${result.statusCode}',
+      );
+      throw Exception('Request password reset failed: ${result.message}');
     } catch (e, st) {
-      _log?.error('[AuthDatasource] /auth/forgot-password threw', e, st);
+      _log?.error('[AuthDatasource] /auth/password-reset/request threw', e, st);
       rethrow;
     }
   }
 
-  // ── POST /auth/reset-password ─────────────────────────────────────────────
+  @override
+  Future<Map<String, dynamic>> verifyPasswordResetOtp({
+    required String email,
+    required String otp,
+  }) async {
+    _log?.info('[AuthDatasource] POST /auth/password-reset/verify-otp');
+    try {
+      final result = await _http.post(
+        '/auth/password-reset/verify-otp',
+        data: {'code': otp, 'email': email},
+      );
+
+      if (_isSuccess(result.statusCode)) {
+        _log?.debug('[AuthDatasource] /auth/password-reset/verify-otp ✅');
+        return result.data;
+      }
+      _log?.error(
+        '[AuthDatasource] /auth/password-reset/verify-otp ❌ ${result.statusCode}',
+      );
+      throw Exception('Verify password reset failed: ${result.message}');
+    } catch (e, st) {
+      _log?.error(
+        '[AuthDatasource] /auth/password-reset/verify-otp threw',
+        e,
+        st,
+      );
+      rethrow;
+    }
+  }
+
+  // ── POST /auth/password-reset/reset ─────────────────────────────────────────────
 
   @override
   Future<Map<String, dynamic>> resetPassword({
     required String token,
     required String newPassword,
   }) async {
-    _log?.info('[AuthDatasource] POST /auth/reset-password');
+    _log?.info('[AuthDatasource] POST /auth/password-reset/reset');
     try {
-      final result = await _http.post('/auth/reset-password', data: {
-        'token': token,
-        'password': newPassword,
-      });
+      final result = await _http.post(
+        '/auth/password-reset/reset',
+        data: {'token': token, 'password': newPassword},
+      );
 
       if (_isSuccess(result.statusCode)) {
-        _log?.debug('[AuthDatasource] /auth/reset-password ✅');
+        _log?.debug('[AuthDatasource] /auth/password-reset/reset ✅');
         return result.data;
       }
-      _log?.error('[AuthDatasource] /auth/reset-password ❌ ${result.statusCode}');
+      _log?.error(
+        '[AuthDatasource] /auth/password-reset/reset ❌ ${result.statusCode}',
+      );
       throw Exception('Reset password failed: ${result.message}');
     } catch (e, st) {
-      _log?.error('[AuthDatasource] /auth/reset-password threw', e, st);
+      _log?.error('[AuthDatasource] /auth/password-reset/reset threw', e, st);
       rethrow;
     }
   }
@@ -242,10 +334,10 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   }) async {
     _log?.info('[AuthDatasource] POST /auth/verify-2fa — userId: $userId');
     try {
-      final result = await _http.post('/auth/verify-2fa', data: {
-        'userId': userId,
-        'otp': otp,
-      });
+      final result = await _http.post(
+        '/auth/verify-2fa',
+        data: {'userId': userId, 'otp': otp},
+      );
 
       if (_isSuccess(result.statusCode)) {
         _log?.debug('[AuthDatasource] /auth/verify-2fa ✅');
@@ -269,11 +361,14 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   }) async {
     _log?.info('[AuthDatasource] POST /auth/refresh — platformId: $platformId');
     try {
-      final result = await _http.post('/auth/refresh', data: {
-        'refreshToken': refreshToken,
-        'platformId': platformId,
-        'scopes': scopes,
-      });
+      final result = await _http.post(
+        '/auth/refresh',
+        data: {
+          'refreshToken': refreshToken,
+          'platformId': platformId,
+          'scopes': scopes,
+        },
+      );
 
       if (_isSuccess(result.statusCode)) {
         _log?.debug('[AuthDatasource] /auth/refresh ✅');
@@ -296,16 +391,18 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   }) async {
     _log?.info('[AuthDatasource] POST /auth/social/google');
     try {
-      final result = await _http.post('/auth/social/google', data: {
-        'idToken': idToken,
-        ...deviceInfo,
-      });
+      final result = await _http.post(
+        '/auth/social/google',
+        data: {'idToken': idToken, ...deviceInfo},
+      );
 
       if (_isSuccess(result.statusCode)) {
         _log?.debug('[AuthDatasource] /auth/social/google ✅');
         return result.data;
       }
-      _log?.error('[AuthDatasource] /auth/social/google ❌ ${result.statusCode}');
+      _log?.error(
+        '[AuthDatasource] /auth/social/google ❌ ${result.statusCode}',
+      );
       throw Exception('Google sign in failed: ${result.message}');
     } catch (e, st) {
       _log?.error('[AuthDatasource] /auth/social/google threw', e, st);
@@ -325,13 +422,16 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   }) async {
     _log?.info('[AuthDatasource] POST /auth/social/apple');
     try {
-      final result = await _http.post('/auth/social/apple', data: {
-        'identityToken': identityToken,
-        'authorizationCode': authorizationCode,
-        'firstName': ?firstName,
-        'lastName': ?lastName,
-        ...deviceInfo,
-      });
+      final result = await _http.post(
+        '/auth/social/apple',
+        data: {
+          'identityToken': identityToken,
+          'authorizationCode': authorizationCode,
+          'firstName': ?firstName,
+          'lastName': ?lastName,
+          ...deviceInfo,
+        },
+      );
 
       if (_isSuccess(result.statusCode)) {
         _log?.debug('[AuthDatasource] /auth/social/apple ✅');
@@ -359,7 +459,9 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         _log?.debug('[AuthDatasource] /onboarding/complete ✅');
         return result.data;
       }
-      _log?.error('[AuthDatasource] /onboarding/complete ❌ ${result.statusCode}');
+      _log?.error(
+        '[AuthDatasource] /onboarding/complete ❌ ${result.statusCode}',
+      );
       throw Exception('Onboarding failed: ${result.message}');
     } catch (e, st) {
       _log?.error('[AuthDatasource] /onboarding/complete threw', e, st);

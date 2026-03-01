@@ -42,7 +42,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         // view underneath. Pop here so the confirmation becomes visible.
         listener: (context, state) {
           state.whenOrNull(
-            passwordResetSent: () {
+            passwordResetRequestSent: (email) {
               if (Navigator.of(context).canPop()) Navigator.of(context).pop();
             },
             error: (msg) => ScaffoldMessenger.of(context).showSnackBar(
@@ -136,7 +136,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               onPressed: state.maybeWhen(
                                 loading: () => null,
                                 orElse: () =>
-                                    () => cubit.forgotPassword(
+                                    () => cubit.requestResetPassword(
                                       email: _emailController.text.trim(),
                                     ),
                               ),

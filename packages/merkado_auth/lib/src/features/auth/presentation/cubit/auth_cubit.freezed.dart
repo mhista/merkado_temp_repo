@@ -55,7 +55,7 @@ extension AuthStatePatterns on AuthState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Authenticated value)?  authenticated,TResult Function( _AccountsDetected value)?  accountsDetected,TResult Function( _Unauthenticated value)?  unauthenticated,TResult Function( _EmailNotVerified value)?  emailNotVerified,TResult Function( _OtpVerified value)?  otpVerified,TResult Function( _OtpResent value)?  otpResent,TResult Function( _OnboardingRequired value)?  onboardingRequired,TResult Function( _MfaRequired value)?  mfaRequired,TResult Function( _PasswordResetSent value)?  passwordResetSent,TResult Function( _PasswordResetSuccess value)?  passwordResetSuccess,TResult Function( _SessionExpiredForAccount value)?  sessionExpiredForAccount,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Authenticated value)?  authenticated,TResult Function( _AccountsDetected value)?  accountsDetected,TResult Function( _Unauthenticated value)?  unauthenticated,TResult Function( _EmailNotVerified value)?  emailNotVerified,TResult Function( _OtpVerified value)?  otpVerified,TResult Function( _OtpResent value)?  otpResent,TResult Function( _OnboardingRequired value)?  onboardingRequired,TResult Function( _MfaRequired value)?  mfaRequired,TResult Function( _PasswordResetRequestSent value)?  passwordResetRequestSent,TResult Function( _PasswordResetSent value)?  passwordResetSent,TResult Function( _PasswordResetSuccess value)?  passwordResetSuccess,TResult Function( _SessionExpiredForAccount value)?  sessionExpiredForAccount,TResult Function( _Error value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -68,7 +68,8 @@ return emailNotVerified(_that);case _OtpVerified() when otpVerified != null:
 return otpVerified(_that);case _OtpResent() when otpResent != null:
 return otpResent(_that);case _OnboardingRequired() when onboardingRequired != null:
 return onboardingRequired(_that);case _MfaRequired() when mfaRequired != null:
-return mfaRequired(_that);case _PasswordResetSent() when passwordResetSent != null:
+return mfaRequired(_that);case _PasswordResetRequestSent() when passwordResetRequestSent != null:
+return passwordResetRequestSent(_that);case _PasswordResetSent() when passwordResetSent != null:
 return passwordResetSent(_that);case _PasswordResetSuccess() when passwordResetSuccess != null:
 return passwordResetSuccess(_that);case _SessionExpiredForAccount() when sessionExpiredForAccount != null:
 return sessionExpiredForAccount(_that);case _Error() when error != null:
@@ -90,7 +91,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Authenticated value)  authenticated,required TResult Function( _AccountsDetected value)  accountsDetected,required TResult Function( _Unauthenticated value)  unauthenticated,required TResult Function( _EmailNotVerified value)  emailNotVerified,required TResult Function( _OtpVerified value)  otpVerified,required TResult Function( _OtpResent value)  otpResent,required TResult Function( _OnboardingRequired value)  onboardingRequired,required TResult Function( _MfaRequired value)  mfaRequired,required TResult Function( _PasswordResetSent value)  passwordResetSent,required TResult Function( _PasswordResetSuccess value)  passwordResetSuccess,required TResult Function( _SessionExpiredForAccount value)  sessionExpiredForAccount,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Authenticated value)  authenticated,required TResult Function( _AccountsDetected value)  accountsDetected,required TResult Function( _Unauthenticated value)  unauthenticated,required TResult Function( _EmailNotVerified value)  emailNotVerified,required TResult Function( _OtpVerified value)  otpVerified,required TResult Function( _OtpResent value)  otpResent,required TResult Function( _OnboardingRequired value)  onboardingRequired,required TResult Function( _MfaRequired value)  mfaRequired,required TResult Function( _PasswordResetRequestSent value)  passwordResetRequestSent,required TResult Function( _PasswordResetSent value)  passwordResetSent,required TResult Function( _PasswordResetSuccess value)  passwordResetSuccess,required TResult Function( _SessionExpiredForAccount value)  sessionExpiredForAccount,required TResult Function( _Error value)  error,}){
 final _that = this;
 switch (_that) {
 case _Initial():
@@ -103,7 +104,8 @@ return emailNotVerified(_that);case _OtpVerified():
 return otpVerified(_that);case _OtpResent():
 return otpResent(_that);case _OnboardingRequired():
 return onboardingRequired(_that);case _MfaRequired():
-return mfaRequired(_that);case _PasswordResetSent():
+return mfaRequired(_that);case _PasswordResetRequestSent():
+return passwordResetRequestSent(_that);case _PasswordResetSent():
 return passwordResetSent(_that);case _PasswordResetSuccess():
 return passwordResetSuccess(_that);case _SessionExpiredForAccount():
 return sessionExpiredForAccount(_that);case _Error():
@@ -124,7 +126,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Authenticated value)?  authenticated,TResult? Function( _AccountsDetected value)?  accountsDetected,TResult? Function( _Unauthenticated value)?  unauthenticated,TResult? Function( _EmailNotVerified value)?  emailNotVerified,TResult? Function( _OtpVerified value)?  otpVerified,TResult? Function( _OtpResent value)?  otpResent,TResult? Function( _OnboardingRequired value)?  onboardingRequired,TResult? Function( _MfaRequired value)?  mfaRequired,TResult? Function( _PasswordResetSent value)?  passwordResetSent,TResult? Function( _PasswordResetSuccess value)?  passwordResetSuccess,TResult? Function( _SessionExpiredForAccount value)?  sessionExpiredForAccount,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Authenticated value)?  authenticated,TResult? Function( _AccountsDetected value)?  accountsDetected,TResult? Function( _Unauthenticated value)?  unauthenticated,TResult? Function( _EmailNotVerified value)?  emailNotVerified,TResult? Function( _OtpVerified value)?  otpVerified,TResult? Function( _OtpResent value)?  otpResent,TResult? Function( _OnboardingRequired value)?  onboardingRequired,TResult? Function( _MfaRequired value)?  mfaRequired,TResult? Function( _PasswordResetRequestSent value)?  passwordResetRequestSent,TResult? Function( _PasswordResetSent value)?  passwordResetSent,TResult? Function( _PasswordResetSuccess value)?  passwordResetSuccess,TResult? Function( _SessionExpiredForAccount value)?  sessionExpiredForAccount,TResult? Function( _Error value)?  error,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
@@ -137,7 +139,8 @@ return emailNotVerified(_that);case _OtpVerified() when otpVerified != null:
 return otpVerified(_that);case _OtpResent() when otpResent != null:
 return otpResent(_that);case _OnboardingRequired() when onboardingRequired != null:
 return onboardingRequired(_that);case _MfaRequired() when mfaRequired != null:
-return mfaRequired(_that);case _PasswordResetSent() when passwordResetSent != null:
+return mfaRequired(_that);case _PasswordResetRequestSent() when passwordResetRequestSent != null:
+return passwordResetRequestSent(_that);case _PasswordResetSent() when passwordResetSent != null:
 return passwordResetSent(_that);case _PasswordResetSuccess() when passwordResetSuccess != null:
 return passwordResetSuccess(_that);case _SessionExpiredForAccount() when sessionExpiredForAccount != null:
 return sessionExpiredForAccount(_that);case _Error() when error != null:
@@ -158,7 +161,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  authenticated,TResult Function( List<GrascopeSessionHint> accounts)?  accountsDetected,TResult Function()?  unauthenticated,TResult Function( String email)?  emailNotVerified,TResult Function( String message)?  otpVerified,TResult Function()?  otpResent,TResult Function()?  onboardingRequired,TResult Function( String userId,  String message)?  mfaRequired,TResult Function()?  passwordResetSent,TResult Function()?  passwordResetSuccess,TResult Function( String? userId,  String? displayName)?  sessionExpiredForAccount,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  authenticated,TResult Function( List<GrascopeSessionHint> accounts)?  accountsDetected,TResult Function()?  unauthenticated,TResult Function( String email)?  emailNotVerified,TResult Function( String message)?  otpVerified,TResult Function()?  otpResent,TResult Function()?  onboardingRequired,TResult Function( String userId,  String message)?  mfaRequired,TResult Function( String email)?  passwordResetRequestSent,TResult Function( String token)?  passwordResetSent,TResult Function()?  passwordResetSuccess,TResult Function( String? userId,  String? displayName)?  sessionExpiredForAccount,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
@@ -170,8 +173,9 @@ return emailNotVerified(_that.email);case _OtpVerified() when otpVerified != nul
 return otpVerified(_that.message);case _OtpResent() when otpResent != null:
 return otpResent();case _OnboardingRequired() when onboardingRequired != null:
 return onboardingRequired();case _MfaRequired() when mfaRequired != null:
-return mfaRequired(_that.userId,_that.message);case _PasswordResetSent() when passwordResetSent != null:
-return passwordResetSent();case _PasswordResetSuccess() when passwordResetSuccess != null:
+return mfaRequired(_that.userId,_that.message);case _PasswordResetRequestSent() when passwordResetRequestSent != null:
+return passwordResetRequestSent(_that.email);case _PasswordResetSent() when passwordResetSent != null:
+return passwordResetSent(_that.token);case _PasswordResetSuccess() when passwordResetSuccess != null:
 return passwordResetSuccess();case _SessionExpiredForAccount() when sessionExpiredForAccount != null:
 return sessionExpiredForAccount(_that.userId,_that.displayName);case _Error() when error != null:
 return error(_that.message);case _:
@@ -192,7 +196,7 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  authenticated,required TResult Function( List<GrascopeSessionHint> accounts)  accountsDetected,required TResult Function()  unauthenticated,required TResult Function( String email)  emailNotVerified,required TResult Function( String message)  otpVerified,required TResult Function()  otpResent,required TResult Function()  onboardingRequired,required TResult Function( String userId,  String message)  mfaRequired,required TResult Function()  passwordResetSent,required TResult Function()  passwordResetSuccess,required TResult Function( String? userId,  String? displayName)  sessionExpiredForAccount,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  authenticated,required TResult Function( List<GrascopeSessionHint> accounts)  accountsDetected,required TResult Function()  unauthenticated,required TResult Function( String email)  emailNotVerified,required TResult Function( String message)  otpVerified,required TResult Function()  otpResent,required TResult Function()  onboardingRequired,required TResult Function( String userId,  String message)  mfaRequired,required TResult Function( String email)  passwordResetRequestSent,required TResult Function( String token)  passwordResetSent,required TResult Function()  passwordResetSuccess,required TResult Function( String? userId,  String? displayName)  sessionExpiredForAccount,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
@@ -204,8 +208,9 @@ return emailNotVerified(_that.email);case _OtpVerified():
 return otpVerified(_that.message);case _OtpResent():
 return otpResent();case _OnboardingRequired():
 return onboardingRequired();case _MfaRequired():
-return mfaRequired(_that.userId,_that.message);case _PasswordResetSent():
-return passwordResetSent();case _PasswordResetSuccess():
+return mfaRequired(_that.userId,_that.message);case _PasswordResetRequestSent():
+return passwordResetRequestSent(_that.email);case _PasswordResetSent():
+return passwordResetSent(_that.token);case _PasswordResetSuccess():
 return passwordResetSuccess();case _SessionExpiredForAccount():
 return sessionExpiredForAccount(_that.userId,_that.displayName);case _Error():
 return error(_that.message);case _:
@@ -225,7 +230,7 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  authenticated,TResult? Function( List<GrascopeSessionHint> accounts)?  accountsDetected,TResult? Function()?  unauthenticated,TResult? Function( String email)?  emailNotVerified,TResult? Function( String message)?  otpVerified,TResult? Function()?  otpResent,TResult? Function()?  onboardingRequired,TResult? Function( String userId,  String message)?  mfaRequired,TResult? Function()?  passwordResetSent,TResult? Function()?  passwordResetSuccess,TResult? Function( String? userId,  String? displayName)?  sessionExpiredForAccount,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  authenticated,TResult? Function( List<GrascopeSessionHint> accounts)?  accountsDetected,TResult? Function()?  unauthenticated,TResult? Function( String email)?  emailNotVerified,TResult? Function( String message)?  otpVerified,TResult? Function()?  otpResent,TResult? Function()?  onboardingRequired,TResult? Function( String userId,  String message)?  mfaRequired,TResult? Function( String email)?  passwordResetRequestSent,TResult? Function( String token)?  passwordResetSent,TResult? Function()?  passwordResetSuccess,TResult? Function( String? userId,  String? displayName)?  sessionExpiredForAccount,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
@@ -237,8 +242,9 @@ return emailNotVerified(_that.email);case _OtpVerified() when otpVerified != nul
 return otpVerified(_that.message);case _OtpResent() when otpResent != null:
 return otpResent();case _OnboardingRequired() when onboardingRequired != null:
 return onboardingRequired();case _MfaRequired() when mfaRequired != null:
-return mfaRequired(_that.userId,_that.message);case _PasswordResetSent() when passwordResetSent != null:
-return passwordResetSent();case _PasswordResetSuccess() when passwordResetSuccess != null:
+return mfaRequired(_that.userId,_that.message);case _PasswordResetRequestSent() when passwordResetRequestSent != null:
+return passwordResetRequestSent(_that.email);case _PasswordResetSent() when passwordResetSent != null:
+return passwordResetSent(_that.token);case _PasswordResetSuccess() when passwordResetSuccess != null:
 return passwordResetSuccess();case _SessionExpiredForAccount() when sessionExpiredForAccount != null:
 return sessionExpiredForAccount(_that.userId,_that.displayName);case _Error() when error != null:
 return error(_that.message);case _:
@@ -716,34 +722,134 @@ as String,
 /// @nodoc
 
 
-class _PasswordResetSent implements AuthState {
-  const _PasswordResetSent();
+class _PasswordResetRequestSent implements AuthState {
+  const _PasswordResetRequestSent({required this.email});
   
 
+ final  String email;
 
-
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$PasswordResetRequestSentCopyWith<_PasswordResetRequestSent> get copyWith => __$PasswordResetRequestSentCopyWithImpl<_PasswordResetRequestSent>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PasswordResetSent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PasswordResetRequestSent&&(identical(other.email, email) || other.email == email));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,email);
 
 @override
 String toString() {
-  return 'AuthState.passwordResetSent()';
+  return 'AuthState.passwordResetRequestSent(email: $email)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class _$PasswordResetRequestSentCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
+  factory _$PasswordResetRequestSentCopyWith(_PasswordResetRequestSent value, $Res Function(_PasswordResetRequestSent) _then) = __$PasswordResetRequestSentCopyWithImpl;
+@useResult
+$Res call({
+ String email
+});
 
 
+
+
+}
+/// @nodoc
+class __$PasswordResetRequestSentCopyWithImpl<$Res>
+    implements _$PasswordResetRequestSentCopyWith<$Res> {
+  __$PasswordResetRequestSentCopyWithImpl(this._self, this._then);
+
+  final _PasswordResetRequestSent _self;
+  final $Res Function(_PasswordResetRequestSent) _then;
+
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? email = null,}) {
+  return _then(_PasswordResetRequestSent(
+email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _PasswordResetSent implements AuthState {
+  const _PasswordResetSent({required this.token});
+  
+
+ final  String token;
+
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$PasswordResetSentCopyWith<_PasswordResetSent> get copyWith => __$PasswordResetSentCopyWithImpl<_PasswordResetSent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PasswordResetSent&&(identical(other.token, token) || other.token == token));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,token);
+
+@override
+String toString() {
+  return 'AuthState.passwordResetSent(token: $token)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$PasswordResetSentCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
+  factory _$PasswordResetSentCopyWith(_PasswordResetSent value, $Res Function(_PasswordResetSent) _then) = __$PasswordResetSentCopyWithImpl;
+@useResult
+$Res call({
+ String token
+});
+
+
+
+
+}
+/// @nodoc
+class __$PasswordResetSentCopyWithImpl<$Res>
+    implements _$PasswordResetSentCopyWith<$Res> {
+  __$PasswordResetSentCopyWithImpl(this._self, this._then);
+
+  final _PasswordResetSent _self;
+  final $Res Function(_PasswordResetSent) _then;
+
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? token = null,}) {
+  return _then(_PasswordResetSent(
+token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

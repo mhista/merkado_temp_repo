@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:merkado_auth/src/features/auth/presentation/screens/password/reset_password_screen.dart';
 
 import '../../../../core/config/merkado_auth_config.dart';
 import '../cubit/auth_cubit.dart';
@@ -66,7 +67,8 @@ class _AuthShellState extends State<AuthShell> {
       emailNotVerified: (_) => true,
       onboardingRequired: () => true,
       mfaRequired: (_, __) => true,
-      passwordResetSent: () => true,
+      passwordResetSent: (_) => true,
+      passwordResetRequestSent: (_) => true,
       passwordResetSuccess: () => true,
       sessionExpiredForAccount: (_, __) => true,
       orElse: () => false,
@@ -106,10 +108,11 @@ class _AuthShellState extends State<AuthShell> {
       // ── Transient states: hold the last stable screen ─────────────────────
       // The button already shows its own loading indicator via BlocBuilder.
       // Replacing the whole screen here would cause a jarring flash.
-      loading:     () => _lastStableScreen ?? const _LoadingScreen(),
+      loading: () => _lastStableScreen ?? const _LoadingScreen(),
       otpVerified: (_) => _lastStableScreen ?? const _LoadingScreen(),
-      otpResent:   () => _lastStableScreen ?? const _LoadingScreen(),
-      authenticated: () => _lastStableScreen ?? const _LoadingScreen(), // pop is in listener
+      otpResent: () => _lastStableScreen ?? const _LoadingScreen(),
+      authenticated: () =>
+          _lastStableScreen ?? const _LoadingScreen(), // pop is in listener
       error: (message) {
         // Stay on the current screen — the screen's own BlocConsumer listener
         // shows the snackbar. We don't rebuild to a new screen for errors.
@@ -117,11 +120,12 @@ class _AuthShellState extends State<AuthShell> {
       },
 
       // ── Stable screens ────────────────────────────────────────────────────
-
       accountsDetected: (accounts) {
         if (widget.config.customScreens?.accountPickerScreenBuilder != null) {
           return widget.config.customScreens!.accountPickerScreenBuilder!(
-            context, widget.cubit, accounts,
+            context,
+            widget.cubit,
+            accounts,
           );
         }
         return AccountPickerScreen(accounts: accounts, config: widget.config);
@@ -132,16 +136,19 @@ class _AuthShellState extends State<AuthShell> {
       emailNotVerified: (email) {
         if (widget.config.customScreens?.otpScreenBuilder != null) {
           return widget.config.customScreens!.otpScreenBuilder!(
-            context, widget.cubit, email,
+            context,
+            widget.cubit,
+            email,
           );
         }
-        return OtpScreen(email: email, config: widget.config);
+        return OtpScreen(email: email, config: widget.config, canResend: true);
       },
 
       onboardingRequired: () {
         if (widget.config.customScreens?.onboardingScreenBuilder != null) {
           return widget.config.customScreens!.onboardingScreenBuilder!(
-            context, widget.cubit,
+            context,
+            widget.cubit,
           );
         }
         return OnboardingScreen(config: widget.config);
@@ -150,38 +157,57 @@ class _AuthShellState extends State<AuthShell> {
       mfaRequired: (userId, message) {
         if (widget.config.customScreens?.twoFactorScreenBuilder != null) {
           return widget.config.customScreens!.twoFactorScreenBuilder!(
-            context, widget.cubit, userId, message,
+            context,
+            widget.cubit,
+            userId,
+            message,
           );
         }
         return TwoFactorScreen(
-          userId: userId, message: message, config: widget.config,
+          userId: userId,
+          message: message,
+          config: widget.config,
         );
       },
 
-      passwordResetSent: () {
+      passwordResetRequestSent: (email) {
         if (widget.config.customScreens?.forgotPasswordScreenBuilder != null) {
           return widget.config.customScreens!.forgotPasswordScreenBuilder!(
-            context, widget.cubit,
+            context,
+            widget.cubit,
           );
         }
-        return ForgotPasswordScreen(config: widget.config, resetSent: true);
+        return OtpScreen(config: widget.config, canResend: false, email: email);
+      },
+
+      passwordResetSent: (token) {
+        if (widget.config.customScreens?.forgotPasswordScreenBuilder != null) {
+          return widget.config.customScreens!.forgotPasswordScreenBuilder!(
+            context,
+            widget.cubit,
+          );
+        }
+        return ResetPasswordScreen(config: widget.config, token: token);
       },
 
       passwordResetSuccess: () {
         if (widget.config.customScreens?.loginScreenBuilder != null) {
           return widget.config.customScreens!.loginScreenBuilder!(
-            context, widget.cubit,
+            context,
+            widget.cubit,
           );
         }
         return LoginScreen(
-          config: widget.config, showPasswordResetSuccess: true,
+          config: widget.config,
+          showPasswordResetSuccess: true,
         );
       },
 
       sessionExpiredForAccount: (userId, displayName) {
         if (widget.config.customScreens?.loginScreenBuilder != null) {
           return widget.config.customScreens!.loginScreenBuilder!(
-            context, widget.cubit,
+            context,
+            widget.cubit,
           );
         }
         return LoginScreen(
@@ -197,7 +223,8 @@ class _AuthShellState extends State<AuthShell> {
   Widget _buildLoginScreen(BuildContext context) {
     if (widget.config.customScreens?.loginScreenBuilder != null) {
       return widget.config.customScreens!.loginScreenBuilder!(
-        context, widget.cubit,
+        context,
+        widget.cubit,
       );
     }
     return LoginScreen(config: widget.config);
@@ -210,8 +237,6 @@ class _LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }

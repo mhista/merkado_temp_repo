@@ -14,7 +14,10 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDatasource authRemoteDatasource;
   final LoggerService? _log;
 
-  AuthRepositoryImpl({required this.authRemoteDatasource, LoggerService? logger}) : _log = logger;
+  AuthRepositoryImpl({
+    required this.authRemoteDatasource,
+    LoggerService? logger,
+  }) : _log = logger;
 
   /// POST /auth/register
   @override
@@ -46,8 +49,10 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     _log?.debug('[AuthRepo] verifyEmail — $email');
     try {
-      final result =
-          await authRemoteDatasource.verifyEmail(email: email, otp: otp);
+      final result = await authRemoteDatasource.verifyEmail(
+        email: email,
+        otp: otp,
+      );
       _log?.info('[AuthRepo] verifyEmail success — $email');
       return Result.success(result);
     } catch (e, st) {
@@ -103,22 +108,61 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   /// POST /auth/forgot-password
+  // @override
+  // Future<Result<Map<String, dynamic>>> forgotPassword({
+  //   required String email,
+  // }) async {
+  //   _log?.debug('[AuthRepo] forgotPassword — $email');
+  //   try {
+  //     final result = await authRemoteDatasource.forgotPassword(email: email);
+  //     _log?.info('[AuthRepo] forgotPassword success — $email');
+  //     return Result.success(result);
+  //   } catch (e, st) {
+  //     _log?.error('[AuthRepo] forgotPassword failed', e, st);
+  //     return Result.failure(e.toString());
+  //   }
+  // }
+
+  /// POST /auth/password-reset/request
   @override
-  Future<Result<Map<String, dynamic>>> forgotPassword({
+  Future<Result<Map<String, dynamic>>> requestPasswordReset({
     required String email,
   }) async {
-    _log?.debug('[AuthRepo] forgotPassword — $email');
+    _log?.debug('[AuthRepo] resetPassword');
     try {
-      final result = await authRemoteDatasource.forgotPassword(email: email);
-      _log?.info('[AuthRepo] forgotPassword success — $email');
+      final result = await authRemoteDatasource.requestPasswordReset(
+        email: email,
+      );
+      _log?.info('[AuthRepo] reset password reset success');
       return Result.success(result);
     } catch (e, st) {
-      _log?.error('[AuthRepo] forgotPassword failed', e, st);
+      _log?.error('[AuthRepo] reset password reset failed', e, st);
       return Result.failure(e.toString());
     }
   }
 
-  /// POST /auth/reset-password
+  /// POST /auth/password-reset/verify-otp
+
+  @override
+  Future<Result<Map<String, dynamic>>> verifyPasswordResetOtp({
+    required String email,
+    required String otp,
+  }) async {
+    _log?.debug('[AuthRepo] resetPassword');
+    try {
+      final result = await authRemoteDatasource.verifyPasswordResetOtp(
+        otp: otp,
+        email: email,
+      );
+      _log?.info('[AuthRepo] Verify password reset success');
+      return Result.success(result);
+    } catch (e, st) {
+      _log?.error('[AuthRepo] Verify password reset failed', e, st);
+      return Result.failure(e.toString());
+    }
+  }
+
+  /// POST /auth/password-reset/reset
   @override
   Future<Result<Map<String, dynamic>>> resetPassword({
     required String token,
@@ -236,15 +280,19 @@ class AuthRepositoryImpl implements AuthRepository {
     required String phone,
     String? avatarUrl,
   }) async {
-    _log?.debug('[AuthRepo] completeOnboarding — $firstName $lastName, country: $country, phone: $phone');
+    _log?.debug(
+      '[AuthRepo] completeOnboarding — $firstName $lastName, country: $country, phone: $phone',
+    );
     try {
-      final result = await authRemoteDatasource.completeOnboarding(data: {
-        'firstName': firstName,
-        'lastName': lastName,
-        'country': country,
-        'phone': phone,
-        if (avatarUrl != null) 'avatarUrl': avatarUrl,
-      });
+      final result = await authRemoteDatasource.completeOnboarding(
+        data: {
+          'firstName': firstName,
+          'lastName': lastName,
+          'country': country,
+          'phone': phone,
+          if (avatarUrl != null) 'avatarUrl': avatarUrl,
+        },
+      );
       _log?.info('[AuthRepo] completeOnboarding success');
       return Result.success(result);
     } catch (e, st) {

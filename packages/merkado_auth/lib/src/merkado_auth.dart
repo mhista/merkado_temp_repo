@@ -88,8 +88,11 @@ class MerkadoAuth {
       ..registerLazySingleton(
         () => CompleteOnboardingUseCase(getIt<AuthRepository>()),
       )
+       ..registerLazySingleton(
+        () => RequestPasswordResetUseCase(getIt<AuthRepository>()),
+      )
       ..registerLazySingleton(
-        () => ForgotPasswordUseCase(getIt<AuthRepository>()),
+        () => VerifyPasswordResetUseCase(getIt<AuthRepository>()),
       )
       ..registerLazySingleton(
         () => ResetPasswordUseCase(getIt<AuthRepository>()),
@@ -116,7 +119,8 @@ class MerkadoAuth {
         resendOtpUseCase: getIt(),
         verifyEmailUseCase: getIt(),
         completeOnboardingUseCase: getIt(),
-        forgotPasswordUseCase: getIt(),
+        requestPasswordResetUseCase: getIt(),
+        verifyPasswordResetUseCase: getIt(),
         resetPasswordUseCase: getIt(),
         verifyTwoFactorUseCase: getIt(),
         exchangeRefreshTokenUseCase: getIt(),
