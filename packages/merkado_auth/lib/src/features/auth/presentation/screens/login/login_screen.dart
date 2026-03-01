@@ -160,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       labelText: 'Your password',
                       // suffixIcon: HugeIcons.strokeRoundedLock,
                       useSuffixIcon: true,
-                      validator: CommonValidators.passwordValidator,
+                      validator: CommonValidators.strongPasswordValidator,
                       enabled: true,
                       obscureText: true,
                       canDispose: false,

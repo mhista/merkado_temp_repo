@@ -114,7 +114,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           ),
                         ],
                       ),
-            
+
                       // TEXT FIELDS
                       TextFieldForm(
                         controller: _passwordController,
@@ -125,7 +125,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         enabled: true,
                         obscureText: true,
                       ),
-            
+
                       TextFieldForm(
                         controller: _confirmController,
                         fieldName: 'Confirm Password',
@@ -140,7 +140,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         enabled: true,
                         obscureText: true,
                       ),
-            
+
                       Column(
                         children: [
                           SizedBox(height: (24).toDouble()),
@@ -152,15 +152,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                 return ElevatedButton(
                                   onPressed: state.maybeWhen(
                                     loading: () => null,
-                                    orElse: () {
-                                      return () => () {
-                                        if (_formKey.currentState!.validate()) {
-                                          cubit.resetPassword(
-                                            token: widget.token,
-                                            newPassword: _passwordController.text,
-                                          );
-                                        }
-                                      };
+                                    orElse: () => () {
+                                      if (_formKey.currentState!.validate()) {
+                                        cubit.resetPassword(
+                                          token: widget.token,
+                                          newPassword: _passwordController.text,
+                                        );
+                                      }
+                                      ;
                                     },
                                   ),
                                   child: state.maybeWhen(
