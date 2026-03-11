@@ -30,6 +30,9 @@ dependencies:
   dotted_border: ^3.1.0
   mix: ^2.0.0-rc.1
   loading_animation_widget: ^1.3.0
+  merkado_ds:
+    path: ../merkado_ds
+  hugeicons: ^1.1.5
 
 dev_dependencies:
   flutter_test:

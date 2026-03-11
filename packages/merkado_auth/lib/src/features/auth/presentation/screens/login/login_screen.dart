@@ -27,7 +27,7 @@ class LoginScreen extends StatefulWidget {
   final String? errorMessage;
   final String? sessionExpiredMessage;
   final bool showPasswordResetSuccess;
-  const LoginScreen({
+const LoginScreen({
     super.key,
     required this.config,
     this.errorMessage,
