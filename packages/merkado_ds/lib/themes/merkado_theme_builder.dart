@@ -27,7 +27,7 @@ class MerkadoThemeBuilder {
       primaryColor: colors.brandPrimary,
       scaffoldBackgroundColor: colors.backgroundPrimary,
       colorScheme: _buildColorScheme(colors, isDark),
-      textTheme: _buildTextTheme(colors),
+      textTheme: config.textThemeOverride ?? _buildTextTheme(colors),
       appBarTheme:
           config.appBarThemeOverride ?? _buildAppBarTheme(colors, isDark),
       elevatedButtonTheme:
@@ -41,7 +41,8 @@ class MerkadoThemeBuilder {
       outlinedButtonTheme:
           config.outlinedButtonOverride ?? _buildOutlinedButton(colors, radius),
       chipTheme: config.chipOverride ?? _buildChip(colors),
-      checkboxTheme: config.checkboxOverride ?? _buildCheckbox(colors, checkBoxRadius),
+      checkboxTheme:
+          config.checkboxOverride ?? _buildCheckbox(colors, checkBoxRadius),
     );
   }
 
@@ -213,7 +214,7 @@ class MerkadoThemeBuilder {
         backgroundColor: colors.backgroundPrimary,
         disabledForegroundColor: colors.textDisabled,
         disabledBackgroundColor: colors.borderDefault,
-        
+
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         textStyle: TextStyle(
           fontFamily: SemanticTypography.buttonFontFamily,
@@ -223,7 +224,7 @@ class MerkadoThemeBuilder {
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
-          side: BorderSide(color: colors.brandPrimary)
+          side: BorderSide(color: colors.brandPrimary),
         ),
       ),
     );

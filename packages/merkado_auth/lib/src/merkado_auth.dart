@@ -288,9 +288,8 @@ class _AccountSwitcherSheetState extends State<_AccountSwitcherSheet> {
                           (hint) => _AccountTile(
                             hint: hint,
                             isActive:
-                                false, // TODO: detect active user by comparing hint.userId to current session's userId
-                            // hint.userId ==
-                            // AuthSecureStorageService.instance.cachedUserId,
+                            hint.userId ==
+                            AuthSecureStorageService.instance.cachedUserId,
                             primaryColor: color,
                             onTap: () async {
                               Navigator.of(context).pop();

@@ -177,13 +177,13 @@
     },
     {
       "name": "common_designs",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/common_designs-1.1.1",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/common_designs-1.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.10"
     },
     {
       "name": "common_utils2",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/common_utils2-2.0.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/common_utils2-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.10"
     },
@@ -261,7 +261,7 @@
     },
     {
       "name": "dio",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/dio-5.9.1",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/dio-5.9.2",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -447,33 +447,39 @@
     },
     {
       "name": "flutter_local_notifications",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications-20.1.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications-21.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.8"
+      "languageVersion": "3.10"
     },
     {
       "name": "flutter_local_notifications_linux",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_linux-7.0.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_linux-8.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.8"
+      "languageVersion": "3.10"
     },
     {
       "name": "flutter_local_notifications_platform_interface",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_platform_interface-10.0.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_platform_interface-11.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.8"
+      "languageVersion": "3.10"
     },
     {
       "name": "flutter_local_notifications_windows",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_windows-2.0.1",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_local_notifications_windows-3.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.8"
+      "languageVersion": "3.10"
     },
     {
       "name": "flutter_plugin_android_lifecycle",
       "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.33",
       "packageUri": "lib/",
       "languageVersion": "3.9"
+    },
+    {
+      "name": "flutter_screenutil",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_screenutil-5.9.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_secure_storage",
@@ -777,7 +783,7 @@
     },
     {
       "name": "injectable_generator",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/injectable_generator-2.12.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/injectable_generator-2.12.1",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
@@ -802,6 +808,12 @@
     {
       "name": "json_annotation",
       "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/json_annotation-4.11.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "json_serializable",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/json_serializable-6.13.0",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
@@ -843,7 +855,7 @@
     },
     {
       "name": "local_auth",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/local_auth-3.0.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/local_auth-3.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
@@ -1256,6 +1268,12 @@
       "languageVersion": "3.7"
     },
     {
+      "name": "source_helper",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/source_helper-1.3.10",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
       "name": "source_span",
       "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/source_span-1.10.2",
       "packageUri": "lib/",
@@ -1365,9 +1383,9 @@
     },
     {
       "name": "timezone",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/timezone-0.10.1",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/timezone-0.11.0",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.10"
     },
     {
       "name": "typed_data",
@@ -1570,6 +1588,12 @@
     {
       "name": "merkado_auth",
       "rootUri": "../packages/merkado_auth",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
+    },
+    {
+      "name": "merkado_wallet",
+      "rootUri": "../packages/merkado_wallet",
       "packageUri": "lib/",
       "languageVersion": "3.10"
     }

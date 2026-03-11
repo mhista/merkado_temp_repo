@@ -5,6 +5,7 @@
 // ── Theme ──
 export 'merkado_theme_config.dart';
 export 'merkado_theme_builder.dart';
+export 'sub_themes/mycut/mycut_text_theme.dart';
 
 // ── Mix styles (if using Mix 2.0) ──
 // export 'mix/mix_token_provider.dart';

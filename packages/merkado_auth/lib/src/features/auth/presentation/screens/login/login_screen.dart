@@ -51,9 +51,16 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _submit(AuthCubit cubit) {
+  void _submit(AuthCubit cubit) async {
+    final deviceInfo = DeviceInfoHelper.instance;
+    final deviceOs = await deviceInfo.getPlatformInfo();
+    final deviceName = await deviceInfo.getDeviceInfo();
+    final fcmToken = CommonNotificationService.instance.token ?? '';
     if (!_formKey.currentState!.validate()) return;
     cubit.login(
+      deviceName: deviceName,
+      deviceOs: deviceOs,
+      fcmToken: fcmToken,
       email: _emailController.text.trim(),
       password: _passwordController.text,
     );
@@ -206,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   orElse: () => () {
                                     _submit(cubit);
                                   },
-                                  loading: ()=>null,
+                                  loading: () => null,
                                 ),
                                 child: state.maybeWhen(
                                   orElse: () => const Text(

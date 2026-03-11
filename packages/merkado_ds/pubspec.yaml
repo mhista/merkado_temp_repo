@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  common_designs: 1.1.1
+  common_designs: 1.1.2
     # path: ../../../packages/common_designs
   hugeicons: ^1.1.5
 
@@ -63,3 +63,10 @@ flutter:
           weight: 400
         - asset: fonts/EBGaramond-SemiBold.ttf
           weight: 600
+    - family: CormorantGaramond
+      fonts:
+        - asset: fonts/CormorantGaramond-Italic-VariableFont_wght.ttf
+        - asset: fonts/CormorantGaramond-VariableFont_wght.ttf
+    - family: InstrumentSans
+      fonts:
+        - asset: fonts/InstrumentSans-VariableFont_wdth,wght.ttf

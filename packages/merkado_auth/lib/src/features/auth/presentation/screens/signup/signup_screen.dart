@@ -165,10 +165,24 @@ class _SignupScreenState extends State<SignupScreen> {
                                     builder: (context, state) => ElevatedButton(
                                       onPressed: state.maybeWhen(
                                         loading: () => null,
-                                        orElse: () => () {
+                                        orElse: () => () async {
+                                          final deviceInfo =
+                                              DeviceInfoHelper.instance;
+                                          final deviceOs = await deviceInfo
+                                              .getPlatformInfo();
+                                          final deviceName = await deviceInfo
+                                              .getDeviceInfo();
+                                          final fcmToken =
+                                              CommonNotificationService
+                                                  .instance
+                                                  .token ??
+                                              '';
                                           if (_formKey.currentState!
                                               .validate()) {
                                             cubit.signUp(
+                                              fcmToken: fcmToken,
+                                              deviceName: deviceName,
+                                              deviceOs: deviceOs,
                                               email: _emailController.text
                                                   .trim(),
                                               password:
