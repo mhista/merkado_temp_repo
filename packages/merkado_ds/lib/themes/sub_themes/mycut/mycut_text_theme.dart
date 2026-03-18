@@ -97,7 +97,7 @@ abstract final class MycutTextTheme {
 
       // "₦62M" portfolio figure — slightly more presence than the greeting
       displayMedium: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 30,
         fontWeight: FontWeight.w400,
         letterSpacing: -0.25,
@@ -107,7 +107,7 @@ abstract final class MycutTextTheme {
 
       // "Good morning, Drew." — as used in the design (~28 px)
       displaySmall: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 28,
         fontWeight: FontWeight.w400,    // Regular — readable without feeling heavy
         letterSpacing: -0.25,
@@ -119,7 +119,7 @@ abstract final class MycutTextTheme {
       //
       // Stat numbers: "7" (active deals), "14" (partners), "+24%" (avg return)
       headlineLarge: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 24,
         fontWeight: FontWeight.w500,    // Medium — numbers need more weight than text
         letterSpacing: -0.2,
@@ -129,7 +129,7 @@ abstract final class MycutTextTheme {
 
       // Contract card title (inbox): "Samsung & LG Import Q1" — list headline
       headlineMedium: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 20,
         fontWeight: FontWeight.w500,
         letterSpacing: -0.15,
@@ -139,7 +139,7 @@ abstract final class MycutTextTheme {
 
       // Section card title: "Samsung & LG Appliances — Bulk Import Q1"
       headlineSmall: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 17,
         fontWeight: FontWeight.w600,    // SemiBold — card title needs to anchor the card
         letterSpacing: -0.1,
@@ -151,7 +151,7 @@ abstract final class MycutTextTheme {
       //
       // Quick action primary label: "New Deal", "Browse Feed", "Wallet"
       titleLarge: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 16,
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
@@ -161,7 +161,7 @@ abstract final class MycutTextTheme {
 
       // Inbox thread name: "Samsung & LG Import Q1" (the bold title in list)
       titleMedium: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 15,
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
@@ -171,7 +171,7 @@ abstract final class MycutTextTheme {
 
       // Activity row title: "Deal confirmed — Distribution complete"
       titleSmall: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 14,
         fontWeight: FontWeight.w600,    // SemiBold — holds up at this size for Cormorant
         letterSpacing: 0,
@@ -183,7 +183,7 @@ abstract final class MycutTextTheme {
       //
       // Financial figures: "₦24,000,000" (deal value), "₦127,350 available"
       bodyLarge: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 15,
         fontWeight: FontWeight.w500,
         letterSpacing: 0,
@@ -194,7 +194,7 @@ abstract final class MycutTextTheme {
       // Inbox message preview: "Adaeze: I've reviewed version 1.1..."
       // Activity subtitle: "Cassava Export · Ogun State"
       bodyMedium: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 13,
         fontWeight: FontWeight.w500,    // w500 — Cormorant needs this at 13 px to stay legible
         letterSpacing: 0.1,
@@ -205,7 +205,7 @@ abstract final class MycutTextTheme {
       // Quick action subtitle: "Create contract", "Discover deals"
       // "+₦4.2M this month", "3 contracts need attention"
       bodySmall: TextStyle(
-        fontFamily: kMycutSerif,
+        fontFamily: kMycutSans,
         fontSize: 12,
         fontWeight: FontWeight.w600,    // w600 minimum at 12 px for Cormorant's thin strokes
         letterSpacing: 0.1,
