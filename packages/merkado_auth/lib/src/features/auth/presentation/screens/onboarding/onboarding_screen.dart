@@ -295,9 +295,9 @@ class _UserProfileImageState extends State<UserProfileImage> {
             right: 0,
             child: SmoothEdgeContainer(
               onTap: () async {
-                final file = await ImageUtils.pickFromGallery();
+                final file = await MediaUtils.pickImageFromGallery();
                 setState(() {
-                  this.file = file;
+                  this.file = file.value;
                 });
               },
               radius: 100,
