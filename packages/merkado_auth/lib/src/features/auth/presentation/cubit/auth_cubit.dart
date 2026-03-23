@@ -251,7 +251,7 @@ class AuthCubit extends Cubit<AuthState> {
         // Save the new tokens
         await _storage.saveAccessToken(
           data['accessToken'] as String,
-          expiresIn: data['expiresIn'] as int? ?? 900,
+          expiresIn: data['expiresIn'] as int? ?? 1800,
         );
 
         // Update refresh token if rotated
@@ -277,28 +277,45 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  /// Reads known accounts from shared storage.
-  /// Emits account picker if accounts found, login screen if none.
+  /// This ensures a user who has multiple accounts on THIS app always
+  /// sees the local switcher, not the cross-app SSO picker.
   Future<void> _checkForCrossAppAccounts() async {
-    _log?.debug(
-      '[AuthCubit] Checking for cross-app accounts (SSO enabled: ${_config.features.crossAppSso})',
-    );
-    if (!_config.features.crossAppSso) {
-      _log?.debug('[AuthCubit] SSO disabled — emitting unauthenticated');
-      _emit(const AuthState.unauthenticated());
-      _eventBus.emit(const AuthUnauthenticated());
+    final allAccounts = await _storage.getKnownAccounts();
+
+    // ── Step 1: Local accounts for this app ─────────────────────────────────
+    final localAccounts = allAccounts
+        .where((a) => a.sourcePlatformId == _config.platformId)
+        .toList();
+
+    if (localAccounts.isNotEmpty) {
+      _log?.debug(
+        '[AuthCubit] Found \${localAccounts.length} local account(s) for ${_config.platformId}',
+      );
+      _emit(AuthState.localAccountsDetected(accounts: localAccounts));
+      _eventBus.emit(AuthAccountsDetected(accounts: localAccounts));
       return;
     }
 
-    final accounts = await _storage.getKnownAccounts();
-    _log?.debug('[AuthCubit] Found ${accounts.length} known account(s)');
-    if (accounts.isEmpty) {
-      _emit(const AuthState.unauthenticated());
-      _eventBus.emit(const AuthUnauthenticated());
-    } else {
-      _emit(AuthState.accountsDetected(accounts: accounts));
-      _eventBus.emit(AuthAccountsDetected(accounts: accounts));
+    // ── Step 2: Cross-app SSO accounts (other Grascope apps) ────────────────
+    if (_config.features.crossAppSso) {
+      final crossAppAccounts = allAccounts
+          .where((a) => a.sourcePlatformId != _config.platformId)
+          .toList();
+
+      if (crossAppAccounts.isNotEmpty) {
+        _log?.debug(
+          '[AuthCubit] Found \${crossAppAccounts.length} cross-app account(s)',
+        );
+        _emit(AuthState.accountsDetected(accounts: crossAppAccounts));
+        _eventBus.emit(AuthAccountsDetected(accounts: crossAppAccounts));
+        return;
+      }
     }
+
+    // ── Step 3: No accounts found anywhere ───────────────────────────────────
+    _log?.debug('[AuthCubit] No known accounts — emitting unauthenticated');
+    _emit(const AuthState.unauthenticated());
+    _eventBus.emit(const AuthUnauthenticated());
   }
 
   // ══════════════════════════════════════════════════════════════
@@ -640,27 +657,29 @@ class AuthCubit extends Cubit<AuthState> {
 
     // UPLOAD AVATAR FIRST (if provided) to get the URL, which is needed for both onboarding and SSO hint
     String? uploadedAvatarUrl;
-    // if (avatarUrl != null) {
-    //   _log?.info('[AuthCubit] Uploading avatar image');
-    //   final uploadResult = await _completeOnboardingUseCase.uploadAvatar(avatarUrl);
-    //   uploadedAvatarUrl = uploadResult.fold(
-    //     (error) {
-    //       _log?.error('[AuthCubit] Avatar upload failed — $error');
-    //       throw error;
-    //     },
-    //     (url) {
-    //       _log?.info('[AuthCubit] Avatar uploaded successfully — $url');
-    //       return url;
-    //     },
-    //   );
-    // }
+    if (avatarUrl != null) {
+      _log?.info('[AuthCubit] Uploading avatar image');
+      final uploadResult = await AuthMediaService.instance.upload(
+        file: avatarUrl,
+      );
+      uploadedAvatarUrl = uploadResult.when(
+        failure: (error, __) {
+          _log?.error('[AuthCubit] Avatar upload failed — $error');
+          return '';
+        },
+        success: (media) {
+          _log?.info('[AuthCubit] Avatar uploaded successfully — $media');
+          return media.contentUrl;
+        },
+      );
+    }
 
     final result = await _completeOnboardingUseCase(
       firstName: firstName,
       lastName: lastName,
       country: country,
       phone: phone,
-      avatarUrl: uploadedAvatarUrl,
+      avatarUrl: (uploadedAvatarUrl ?? '').isEmpty ? null : uploadedAvatarUrl,
     );
 
     result.when(

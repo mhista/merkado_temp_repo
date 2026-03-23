@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:merkado_auth/merkado_auth.dart';
 
-
+import '../../../../../merkado_auth.dart';
 import '../cubit/auth_cubit.dart';
 import 'signup/signup_screen.dart';
 
 /// AccountPickerScreen
 /// ===================
-/// Shown at startup when one or more known Grascope accounts are detected
-/// in shared secure storage from other Grascope apps on this device.
+/// Shown in two modes controlled by [isLocalAccounts]:
 ///
-/// For a single account, shows "Continue as [name]".
-/// For multiple accounts, shows a full picker list.
-/// Always includes options to sign in with a different account or create new.
+/// LOCAL MODE (isLocalAccounts: true)
+///   Triggered after logout or on startup when this app has previously
+///   signed-in accounts in local storage. The user recognises these as
+///   "their accounts" for this app.
+///   Copy: "Welcome back" / "Switch account"
+///   Action: cubit.continueAsAccount() — exchanges stored refresh token.
+///   Bottom options: "Sign in with a different account", "Create new account"
+///
+/// CROSS-APP SSO MODE (isLocalAccounts: false)
+///   Triggered when no local accounts exist but other Grascope apps on
+///   this device have active sessions. The user may or may not recognise
+///   these accounts as usable here.
+///   Copy: "Continue as [name]" / "Found your Grascope accounts"
+///   Action: cubit.continueAsAccount() — same token exchange.
+///   Bottom options: "Use a different account", "Create new account"
 class AccountPickerScreen extends StatelessWidget {
   final List<GrascopeSessionHint> accounts;
   final MerkadoAuthConfig config;
+
+  /// true  → local accounts for this app (post-logout / returning user)
+  /// false → cross-app SSO accounts from other Grascope apps
+  final bool isLocalAccounts;
 
   const AccountPickerScreen({
     super.key,
     required this.accounts,
     required this.config,
+    this.isLocalAccounts = false,
   });
 
   @override
@@ -29,6 +44,19 @@ class AccountPickerScreen extends StatelessWidget {
     final cubit = context.read<AuthCubit>();
     final theme = Theme.of(context);
     final isSingle = accounts.length == 1;
+
+    // ── Copy varies by mode ──────────────────────────────────────────────────
+    final headline = isLocalAccounts
+        ? (isSingle ? 'Welcome back' : 'Switch account')
+        : (isSingle ? 'Continue as ${accounts.first.displayName}' : 'Your Grascope accounts');
+
+    final subtitle = isLocalAccounts
+        ? (isSingle
+            ? 'Sign in as ${accounts.first.displayName}'
+            : 'Select an account to continue to ${config.appName}')
+        : (isSingle
+            ? 'We found a Grascope account on this device'
+            : 'We found Grascope accounts on this device. Select one to continue.');
 
     return Scaffold(
       body: SafeArea(
@@ -49,7 +77,7 @@ class AccountPickerScreen extends StatelessWidget {
               const SizedBox(height: 40),
 
               Text(
-                isSingle ? 'Welcome back' : 'Choose an account',
+                headline,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -58,9 +86,7 @@ class AccountPickerScreen extends StatelessWidget {
               const SizedBox(height: 8),
 
               Text(
-                isSingle
-                    ? 'Continue to ${config.appName} with your Grascope account'
-                    : 'Select an account to continue to ${config.appName}',
+                subtitle,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurface.withOpacity(0.6),
                 ),
@@ -79,7 +105,9 @@ class AccountPickerScreen extends StatelessWidget {
               // ── Other options ─────────────────────────────────────────────
               _OtherOptionTile(
                 icon: Icons.person_outline,
-                label: 'Use a different account',
+                label: isLocalAccounts
+                    ? 'Sign in with a different account'
+                    : 'Use a different account',
                 onTap: () => cubit.emit(const AuthState.unauthenticated()),
               ),
 

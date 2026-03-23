@@ -9,6 +9,8 @@ import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/domain/usecases/auth_usecases.dart';
 import 'features/auth/presentation/cubit/auth_cubit.dart';
 import 'features/auth/presentation/screens/auth_shell.dart';
+import 'google/google_sign_in_config.dart';
+import 'google/google_sign_in_service.dart';
 
 class MerkadoAuth {
   MerkadoAuth._();
@@ -49,11 +51,18 @@ class MerkadoAuth {
     await _instance!._cubit.init(config);
     _log?.info('[MerkadoAuth] Initialization complete');
 
+    AuthMediaService.init(
+      mediaBaseUrl: config.mediaUrl,
+      authBaseUrl: config.authUrl,
+    );
+
     if (!HttpClient.isInitialized) {
       HttpClient.init(baseUrl: 'https://auth-api.merkado.site');
     }
 
-    HttpClient.instance.addInterceptor(MerkadoAuthInterceptor(logger: logger));
+    HttpClient.instance.addInterceptor(
+      MerkadoAuthInterceptor(logger: logger, authBaseUrl: config.authUrl),
+    );
   }
 
   Future<void> _setupDependencies() async {
@@ -65,8 +74,12 @@ class MerkadoAuth {
     }
 
     // ── 1. Data source (no dependencies) ─────────────────────────────────────
+    // In your injection_container / module — wherever AuthRemoteDatasourceImpl is registered
     getIt.registerLazySingleton<AuthRemoteDatasource>(
-      () => AuthRemoteDatasourceImpl(logger: _log),
+      () => AuthRemoteDatasourceImpl(
+        authBaseUrl: _config.baseUrl,
+        appBaseUrl: _config.authUrl,
+      ),
     );
 
     // ── 2. Repository (depends on datasource) ─────────────────────────────────
@@ -88,7 +101,7 @@ class MerkadoAuth {
       ..registerLazySingleton(
         () => CompleteOnboardingUseCase(getIt<AuthRepository>()),
       )
-       ..registerLazySingleton(
+      ..registerLazySingleton(
         () => RequestPasswordResetUseCase(getIt<AuthRepository>()),
       )
       ..registerLazySingleton(
@@ -109,6 +122,12 @@ class MerkadoAuth {
       ..registerLazySingleton(
         () => SignInWithAppleUseCase(getIt<AuthRepository>()),
       );
+
+    // getIt.registerSingletonAsync<GoogleSignInService>(() async {
+    //   final service = GoogleSignInService();
+    //   await service.initialize(GoogleSignInConfig.firebase());
+    //   return service;
+    // });
 
     // ── 4. Cubit (top of chain, depends on all use cases) ─────────────────────
     getIt.registerLazySingleton<AuthCubit>(
@@ -288,8 +307,8 @@ class _AccountSwitcherSheetState extends State<_AccountSwitcherSheet> {
                           (hint) => _AccountTile(
                             hint: hint,
                             isActive:
-                            hint.userId ==
-                            AuthSecureStorageService.instance.cachedUserId,
+                                hint.userId ==
+                                AuthSecureStorageService.instance.cachedUserId,
                             primaryColor: color,
                             onTap: () async {
                               Navigator.of(context).pop();

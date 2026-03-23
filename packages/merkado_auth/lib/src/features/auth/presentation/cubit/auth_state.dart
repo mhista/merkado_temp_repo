@@ -17,12 +17,24 @@ class AuthState with _$AuthState {
   /// User is fully authenticated (verified + onboarded + valid token).
   const factory AuthState.authenticated() = _Authenticated;
 
-  /// Known Grascope accounts detected from shared storage.
-  /// Shows account picker — single account or multi-account list.
+
+  /// Accounts from THIS app detected in local shared storage.
+  /// Shown after logout or on startup when the user has previously
+  /// signed into this app with one or more accounts.
+  /// UI: "Switch account" / "Sign in to a different account".
+  /// Takes precedence over [accountsDetected] (cross-app SSO).
+  const factory AuthState.localAccountsDetected({
+    required List<GrascopeSessionHint> accounts,
+  }) = _LocalAccountsDetected;
+ 
+  /// Known Grascope accounts detected from CROSS-APP shared storage.
+  /// Only shown when no local accounts exist for this app but other
+  /// Grascope apps on this device have active sessions.
+  /// UI: "Continue as [name]" — cross-app SSO flow.
   const factory AuthState.accountsDetected({
     required List<GrascopeSessionHint> accounts,
   }) = _AccountsDetected;
-
+ 
   /// No session and no known accounts. Show login/signup.
   const factory AuthState.unauthenticated() = _Unauthenticated;
 

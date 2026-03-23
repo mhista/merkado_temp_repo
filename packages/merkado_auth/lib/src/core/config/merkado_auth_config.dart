@@ -36,6 +36,16 @@ class MerkadoAuthConfig {
   /// Example: 'https://auth-api.merkado.site'
   final String baseUrl;
 
+  /// Base Auth URL of the Merkado Identity Service.
+  /// Pass in the base url if auth url is same as base url
+  /// Example: 'https://auth-api.merkado.site'
+  final String authUrl;
+
+  /// Base Media URL of the Merkado Identity Service.
+  /// Pass in the base url if auth url is same as base url
+  /// Example: 'https://auth-api.merkado.site'
+  final String mediaUrl;
+
   /// Human-readable name of this app. Shown in UI headings and error messages.
   final String appName;
 
@@ -78,6 +88,9 @@ class MerkadoAuthConfig {
   const MerkadoAuthConfig({
     required this.platformId,
     required this.baseUrl,
+    required this.authUrl,
+    required this.mediaUrl,
+
     required this.appName,
     this.appLogo,
     this.logoHeight = 80,
@@ -89,9 +102,9 @@ class MerkadoAuthConfig {
     this.enableLogging = false,
     this.enableSharedKeychain = false,
   }) : assert(
-          platformId.length > 0,
-          'platformId must not be empty. Use MerkadoPlatform constants.',
-        );
+         platformId.length > 0,
+         'platformId must not be empty. Use MerkadoPlatform constants.',
+       );
 
   /// Human-readable name of this platform, derived from [platformId].
   String get platformName => MerkadoPlatform.nameOf(platformId);

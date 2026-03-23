@@ -63,6 +63,7 @@ class _AuthShellState extends State<AuthShell> {
   bool _isStableState(AuthState state) {
     return state.maybeWhen(
       unauthenticated: () => true,
+      localAccountsDetected: (_) => true,
       accountsDetected: (_) => true,
       emailNotVerified: (_) => true,
       onboardingRequired: () => true,
@@ -70,6 +71,19 @@ class _AuthShellState extends State<AuthShell> {
       passwordResetSent: (_) => true,
       passwordResetRequestSent: (_) => true,
       passwordResetSuccess: () => true,
+      sessionExpiredForAccount: (_, __) => true,
+      orElse: () => false,
+    );
+  }
+
+  /// Whether the current state is a "root" screen — one where pressing
+  /// back should exit the auth shell entirely (or close the app) rather
+  /// than navigating within the shell.
+  bool _isRootScreen(AuthState state) {
+    return state.maybeWhen(
+      unauthenticated: () => true,
+      localAccountsDetected: (_) => true,
+      accountsDetected: (_) => true,
       sessionExpiredForAccount: (_, __) => true,
       orElse: () => false,
     );
@@ -94,7 +108,35 @@ class _AuthShellState extends State<AuthShell> {
             _lastStableScreen = screen;
           }
 
-          return screen;
+          // PopScope wraps each rebuild so it always has the current state.
+          //
+          // Back button behaviour:
+          //   • Root screens (login, account pickers) — canPop: false.
+          //     onPopInvokedWithResult fires but we DON'T pop the shell.
+          //     Instead we let the OS handle it (minimise the app) by
+          //     calling Navigator.of(context).pop() only when on a
+          //     sub-screen so the user can go BACK to login, not exit auth.
+          //   • Sub-screens (OTP, onboarding, 2FA, forgot password) —
+          //     canPop: false + pop the shell back to login/account picker
+          //     so the user can correct their email or choose differently.
+          //     We never allow a raw pop that would land on splash/_LoginGate.
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, _) {
+              if (didPop) return;
+              if (_isRootScreen(state)) {
+                // On root screen — user wants to leave the auth flow entirely.
+                // Pop the shell so the app goes to whatever is below
+                // (splash/login gate handles it from there).
+                Navigator.of(context).pop();
+              } else {
+                // On a sub-screen — go back to login/account picker
+                // without popping the shell.
+                widget.cubit.emit(const AuthState.unauthenticated());
+              }
+            },
+            child: screen,
+          );
         },
       ),
     );
@@ -119,7 +161,23 @@ class _AuthShellState extends State<AuthShell> {
         return _lastStableScreen ?? _buildLoginScreen(context);
       },
 
-      // ── Stable screens ────────────────────────────────────────────────────
+        // ── Stable screens ────────────────────────────────────────────────────
+ 
+      // Local accounts for THIS app — shown after logout or on startup
+      // when the user has previously signed in here.
+      localAccountsDetected: (accounts) {
+        if (widget.config.customScreens?.accountPickerScreenBuilder != null) {
+          return widget.config.customScreens!.accountPickerScreenBuilder!(
+            context, widget.cubit, accounts,
+          );
+        }
+        return AccountPickerScreen(
+          accounts: accounts,
+          config: widget.config,
+          isLocalAccounts: true,  // drives copy: "Switch account" vs "Continue as"
+        );
+      },
+ 
       accountsDetected: (accounts) {
         if (widget.config.customScreens?.accountPickerScreenBuilder != null) {
           return widget.config.customScreens!.accountPickerScreenBuilder!(
