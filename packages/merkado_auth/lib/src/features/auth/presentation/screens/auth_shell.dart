@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:merkado_auth/src/features/auth/presentation/screens/password/reset_password_screen.dart';
 
@@ -128,7 +129,7 @@ class _AuthShellState extends State<AuthShell> {
                 // On root screen — user wants to leave the auth flow entirely.
                 // Pop the shell so the app goes to whatever is below
                 // (splash/login gate handles it from there).
-                Navigator.of(context).pop();
+                SystemNavigator.pop();
               } else {
                 // On a sub-screen — go back to login/account picker
                 // without popping the shell.

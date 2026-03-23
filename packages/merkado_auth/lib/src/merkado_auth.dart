@@ -57,7 +57,7 @@ class MerkadoAuth {
     );
 
     if (!HttpClient.isInitialized) {
-      HttpClient.init(baseUrl: 'https://auth-api.merkado.site');
+      HttpClient.init(baseUrl: config.authUrl);
     }
 
     HttpClient.instance.addInterceptor(
@@ -77,8 +77,8 @@ class MerkadoAuth {
     // In your injection_container / module — wherever AuthRemoteDatasourceImpl is registered
     getIt.registerLazySingleton<AuthRemoteDatasource>(
       () => AuthRemoteDatasourceImpl(
-        authBaseUrl: _config.baseUrl,
-        appBaseUrl: _config.authUrl,
+        authBaseUrl: _config.authUrl,
+        appBaseUrl: _config.baseUrl,
       ),
     );
 
