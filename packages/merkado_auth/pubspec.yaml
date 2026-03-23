@@ -34,7 +34,6 @@ dependencies:
     path: ../merkado_ds
   hugeicons: ^1.1.5
   google_sign_in: ^7.2.0
-  firebase_auth: ^6.2.0
 
 dev_dependencies:
   flutter_test:
