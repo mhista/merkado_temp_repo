@@ -77,7 +77,6 @@ export 'src/features/withdrawal/presentation/screens/withdraw_screen.dart';
 export 'src/features/withdrawal/presentation/screens/add_bank_account_screen.dart';
 export 'src/features/withdrawal/presentation/screens/withdrawal_history_screen.dart';
 export 'src/features/withdrawal/presentation/screens/pin_entry_sheet.dart';
-
 // ── Services (usable independently) ───────────────────────────────────
 export 'src/services/banks/nigerian_bank_service.dart';
 export 'src/features/pin/pin_service.dart';
