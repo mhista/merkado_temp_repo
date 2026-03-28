@@ -9,6 +9,9 @@ workspace:
   - packages/merkado_ds
   - packages/merkado_auth
   - packages/merkado_wallet
+  - packages/merkados_kyc
+
+  
 
 dev_dependencies:
   melos: ^7.4.0

@@ -1,11 +1,11 @@
 name: merkado_wallet
-description: "A new Flutter package project."
+description: "  Merkados Wallet package"
 version: 0.0.1
 resolution: workspace
 publish_to: none
 
 environment:
-  sdk: ^3.10.4
+  sdk: "^3.10.0"
   flutter: ">=1.17.0"
 
 dependencies:

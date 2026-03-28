@@ -58,6 +58,8 @@ export 'src/core/events/wallet_notification_event.dart';
 
 // ── Models ─────────────────────────────────────────────────────────────
 export 'src/features/wallet/domain/models/wallet.dart';
+export 'src/features/user/domain/models/wallet_user.dart';
+
 export 'src/features/withdrawal/domain/models/bank_account.dart';
 export 'src/features/withdrawal/domain/models/withdrawal_record.dart';
 

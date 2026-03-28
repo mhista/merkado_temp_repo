@@ -130,7 +130,7 @@ class DemoFundResponse {
     required this.message,
     required this.walletId,
     required this.availableBalance,
-    required this.ledgerBalance,
+    required this.ledgerBalance,  
     required this.withdrawableBalance,
   });
 

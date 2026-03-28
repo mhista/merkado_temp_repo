@@ -5,6 +5,7 @@
 <module fileurl="file://$PROJECT_DIR$/packages/merkado_auth/melos_merkado_auth.iml" filepath="$PROJECT_DIR$/packages/merkado_auth/melos_merkado_auth.iml"/>
 <module fileurl="file://$PROJECT_DIR$/packages/merkado_ds/melos_merkado_ds.iml" filepath="$PROJECT_DIR$/packages/merkado_ds/melos_merkado_ds.iml"/>
 <module fileurl="file://$PROJECT_DIR$/packages/merkado_wallet/melos_merkado_wallet.iml" filepath="$PROJECT_DIR$/packages/merkado_wallet/melos_merkado_wallet.iml"/>
+<module fileurl="file://$PROJECT_DIR$/packages/merkados_kyc/melos_merkados_kyc.iml" filepath="$PROJECT_DIR$/packages/merkados_kyc/melos_merkados_kyc.iml"/>
 <module fileurl="file://$PROJECT_DIR$/melos_merkado_monorepo.iml" filepath="$PROJECT_DIR$/melos_merkado_monorepo.iml"/>
     </modules>
   </component>

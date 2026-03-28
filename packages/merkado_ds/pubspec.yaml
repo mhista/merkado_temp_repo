@@ -1,12 +1,12 @@
 name: merkado_ds
-description: "A new Flutter package project."
+description: "Merkado design package"
 version: 0.0.1
 homepage:
 resolution: workspace
 publish_to: none
 
 environment:
-  sdk: ^3.10.4
+  sdk: "^3.10.0"
   flutter: ">=1.17.0"
 
 dependencies:
