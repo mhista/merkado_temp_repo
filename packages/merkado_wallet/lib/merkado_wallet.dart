@@ -67,6 +67,8 @@ export 'src/features/withdrawal/domain/models/withdrawal_record.dart';
 export 'src/features/wallet/presentation/cubit/wallet_cubit.dart';
 export 'src/features/withdrawal/presentation/cubit/withdrawal_cubit.dart';
 export 'src/features/pin/pin_cubit.dart';
+export 'src/features/user/presentation/cubit/user_cubit.dart';
+
 
 // ── Screens (individually usable) ─────────────────────────────────────
 export 'src/features/wallet/presentation/screens/wallet_home_screen.dart';
