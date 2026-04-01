@@ -79,8 +79,10 @@ class MerkadoWalletScope extends StatefulWidget {
   static MerkadoWalletController of(BuildContext context) {
     final scope = context
         .dependOnInheritedWidgetOfExactType<_WalletInheritedWidget>();
-    assert(scope != null,
-        'MerkadoWalletScope not found. Wrap your app with MerkadoWalletScope.');
+    assert(
+      scope != null,
+      'MerkadoWalletScope not found. Wrap your app with MerkadoWalletScope.',
+    );
     return scope!.controller;
   }
 }
@@ -108,13 +110,17 @@ class _MerkadoWalletScopeState extends State<MerkadoWalletScope> {
       'logging: ${widget.config.enableLogging}',
     );
 
+    WalletUrls.initialize(
+      baseUrl: widget.config.baseUrl,
+      alternateBaseUrl: widget.config.alternateBaseUrl,
+    );
+
     // Initialize HTTP client
     WalletHttpClient.init(baseUrl: widget.config.baseUrl);
 
     // Build cubits
-    final walletCubit = WalletCubit(
-      repository: WalletRepositoryImpl(),
-    )..configure(
+    final walletCubit = WalletCubit(repository: WalletRepositoryImpl())
+      ..configure(
         currencySymbol: widget.config.currency.symbol,
         onNotification: widget.config.onNotification != null
             ? (e) => widget.config.onNotification!(e)
@@ -123,24 +129,23 @@ class _MerkadoWalletScopeState extends State<MerkadoWalletScope> {
         demoMode: widget.config.features.demoMode,
       );
 
-    final withdrawalCubit = WithdrawalCubit(
-      repository: WithdrawalRepositoryImpl(),
-    )..configure(
-        currencySymbol: widget.config.currency.symbol,
-        onNotification: widget.config.onNotification != null
-            ? (e) => widget.config.onNotification!(e)
-            : null,
-      );
+    final withdrawalCubit =
+        WithdrawalCubit(repository: WithdrawalRepositoryImpl())..configure(
+          currencySymbol: widget.config.currency.symbol,
+          onNotification: widget.config.onNotification != null
+              ? (e) => widget.config.onNotification!(e)
+              : null,
+        );
 
     final pinCubit = PinCubit();
     final userCubit = UserCubit();
 
     _controller = MerkadoWalletController._(
-      config:          widget.config,
-      walletCubit:     walletCubit,
+      config: widget.config,
+      walletCubit: walletCubit,
       withdrawalCubit: withdrawalCubit,
-      pinCubit:        pinCubit,
-      userCubit:       userCubit,
+      pinCubit: pinCubit,
+      userCubit: userCubit,
     );
 
     // If preview mode is on, immediately inject demo data — no API needed
@@ -151,7 +156,7 @@ class _MerkadoWalletScopeState extends State<MerkadoWalletScope> {
         userCubit.injectPreview(data.user);
         walletCubit.injectPreview(data.wallet);
         withdrawalCubit.injectPreview(
-          bankAccounts:      data.bankAccounts,
+          bankAccounts: data.bankAccounts,
           withdrawalHistory: data.withdrawalHistory,
         );
       });
@@ -287,24 +292,28 @@ class MerkadoWalletController {
   /// Push the full wallet home screen.
   Future<void> pushWallet(BuildContext context) {
     if (config.customScreens?.homeScreenBuilder != null) {
-      return Navigator.of(context).push(MaterialPageRoute(
-        builder: (ctx) =>
-            config.customScreens!.homeScreenBuilder!(ctx, walletCubit),
-      ));
+      return Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (ctx) =>
+              config.customScreens!.homeScreenBuilder!(ctx, walletCubit),
+        ),
+      );
     }
-    return Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: walletCubit),
-          BlocProvider.value(value: withdrawalCubit),
-        ],
-        child: WalletHomeScreen(
-          config: config,
-          cubit: walletCubit,
-          withdrawalCubit: withdrawalCubit,
+    return Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: walletCubit),
+            BlocProvider.value(value: withdrawalCubit),
+          ],
+          child: WalletHomeScreen(
+            config: config,
+            cubit: walletCubit,
+            withdrawalCubit: withdrawalCubit,
+          ),
         ),
       ),
-    ));
+    );
   }
 
   // ── Event stream (state-management-agnostic) ────────────────────────

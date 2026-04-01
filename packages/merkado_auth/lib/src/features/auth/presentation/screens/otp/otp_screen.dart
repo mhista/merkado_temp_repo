@@ -70,8 +70,9 @@ class _OtpScreenState extends State<OtpScreen> {
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
 
-            child: Box(
-              style: LoginPageStyler.onboardingBg().paddingY(kToolbarHeight),
+            child: Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            padding: const EdgeInsets.symmetric(horizontal: 17.5,vertical: kToolbarHeight),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: AppSpacing.huge + AppSpacing.xxs,

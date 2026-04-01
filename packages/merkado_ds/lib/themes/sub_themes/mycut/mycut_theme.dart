@@ -36,12 +36,14 @@ abstract final class MycutTheme {
         ),
       );
 
-  static ThemeData get dark => MerkadoThemeBuilder.build(
-        isDark: true,
-        config: MerkadoThemeConfig(
-          colors: AppColorScheme.fromMycut(isDark: true),
-          fontFamilyOverride: kMycutSerif,
-          textThemeOverride: MycutTextTheme.dark,
-        ),
-      );
+  static ThemeData get dark => light;
+  
+  //  MerkadoThemeBuilder.build(
+  //       isDark: true,
+  //       config: MerkadoThemeConfig(
+  //         colors: AppColorScheme.fromMycut(isDark: true),
+  //         fontFamilyOverride: kMycutSerif,
+  //         textThemeOverride: MycutTextTheme.dark,
+  //       ),
+  //     );
 }

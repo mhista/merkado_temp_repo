@@ -18,6 +18,7 @@ part 'withdrawal_cubit.freezed.dart';
 /// PIN verification is handled before calling [requestWithdrawal].
 class WithdrawalCubit extends Cubit<WithdrawalState> {
   final WithdrawalRepository _repository;
+  
   final WalletEventBus _eventBus = WalletEventBus.instance;
   final PinService _pinService = PinService.instance;
 

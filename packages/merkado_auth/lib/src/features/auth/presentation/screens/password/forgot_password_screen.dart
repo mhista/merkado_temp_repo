@@ -53,8 +53,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         child: SingleChildScrollView(
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
-            child: Box(
-              style: LoginPageStyler.onboardingBg().paddingY(kToolbarHeight),
+            child:Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            padding: const EdgeInsets.symmetric(horizontal: 17.5,vertical: kToolbarHeight),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: AppSpacing.huge,
@@ -68,6 +69,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ? Icons.arrow_back_ios_new
                           : Icons.arrow_back,
                       size: 20,
+                        color: Colors.black,
+
                     ),
                   ),
                   Column(

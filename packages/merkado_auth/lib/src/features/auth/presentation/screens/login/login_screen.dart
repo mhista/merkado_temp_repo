@@ -81,8 +81,9 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         },
         builder: (context, state) {
-          return Box(
-            style: LoginPageStyler.onboardingBg(),
+          return Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            padding: const EdgeInsets.symmetric(horizontal: 17.5),
             child: SafeArea(
               child: Form(
                 key: _formKey,

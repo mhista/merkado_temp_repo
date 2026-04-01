@@ -3,19 +3,19 @@
 import 'package:flutter/widgets.dart';
 import '../tokens/semantic/colors/app_color_scheme.dart';
 
-class MixTokenProvider extends InheritedWidget {
-  final AppColorScheme colors;
+// class MixTokenProvider extends InheritedWidget {
+//   final AppColorScheme colors;
 
-  const MixTokenProvider({
-    super.key,
-    required this.colors,
-    required super.child,
-  });
+//   const MixTokenProvider({
+//     super.key,
+//     required this.colors,
+//     required super.child,
+//   });
 
-  static AppColorScheme of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<MixTokenProvider>()!.colors;
-  }
+//   static AppColorScheme of(BuildContext context) {
+//     return context.dependOnInheritedWidgetOfExactType<MixTokenProvider>()!.colors;
+//   }
 
-  @override
-  bool updateShouldNotify(MixTokenProvider oldWidget) => colors != oldWidget.colors;
-}
+//   @override
+//   bool updateShouldNotify(MixTokenProvider oldWidget) => colors != oldWidget.colors;
+// }

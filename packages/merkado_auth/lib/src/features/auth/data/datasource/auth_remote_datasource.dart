@@ -102,7 +102,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     try {
       return await call();
     } finally {
-      _http.updateBaseUrl(_appBaseUrl);
+      _http.updateBaseUrl(_appBaseUrl); 
     }
   }
 

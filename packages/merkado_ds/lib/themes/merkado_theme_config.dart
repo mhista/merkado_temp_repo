@@ -28,6 +28,7 @@ class MerkadoThemeConfig {
   final ChipThemeData? chipOverride;
   final CheckboxThemeData? checkboxOverride;
   final TextTheme? textThemeOverride;
+  final Color? scaffoldBackgroundColor;
 
   MerkadoThemeConfig({
     required this.colors,
@@ -43,6 +44,7 @@ class MerkadoThemeConfig {
     this.bottomSheetOverride,
     this.chipOverride,
     this.checkboxOverride,
-    this.textThemeOverride
+    this.textThemeOverride,
+    this.scaffoldBackgroundColor,
   });
 }

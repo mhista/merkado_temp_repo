@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:merkado_wallet/src/core/config/merkado_wallet_config.dart';
 import '../../domain/models/wallet.dart';
 import '../../../../core/http/wallet_http_client.dart';
 
@@ -32,18 +34,34 @@ abstract interface class WalletRemoteDatasource {
 class WalletRemoteDatasourceImpl implements WalletRemoteDatasource {
   final WalletHttpClient _http = WalletHttpClient.instance;
 
+  /// Switches to [baseUrl], runs [call], then always restores [alternateBaseUrl].
+  /// This ensures the single HttpClient instance is always left pointing at
+  /// the correct base URL regardless of success or failure.
+  Future<T> _withWalletUrl<T>(Future<T> Function() call) async {
+    _http.updateBaseUrl(WalletUrls.instance.baseUrl);
+    debugPrint('Switched to base URL: ${WalletUrls.instance.baseUrl}');
+    try {
+      return await call();
+    } finally {
+      _http.updateBaseUrl(WalletUrls.instance.alternateBaseUrl);
+      debugPrint('Restored alternate URL: ${WalletUrls.instance.alternateBaseUrl}');
+    }
+  }
+
   // ── GET /v1/wallet ──────────────────────────────────────────────────
   @override
-  Future<Wallet> getWallet() async {
+  Future<Wallet> getWallet() => _withWalletUrl(() async {
     try {
       final response = await _http.get('/v1/wallet');
       _assertSuccess(response, '/v1/wallet GET');
-      final data = response.data is Map ? response.data as Map<String, dynamic> : {'':''};
+      final data = response.data is Map
+          ? response.data as Map<String, dynamic>
+          : {'': ''};
       return Wallet.fromJson(data);
     } on DioException catch (e) {
       throw _dioError(e, '/v1/wallet GET');
     }
-  }
+  });
 
   // ── POST /v1/wallet/fund ────────────────────────────────────────────
   /// Initiates a real funding flow.
@@ -53,7 +71,7 @@ class WalletRemoteDatasourceImpl implements WalletRemoteDatasource {
   Future<FundWalletResponse> fundWallet({
     required double amount,
     required String redirectUrl,
-  }) async {
+  }) => _withWalletUrl(() async {
     try {
       final response = await _http.post(
         '/v1/wallet/fund',
@@ -66,7 +84,7 @@ class WalletRemoteDatasourceImpl implements WalletRemoteDatasource {
     } on DioException catch (e) {
       throw _dioError(e, '/v1/wallet/fund POST');
     }
-  }
+  });
 
   // ── POST /v1/wallet/demo/fund ───────────────────────────────────────
   /// Instantly credits the wallet in demo/sandbox mode.
@@ -75,14 +93,11 @@ class WalletRemoteDatasourceImpl implements WalletRemoteDatasource {
   Future<DemoFundResponse> demoFundWallet({
     required double amount,
     String? reference,
-  }) async {
+  }) => _withWalletUrl(() async {
     try {
       final response = await _http.post(
         '/v1/wallet/demo/fund',
-        data: {
-          'amount': amount,
-          if (reference != null) 'reference': reference,
-        },
+        data: {'amount': amount, if (reference != null) 'reference': reference},
       );
       _assertSuccess(response, '/v1/wallet/demo/fund POST');
       return DemoFundResponse.fromJson(
@@ -91,11 +106,13 @@ class WalletRemoteDatasourceImpl implements WalletRemoteDatasource {
     } on DioException catch (e) {
       throw _dioError(e, '/v1/wallet/demo/fund POST');
     }
-  }
+  });
 
   // ── POST /v1/wallet/demo/withdraw ───────────────────────────────────
   @override
-  Future<DemoWithdrawResponse> demoWithdrawWallet({required double amount}) async {
+  Future<DemoWithdrawResponse> demoWithdrawWallet({
+    required double amount,
+  }) => _withWalletUrl(() async {
     try {
       final response = await _http.post(
         '/v1/wallet/demo/withdraw',
@@ -108,13 +125,14 @@ class WalletRemoteDatasourceImpl implements WalletRemoteDatasource {
     } on DioException catch (e) {
       throw _dioError(e, '/v1/wallet/demo/withdraw POST');
     }
-  }
+  });
 
   // ── Helpers ─────────────────────────────────────────────────────────
 
   void _assertSuccess(Response response, String label) {
     final code = response.statusCode ?? 0;
     if (code < 200 || code >= 300) {
+      debugPrint('Response data: ${response.data}');
       final msg = _extractMessage(response.data);
       throw Exception('$label failed [$code]: $msg');
     }
@@ -122,7 +140,9 @@ class WalletRemoteDatasourceImpl implements WalletRemoteDatasource {
 
   String _extractMessage(dynamic data) {
     if (data is Map) {
-      return data['message']?.toString() ?? data['error']?.toString() ?? 'Unknown error';
+      return data['message']?.toString() ??
+          data['error']?.toString() ??
+          'Unknown error';
     }
     return data?.toString() ?? 'Unknown error';
   }

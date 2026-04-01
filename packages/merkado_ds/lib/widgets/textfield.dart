@@ -54,16 +54,30 @@ class _TextFieldFormState extends State<TextFieldForm> {
       minLines: widget.minLines,
       maxLines: widget.maxLines,
       enabled: widget.enabled,
+      style: Theme.of(
+        context,
+      ).textTheme.titleMedium!.apply(fontWeightDelta: -1, color: Colors.black),
       decoration:
           widget.decoration ??
           InputDecoration(
             labelText: widget.labelText,
             hintText: widget.hintText,
-            // hintStyle: Theme.of(context).textTheme.titleMedium!.apply(
-            //   fontWeightDelta: -1,
-            //   color: PColors.accent.withValues(alpha: 0.9),
-            // ),
-            prefixIcon: widget.icon != null ? HugeIcon(icon: widget.icon!) : null,
+            hintStyle: Theme.of(context).textTheme.titleMedium!.apply(
+              fontWeightDelta: -1,
+              color: Colors.black, //PColors.accent.withValues(alpha: 0.9),
+            ),
+            labelStyle: Theme.of(context).textTheme.titleMedium!.apply(
+              fontWeightDelta: -1,
+              color: Colors.black, //PColors.accent.withValues(alpha: 0.9),
+            ),
+            floatingLabelStyle: Theme.of(context).textTheme.titleMedium!.apply(
+              fontWeightDelta: -1,
+              color: Colors.black, //PColors.accent.withValues(alpha: 0.9),
+            ),
+
+            prefixIcon: widget.icon != null
+                ? HugeIcon(icon: widget.icon!)
+                : null,
             suffixIcon: widget.useSuffixIcon
                 ? IconButton(
                     onPressed: () {

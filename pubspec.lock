@@ -237,18 +237,18 @@ packages:
     dependency: transitive
     description:
       name: common_designs
-      sha256: e1ea09808ac27e1d7317f322c690fda36040f89bb0331d639697f450752ec578
+      sha256: "6be9d78580042b7386765b2c75a0e16e8dceb2050f7febc4e6635c41e896617b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.5"
+    version: "1.1.6"
   common_utils2:
     dependency: transitive
     description:
       name: common_utils2
-      sha256: "1aabba898c2e11cbda48d8da29cd38d8de47d08461763914db5d5cf3aea03d47"
+      sha256: "5377500ec847c77777c496a906ff44ce9c37d738ad225869a8f65efcf21e790f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.7"
   connectivity_plus:
     dependency: transitive
     description:

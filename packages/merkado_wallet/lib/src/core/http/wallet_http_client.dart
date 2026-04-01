@@ -7,7 +7,10 @@ class WalletHttpClient {
 
   static WalletHttpClient? _instance;
   static WalletHttpClient get instance {
-    assert(_instance != null, 'WalletHttpClient not initialized. Call WalletHttpClient.init()');
+    assert(
+      _instance != null,
+      'WalletHttpClient not initialized. Call WalletHttpClient.init()',
+    );
     return _instance!;
   }
 
@@ -28,6 +31,11 @@ class WalletHttpClient {
       WalletAuthInterceptor(_instance!),
       WalletLoggingInterceptor(),
     ]);
+  }
+
+  /// Update base URL — used by datasources to switch between service hosts.
+  void updateBaseUrl(String newBaseUrl) {
+    _dio.options.baseUrl = newBaseUrl;
   }
 
   void setToken(String token) => _accessToken = token;
@@ -116,12 +124,15 @@ class WalletLoggingInterceptor extends Interceptor {
   Duration? _elapsed(RequestOptions options) {
     final start = options.extra[_startTimeKey] as int?;
     if (start == null) return null;
-    return Duration(milliseconds: DateTime.now().millisecondsSinceEpoch - start);
+    return Duration(
+      milliseconds: DateTime.now().millisecondsSinceEpoch - start,
+    );
   }
 
   Map<String, dynamic> _redactHeaders(Map<String, dynamic> headers) {
     final copy = Map<String, dynamic>.from(headers);
-    if (copy.containsKey('Authorization')) copy['Authorization'] = 'Bearer [REDACTED]';
+    if (copy.containsKey('Authorization'))
+      copy['Authorization'] = 'Bearer [REDACTED]';
     return copy;
   }
 
@@ -137,7 +148,8 @@ class WalletLoggingInterceptor extends Interceptor {
   }
 
   String? _extractMessage(dynamic data) {
-    if (data is Map) return data['message']?.toString() ?? data['error']?.toString();
+    if (data is Map)
+      return data['message']?.toString() ?? data['error']?.toString();
     return null;
   }
 }

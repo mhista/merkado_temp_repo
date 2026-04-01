@@ -10,7 +10,7 @@ class WalletFeatures {
   final bool withdraw;
   final bool withdrawalHistory;
   final bool recentActivityPreview;
-  final int  recentActivityCount;
+  final int recentActivityCount;
   final bool balanceVisibilityToggle;
   final bool pinLock;
   final bool biometricUnlock;
@@ -25,29 +25,29 @@ class WalletFeatures {
   final bool previewMode;
 
   const WalletFeatures({
-    this.addMoney                    = true,
-    this.demoMode                    = false,
-    this.withdraw                    = true,
-    this.withdrawalHistory           = true,
-    this.recentActivityPreview       = true,
-    this.recentActivityCount         = 5,
-    this.balanceVisibilityToggle     = true,
-    this.pinLock                     = true,
-    this.biometricUnlock             = false,
+    this.addMoney = true,
+    this.demoMode = false,
+    this.withdraw = true,
+    this.withdrawalHistory = true,
+    this.recentActivityPreview = true,
+    this.recentActivityCount = 5,
+    this.balanceVisibilityToggle = true,
+    this.pinLock = true,
+    this.biometricUnlock = false,
     this.fundingRedirectUrl,
-    this.exploreActions              = const [],
+    this.exploreActions = const [],
     this.supportedWithdrawalCurrencies = const ['NGN'],
-    this.previewMode                 = false,
+    this.previewMode = false,
   });
 }
 
 /// A single pill button in the "Explore Deals" section.
 /// Pass an empty list (or omit) to hide the section entirely.
 class WalletExploreAction {
-  final String    label;
-  final IconData  icon;
+  final String label;
+  final IconData icon;
   final VoidCallback onTap;
-  final int?      badge;
+  final int? badge;
 
   const WalletExploreAction({
     required this.label,
@@ -94,6 +94,7 @@ class WalletExploreAction {
 class MerkadoWalletConfig {
   final String platformId;
   final String baseUrl;
+  final String alternateBaseUrl;
   final Color? primaryColor;
   final WalletFeatures features;
   final CustomWalletScreens? customScreens;
@@ -116,12 +117,13 @@ class MerkadoWalletConfig {
   const MerkadoWalletConfig({
     required this.platformId,
     required this.baseUrl,
+    this.alternateBaseUrl = '',
     this.primaryColor,
-    this.features      = const WalletFeatures(),
+    this.features = const WalletFeatures(),
     this.customScreens,
     this.onNotification,
     this.onWalletEvent,
-    this.currency      = const WalletCurrencyConfig(),
+    this.currency = const WalletCurrencyConfig(),
     this.enableLogging = false,
     this.logger,
     this.previewData,
@@ -137,8 +139,58 @@ class WalletCurrencyConfig {
   final String locale;
 
   const WalletCurrencyConfig({
-    this.code   = 'NGN',
+    this.code = 'NGN',
     this.symbol = '₦',
     this.locale = 'en_NG',
   });
+}
+
+
+
+class WalletUrls {
+  // Private constructor
+  WalletUrls._({
+    required this.baseUrl,
+    this.alternateBaseUrl = '',
+  });
+
+  // Static instance (nullable until initialized)
+  static WalletUrls? _instance;
+
+  // Public getter for the instance
+  static WalletUrls get instance {
+    if (_instance == null) {
+      throw StateError(
+        'WalletUrls has not been initialized. Call WalletUrls.initialize() first.',
+      );
+    }
+    return _instance!;
+  }
+
+  // Configuration method - Call this once from outside
+  static void initialize({
+    required String baseUrl,
+    String alternateBaseUrl = '',
+  }) {
+    if (_instance != null) {
+      throw StateError('WalletUrls is already initialized.');
+    }
+
+    _instance = WalletUrls._(
+      baseUrl: baseUrl,
+      alternateBaseUrl: alternateBaseUrl,
+    );
+  }
+
+  // Instance fields
+  final String baseUrl;
+  final String alternateBaseUrl;
+
+  // Optional: Reset method (useful for testing)
+  static void reset() {
+    _instance = null;
+  }
+
+  // Optional: Check if initialized
+  static bool get isInitialized => _instance != null;
 }
