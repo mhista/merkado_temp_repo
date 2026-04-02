@@ -106,7 +106,7 @@ Future<bool> _attemptRefresh() async {
     final localRefreshToken = await _storage.getRefreshToken();
     if (localRefreshToken == null) return false;
 
-    // ✅ FIX 2: Include platformId and scopes — your backend requires them.
+    // ✅ FIX 2: Include platformId — your backend requires them.
     // Without these, the server either rejects the request or returns a
     // generic token not scoped to this platform, causing silent failures.
     final refreshDio = Dio(BaseOptions(baseUrl: _authBaseUrl));
@@ -115,7 +115,8 @@ Future<bool> _attemptRefresh() async {
       data: {
         'refreshToken': localRefreshToken,
         'platformId': _platformId,       // ← was missing
-        'scopes': _scopesForPlatform(_platformId), // ← was missing
+        'deviceType': 'mobile',
+        // 'scopes': _scopesForPlatform(_platformId), // ← was missing
       },
     );
 

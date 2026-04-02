@@ -244,25 +244,25 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
 
   // ── POST /auth/refresh ────────────────────────────────────────────────────
 
-  @override
-  Future<Map<String, dynamic>> exchangeRefreshToken({
-    required String refreshToken,
-    required String platformId,
-    required List<String> scopes,
-  }) => _withAuthUrl(() async {
-    _log?.info('[AuthDatasource] POST /auth/refresh — platformId: $platformId');
-    final result = await _http.post(
-      '/auth/refresh',
-      data: {
-        'refreshToken': refreshToken,
-        'platformId': platformId,
-        'scopes': scopes,
-      },
-    );
-    if (_isSuccess(result.statusCode)) return result.data;
-    throw Exception('Token refresh failed: ${result.message}');
-  });
-
+ @override
+Future<Map<String, dynamic>> exchangeRefreshToken({
+  required String refreshToken,
+  required String platformId,
+  required List<String> scopes, // kept for interface compat, not sent
+}) => _withAuthUrl(() async {
+  _log?.info('[AuthDatasource] POST /auth/refresh — platformId: $platformId');
+  final result = await _http.post(
+    '/auth/refresh',
+    data: {
+      'refreshToken': refreshToken,
+      'platformId': platformId,    // ✅ required by backend
+      'deviceType': 'mobile',      // ✅ optional but good practice
+      // ❌ 'scopes' removed — not in the schema, causes 404/rejection
+    },
+  );
+  if (_isSuccess(result.statusCode)) return result.data;
+  throw Exception('Token refresh failed: ${result.message}');
+});
   // ── POST /auth/social/google ──────────────────────────────────────────────
 
   @override
