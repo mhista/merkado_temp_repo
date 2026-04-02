@@ -5,20 +5,20 @@ import 'package:dio/dio.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 
 class MerkadoAuthInterceptor extends Interceptor {
-  final AuthSecureStorageService _storage = AuthSecureStorageService.instance;
+ final AuthSecureStorageService _storage = AuthSecureStorageService.instance;
   LoggerService? _log;
   final String _refreshEndpoint;
-
-  /// authBaseUrl MUST be passed in — this is the base for /auth/refresh.
-  /// It is NOT the same as the app's apiBaseUrl.
   final String _authBaseUrl;
+  final String _platformId; // ← ADD THIS
 
   MerkadoAuthInterceptor({
-    required String authBaseUrl,          // ← NEW required param
+    required String authBaseUrl,
+    required String platformId, // ← ADD THIS
     String refreshEndpoint = '/auth/refresh',
     LoggerService? logger,
   }) : _refreshEndpoint = refreshEndpoint,
        _authBaseUrl = authBaseUrl,
+       _platformId = platformId, // ← ADD THIS
        _log = logger {
     _log = LoggerService.instance;
   }
@@ -95,45 +95,83 @@ class MerkadoAuthInterceptor extends Interceptor {
     }
   }
 
-  Future<bool> _attemptRefresh() async {
-    try {
-      final activeUserId = await _storage.getUserId();
-      if (activeUserId == null) return false;
+Future<bool> _attemptRefresh() async {
+  try {
+    final activeUserId = await _storage.getUserId();
+    if (activeUserId == null) return false;
 
-      final accounts = await _storage.getKnownAccounts();
-      final account = accounts.where((a) => a.userId == activeUserId).firstOrNull;
-      if (account == null) return false;
+    // ✅ FIX 1: Read the refresh token from LOCAL storage first —
+    // this is always the most up-to-date token. The knownAccounts list
+    // may have a stale token if rotation happened mid-session.
+    final localRefreshToken = await _storage.getRefreshToken();
+    if (localRefreshToken == null) return false;
 
-      // Use _authBaseUrl — NEVER originalRequest.baseUrl for the refresh call
-      final refreshDio = Dio(BaseOptions(baseUrl: _authBaseUrl));
-      final response = await refreshDio.post(
-        _refreshEndpoint,
-        data: {'refreshToken': account.refreshToken},
-      );
+    // ✅ FIX 2: Include platformId and scopes — your backend requires them.
+    // Without these, the server either rejects the request or returns a
+    // generic token not scoped to this platform, causing silent failures.
+    final refreshDio = Dio(BaseOptions(baseUrl: _authBaseUrl));
+    final response = await refreshDio.post(
+      _refreshEndpoint,
+      data: {
+        'refreshToken': localRefreshToken,
+        'platformId': _platformId,       // ← was missing
+        'scopes': _scopesForPlatform(_platformId), // ← was missing
+      },
+    );
 
-      if (response.statusCode != null &&
-          response.statusCode! >= 200 &&
-          response.statusCode! < 300) {
-        final data = response.data as Map<String, dynamic>;
-        final newAccessToken = data['accessToken'] as String;
-        final newRefreshToken = data['refreshToken'] as String?;
-        final expiresIn = data['expiresIn'] as int? ?? 900;
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      final data = response.data as Map<String, dynamic>;
+      final newAccessToken = data['accessToken'] as String;
+      final newRefreshToken = data['refreshToken'] as String?;
+      final expiresIn = data['expiresIn'] as int? ?? 900;
 
-        await _storage.saveAccessToken(newAccessToken, expiresIn: expiresIn);
+      await _storage.saveAccessToken(newAccessToken, expiresIn: expiresIn);
 
-        if (newRefreshToken != null && newRefreshToken != account.refreshToken) {
+      // ✅ FIX 3: Also update LOCAL refresh token storage, not just knownAccounts.
+      // Without this, the next refresh cycle reads the old token again.
+      if (newRefreshToken != null && newRefreshToken != localRefreshToken) {
+        await _storage.saveRefreshToken(newRefreshToken); // ← add this method (see below)
+
+        // Also keep knownAccounts in sync if the account exists there
+        final accounts = await _storage.getKnownAccounts();
+        final account = accounts.where((a) => a.userId == activeUserId).firstOrNull;
+        if (account != null) {
           await _storage.upsertKnownAccount(
             account.copyWith(refreshToken: newRefreshToken),
           );
         }
-        return true;
       }
-      return false;
-    } catch (e) {
-      _log?.error('[Interceptor] _attemptRefresh threw', e);
-      return false;
+      return true;
     }
+    return false;
+  } catch (e) {
+    _log?.error('[Interceptor] _attemptRefresh threw', e);
+    return false;
   }
+}
+
+// Add the scopes helper (mirrors AuthCubit._scopesForPlatform)
+List<String> _scopesForPlatform(String platformId) {
+  return [
+    'profile:read',
+    'wallet:read',
+    '${_platformSlug(platformId)}:read',
+    '${_platformSlug(platformId)}:write',
+  ];
+}
+
+String _platformSlug(String platformId) {
+  const slugs = {
+    '019c761c-d25e-7257-b5ec-8af95ddd202c': 'mycut',
+    '019c761c-d265-7a25-a095-ec995157cb32': 'driply',
+    '019c761c-d265-7a25-a095-ec9a7262b4fa': 'haulway',
+    '019c761c-d265-7a25-a095-ec9bfcd940d6': 'feastfeed',
+    '019c761c-d265-7a25-a095-ec9c5ad364f5': 'itsyourday',
+  };
+  return slugs[platformId] ?? 'merkado';
+}
 
   bool _isPublicPath(String path) =>
       _publicPaths.any((p) => path.contains(p));

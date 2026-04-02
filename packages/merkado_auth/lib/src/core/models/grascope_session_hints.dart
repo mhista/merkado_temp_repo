@@ -63,22 +63,23 @@ class GrascopeSessionHint {
   }
 
   /// Returns a copy with updated fields. Used when rotating refresh tokens.
-  GrascopeSessionHint copyWith({
-    String? refreshToken,
-    DateTime? lastUsedAt,
-    String? displayName,
-    String? avatarUrl,
-  }) {
-    return GrascopeSessionHint(
-      userId: userId,
-      displayName: displayName ?? this.displayName,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-      email: email,
-      refreshToken: refreshToken ?? this.refreshToken,
-      lastUsedAt: lastUsedAt ?? this.lastUsedAt,
-      sourcePlatformId: sourcePlatformId,
-    );
-  }
+GrascopeSessionHint copyWith({
+  String? refreshToken,
+  DateTime? lastUsedAt,
+  String? displayName,
+  String? avatarUrl,
+  String? sourcePlatformId, // ← ADD THIS
+}) {
+  return GrascopeSessionHint(
+    userId: userId,
+    displayName: displayName ?? this.displayName,
+    avatarUrl: avatarUrl ?? this.avatarUrl,
+    email: email,
+    refreshToken: refreshToken ?? this.refreshToken,
+    lastUsedAt: lastUsedAt ?? this.lastUsedAt,
+    sourcePlatformId: sourcePlatformId ?? this.sourcePlatformId, // ← FIX
+  );
+}
 
   factory GrascopeSessionHint.fromJson(Map<String, dynamic> json) {
     return GrascopeSessionHint(

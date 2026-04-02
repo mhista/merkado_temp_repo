@@ -61,7 +61,7 @@ class MerkadoAuth {
     }
 
     HttpClient.instance.addInterceptor(
-      MerkadoAuthInterceptor(logger: logger, authBaseUrl: config.authUrl),
+      MerkadoAuthInterceptor(logger: logger, authBaseUrl: config.authUrl, platformId: config.platformId),
     );
   }
 
