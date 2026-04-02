@@ -254,6 +254,13 @@ class AuthCubit extends Cubit<AuthState> {
           expiresIn: data['expiresIn'] as int? ?? 1800,
         );
 
+        // ✅ ADD THIS — persist new refresh token to local storage.
+        // Without it, _storage.getRefreshToken() still returns the old token,
+        // so the interceptor's second refresh attempt sends a stale token → 401.
+        if (data['refreshToken'] != null) {
+          await _storage.saveRefreshToken(data['refreshToken'] as String);
+        }
+
         // Update refresh token if rotated
         if (data['refreshToken'] != null) {
           final userId = await _storage.getUserId() ?? '';
