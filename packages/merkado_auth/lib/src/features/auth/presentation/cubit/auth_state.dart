@@ -17,7 +17,6 @@ class AuthState with _$AuthState {
   /// User is fully authenticated (verified + onboarded + valid token).
   const factory AuthState.authenticated() = _Authenticated;
 
-
   /// Accounts from THIS app detected in local shared storage.
   /// Shown after logout or on startup when the user has previously
   /// signed into this app with one or more accounts.
@@ -26,7 +25,7 @@ class AuthState with _$AuthState {
   const factory AuthState.localAccountsDetected({
     required List<GrascopeSessionHint> accounts,
   }) = _LocalAccountsDetected;
- 
+
   /// Known Grascope accounts detected from CROSS-APP shared storage.
   /// Only shown when no local accounts exist for this app but other
   /// Grascope apps on this device have active sessions.
@@ -34,7 +33,7 @@ class AuthState with _$AuthState {
   const factory AuthState.accountsDetected({
     required List<GrascopeSessionHint> accounts,
   }) = _AccountsDetected;
- 
+
   /// No session and no known accounts. Show login/signup.
   const factory AuthState.unauthenticated() = _Unauthenticated;
 
@@ -59,14 +58,22 @@ class AuthState with _$AuthState {
     required String message,
   }) = _MfaRequired;
 
-    /// Password reset request sent successfully.
-  const factory AuthState.passwordResetRequestSent({required String email}) = _PasswordResetRequestSent;
+  /// Password reset request sent successfully.
+  const factory AuthState.passwordResetRequestSent({required String email}) =
+      _PasswordResetRequestSent;
 
   /// Password reset email/OTP sent successfully.
-  const factory AuthState.passwordResetSent({required String token}) = _PasswordResetSent;
+  const factory AuthState.passwordResetSent({required String token}) =
+      _PasswordResetSent;
 
   /// Password successfully reset. Show login with success banner.
   const factory AuthState.passwordResetSuccess() = _PasswordResetSuccess;
+
+  // In auth_state.dart (inside @freezed)
+  const factory AuthState.onboardingUploading({
+    required double progress, // 0.0 to 1.0
+    required String message,
+  }) = _OnboardingUploading;
 
   /// A known account's session has expired.
   /// [displayName] allows showing "Your session for Amara has expired."

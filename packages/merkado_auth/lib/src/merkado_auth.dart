@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_auth/src/features/auth/data/auth_repo_impl/auth_repository_implementation.dart';
+import 'package:merkado_auth/src/features/auth/presentation/screens/otp/otp_screen.dart';
 import 'core/interceptors/merkado_auth_interceptor.dart';
 import 'features/auth/data/datasource/auth_remote_datasource.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
@@ -180,6 +181,18 @@ class MerkadoAuth {
       ),
     );
   }
+
+
+    /// Pushes the 2fa screen for 2fa
+  // Future<void> pushOtp(BuildContext context) async {
+  //   _log?.info('[MerkadoAuth] Pushing auth shell');
+  //   await Navigator.of(context).push(
+  //     MaterialPageRoute<void>(
+  //       builder: (_) => OtpScreen(config: _config,email: ,),
+  //       fullscreenDialog: true,
+  //     ),
+  //   );
+  // }
 
   /// Pushes a standalone account switcher sheet showing all known accounts
   /// on this device. The user can switch to any account or add a new one.

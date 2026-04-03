@@ -25,12 +25,12 @@ $GoogleSignInStateCopyWith<GoogleSignInState> get copyWith => _$GoogleSignInStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoogleSignInState&&const DeepCollectionEquality().equals(other.user, user)&&(identical(other.isInitialized, isInitialized) || other.isInitialized == isInitialized)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoogleSignInState&&(identical(other.user, user) || other.user == user)&&(identical(other.isInitialized, isInitialized) || other.isInitialized == isInitialized)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(user),isInitialized,isLoading,error);
+int get hashCode => Object.hash(runtimeType,user,isInitialized,isLoading,error);
 
 @override
 String toString() {
@@ -227,12 +227,12 @@ _$GoogleSignInStateCopyWith<_GoogleSignInState> get copyWith => __$GoogleSignInS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoogleSignInState&&const DeepCollectionEquality().equals(other.user, user)&&(identical(other.isInitialized, isInitialized) || other.isInitialized == isInitialized)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoogleSignInState&&(identical(other.user, user) || other.user == user)&&(identical(other.isInitialized, isInitialized) || other.isInitialized == isInitialized)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(user),isInitialized,isLoading,error);
+int get hashCode => Object.hash(runtimeType,user,isInitialized,isLoading,error);
 
 @override
 String toString() {

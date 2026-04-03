@@ -102,7 +102,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     try {
       return await call();
     } finally {
-      _http.updateBaseUrl(_appBaseUrl); 
+      _http.updateBaseUrl(_appBaseUrl);
     }
   }
 
@@ -120,7 +120,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
       data: {'email': email, 'password': password},
     );
     if (_isSuccess(result.statusCode)) return result.data;
-    throw Exception('Sign up failed: ${result.message}');
+    throw Exception('Sign up failed: ${result.data['message']}');
   });
 
   // ── POST /auth/verify-email ───────────────────────────────────────────────
@@ -133,7 +133,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     _log?.info('[AuthDatasource] POST /auth/verify-email — $email');
     final result = await _http.post('/auth/verify-email', data: {'code': otp});
     if (_isSuccess(result.statusCode)) return result.data;
-    throw Exception('Email verification failed: ${result.message}');
+    throw Exception('Email verification failed: ${result.data['message']}');
   });
 
   // ── POST /auth/resend-otp ─────────────────────────────────────────────────
@@ -144,7 +144,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         _log?.info('[AuthDatasource] POST /auth/resend-otp — $email');
         final result = await _http.post('/auth/resend-otp', data: {});
         if (_isSuccess(result.statusCode)) return result.data;
-        throw Exception('Resend OTP failed: ${result.message}');
+        throw Exception('Resend OTP failed: ${result.data['message']}');
       });
 
   // ── POST /auth/login ──────────────────────────────────────────────────────
@@ -155,7 +155,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         _log?.info('[AuthDatasource] POST /auth/login — ${data['email']}');
         final result = await _http.post('/auth/login', data: data);
         if (_isSuccess(result.statusCode)) return result.data;
-        throw Exception('Login failed: ${result.message}');
+        throw Exception('Login failed: ${result.data['message']}');
       });
 
   // ── POST /auth/logout ─────────────────────────────────────────────────────
@@ -191,7 +191,9 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
           data: {'email': email},
         );
         if (_isSuccess(result.statusCode)) return result.data;
-        throw Exception('Request password reset failed: ${result.message}');
+        throw Exception(
+          'Request password reset failed: ${result.data['message']}',
+        );
       });
 
   // ── POST /auth/password-reset/verify-otp ─────────────────────────────────
@@ -207,7 +209,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
       data: {'code': otp, 'email': email},
     );
     if (_isSuccess(result.statusCode)) return result.data;
-    throw Exception('Verify password reset failed: ${result.message}');
+    throw Exception('Verify password reset failed: ${result.data['message']}');
   });
 
   // ── POST /auth/password-reset/reset ──────────────────────────────────────
@@ -223,7 +225,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
       data: {'token': token, 'password': newPassword},
     );
     if (_isSuccess(result.statusCode)) return result.data;
-    throw Exception('Reset password failed: ${result.message}');
+    throw Exception('Reset password failed: ${result.data['message']}');
   });
 
   // ── POST /auth/verify-2fa ─────────────────────────────────────────────────
@@ -239,30 +241,30 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
       data: {'userId': userId, 'otp': otp},
     );
     if (_isSuccess(result.statusCode)) return result.data;
-    throw Exception('2FA verification failed: ${result.message}');
+    throw Exception('2FA verification failed: ${result.data['message']}');
   });
 
   // ── POST /auth/refresh ────────────────────────────────────────────────────
 
- @override
-Future<Map<String, dynamic>> exchangeRefreshToken({
-  required String refreshToken,
-  required String platformId,
-  required List<String> scopes, // kept for interface compat, not sent
-}) => _withAuthUrl(() async {
-  _log?.info('[AuthDatasource] POST /auth/refresh — platformId: $platformId');
-  final result = await _http.post(
-    '/auth/refresh',
-    data: {
-      'refreshToken': refreshToken,
-      'platformId': platformId,    // ✅ required by backend
-      'deviceType': 'mobile',      // ✅ optional but good practice
-      // ❌ 'scopes' removed — not in the schema, causes 404/rejection
-    },
-  );
-  if (_isSuccess(result.statusCode)) return result.data;
-  throw Exception('Token refresh failed: ${result.message}');
-});
+  @override
+  Future<Map<String, dynamic>> exchangeRefreshToken({
+    required String refreshToken,
+    required String platformId,
+    required List<String> scopes, // kept for interface compat, not sent
+  }) => _withAuthUrl(() async {
+    _log?.info('[AuthDatasource] POST /auth/refresh — platformId: $platformId');
+    final result = await _http.post(
+      '/auth/refresh',
+      data: {
+        'refreshToken': refreshToken,
+        'platformId': platformId, // ✅ required by backend
+        'deviceType': 'mobile', // ✅ optional but good practice
+        // ❌ 'scopes' removed — not in the schema, causes 404/rejection
+      },
+    );
+    if (_isSuccess(result.statusCode)) return result.data;
+    throw Exception('Token refresh failed: ${result.data['message']}');
+  });
   // ── POST /auth/social/google ──────────────────────────────────────────────
 
   @override
@@ -276,7 +278,7 @@ Future<Map<String, dynamic>> exchangeRefreshToken({
       data: {'idToken': idToken, ...deviceInfo},
     );
     if (_isSuccess(result.statusCode)) return result.data;
-    throw Exception('Google sign in failed: ${result.message}');
+    throw Exception('Google sign in failed: ${result.data['message']}');
   });
 
   // ── POST /auth/social/apple ───────────────────────────────────────────────
@@ -301,7 +303,7 @@ Future<Map<String, dynamic>> exchangeRefreshToken({
       },
     );
     if (_isSuccess(result.statusCode)) return result.data;
-    throw Exception('Apple sign in failed: ${result.message}');
+    throw Exception('Apple sign in failed: ${result.data['message']}');
   });
 
   // ── POST /onboarding/complete ─────────────────────────────────────────────
@@ -313,7 +315,7 @@ Future<Map<String, dynamic>> exchangeRefreshToken({
     _log?.info('[AuthDatasource] POST /onboarding/complete');
     final result = await _http.post('/onboarding/complete', data: data);
     if (_isSuccess(result.statusCode)) return result.data;
-    throw Exception('Onboarding failed: ${result.message}');
+    throw Exception('Onboarding failed: ${result.data['message']}');
   });
 
   // ── Helper ────────────────────────────────────────────────────────────────

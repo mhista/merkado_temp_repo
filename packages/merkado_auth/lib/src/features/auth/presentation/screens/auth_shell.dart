@@ -158,6 +158,18 @@ class _AuthShellState extends State<AuthShell> {
 
   Widget _buildScreen(BuildContext context, AuthState state) {
     return state.when(
+      // ── NEW: Onboarding Upload Progress State ───────────────────────
+      onboardingUploading: (progress, message) {
+        // Show the onboarding screen with upload progress overlay
+        // We pass the progress so OnboardingScreen can display it nicely
+        if (widget.config.customScreens?.onboardingScreenBuilder != null) {
+          return widget.config.customScreens!.onboardingScreenBuilder!(
+            context,
+            widget.cubit,
+          );
+        }
+        return OnboardingScreen(config: widget.config);
+      },
       // ── First-load only: no stable screen cached yet ──────────────────────
       initial: () => _lastStableScreen ?? const _LoadingScreen(),
 

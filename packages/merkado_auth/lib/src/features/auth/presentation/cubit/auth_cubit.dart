@@ -655,38 +655,63 @@ class AuthCubit extends Cubit<AuthState> {
     required String lastName,
     required String country,
     required String phone,
-    File? avatarUrl,
+    File? avatarFile, // renamed for clarity
   }) async {
     _log?.info(
-      '[AuthCubit] Completing onboarding — $firstName $lastName, country: $country, phone: $phone',
+      '[AuthCubit] Starting onboarding with avatar: ${avatarFile != null}',
     );
-    _emit(const AuthState.loading());
 
-    // UPLOAD AVATAR FIRST (if provided) to get the URL, which is needed for both onboarding and SSO hint
-    String? uploadedAvatarUrl;
-    if (avatarUrl != null) {
-      _log?.info('[AuthCubit] Uploading avatar image');
-      final uploadResult = await AuthMediaService.instance.upload(
-        file: avatarUrl,
+    // Step 1: Emit uploading state if there's an avatar
+    if (avatarFile != null) {
+      _emit(
+        AuthState.onboardingUploading(
+          progress: 0.0,
+          message: 'Uploading avatar...',
+        ),
       );
-      uploadedAvatarUrl = uploadResult.when(
-        failure: (error, __) {
-          _log?.error('[AuthCubit] Avatar upload failed — $error');
-          return '';
+    } else {
+      _emit(const AuthState.loading());
+    }
+
+    String? uploadedAvatarUrl;
+
+    // Step 2: Upload avatar with progress
+    if (avatarFile != null) {
+      final uploadResult = await AuthMediaService.instance.upload(
+        file: avatarFile,
+        onProgress: (progress) {
+          _emit(
+            AuthState.onboardingUploading(
+              progress: progress,
+              message:
+                  'Uploading avatar... ${(progress * 100).toStringAsFixed(0)}%',
+            ),
+          );
         },
+      );
+
+      uploadedAvatarUrl = uploadResult.when(
         success: (media) {
-          _log?.info('[AuthCubit] Avatar uploaded successfully — $media');
+          _log?.info('[AuthCubit] Avatar uploaded → ${media.mediaId}');
           return media.contentUrl;
+        },
+        failure: (error, _) {
+          _log?.error('[AuthCubit] Avatar upload failed: $error');
+          // Continue onboarding even if avatar fails (non-blocking)
+          return null;
         },
       );
     }
+
+    // Step 3: Complete onboarding
+    _emit(const AuthState.loading()); // or keep uploading state if you prefer
 
     final result = await _completeOnboardingUseCase(
       firstName: firstName,
       lastName: lastName,
       country: country,
       phone: phone,
-      avatarUrl: (uploadedAvatarUrl ?? '').isEmpty ? null : uploadedAvatarUrl,
+      avatarUrl: uploadedAvatarUrl,
     );
 
     result.when(
@@ -699,7 +724,6 @@ class AuthCubit extends Cubit<AuthState> {
         final userId = await _storage.getUserId() ?? '';
         final refreshToken = await _storage.getRefreshToken() ?? '';
 
-        // Update shared SSO hint with real name now that we have it
         await _storage.updateSharedAccountHint(
           userId: userId,
           displayName: displayName,
