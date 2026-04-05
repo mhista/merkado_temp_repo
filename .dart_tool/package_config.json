@@ -183,19 +183,19 @@
     },
     {
       "name": "common_utils2",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/common_utils2-2.0.7",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/common_utils2-2.0.8",
       "packageUri": "lib/",
       "languageVersion": "3.10"
     },
     {
       "name": "connectivity_plus",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus-7.0.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus-7.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "connectivity_plus_platform_interface",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus_platform_interface-2.0.1",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/connectivity_plus_platform_interface-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -249,7 +249,7 @@
     },
     {
       "name": "device_info_plus",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/device_info_plus-12.3.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/device_info_plus-12.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
@@ -657,7 +657,7 @@
     },
     {
       "name": "go_router",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/go_router-17.1.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/go_router-17.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
@@ -741,7 +741,7 @@
     },
     {
       "name": "hotreloader",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/hotreloader-4.3.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/hotreloader-4.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -771,7 +771,7 @@
     },
     {
       "name": "hugeicons",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/hugeicons-1.1.5",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/hugeicons-1.1.6",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -783,7 +783,7 @@
     },
     {
       "name": "image_picker_android",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_android-0.8.13+15",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_android-0.8.13+16",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
@@ -951,7 +951,7 @@
     },
     {
       "name": "melos",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/melos-7.5.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/melos-7.5.1",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },
@@ -1035,7 +1035,7 @@
     },
     {
       "name": "package_info_plus",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus-9.0.0",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus-9.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -1227,7 +1227,7 @@
     },
     {
       "name": "share_plus",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/share_plus-12.0.1",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/share_plus-12.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -1479,7 +1479,7 @@
     },
     {
       "name": "vector_graphics",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics-1.1.20",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/vector_graphics-1.1.21",
       "packageUri": "lib/",
       "languageVersion": "3.9"
     },

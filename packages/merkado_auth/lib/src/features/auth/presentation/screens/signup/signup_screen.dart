@@ -37,6 +37,22 @@ class _SignupScreenState extends State<SignupScreen> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  void _submit(AuthCubit cubit) async {
+    final deviceInfo = DeviceInfoHelper.instance;
+    final deviceOs = await deviceInfo.getPlatformInfo();
+    final deviceName = await deviceInfo.getDeviceInfo();
+    final fcmToken = CommonNotificationService.instance.token ?? '';
+    if (_formKey.currentState!.validate()) {
+      cubit.signUp(
+        fcmToken: fcmToken,
+        deviceName: deviceName,
+        deviceOs: deviceOs,
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AuthCubit>();
@@ -61,8 +77,11 @@ class _SignupScreenState extends State<SignupScreen> {
           return GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            padding: const EdgeInsets.symmetric(horizontal: 17.5,vertical: kToolbarHeight),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 17.5,
+                vertical: kToolbarHeight,
+              ),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -81,7 +100,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             : Icons.arrow_back,
                         size: 20,
                         color: Colors.black,
-
                       ),
                     ),
                     Column(
@@ -168,30 +186,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                     builder: (context, state) => ElevatedButton(
                                       onPressed: state.maybeWhen(
                                         loading: () => null,
-                                        orElse: () => () async {
-                                          final deviceInfo =
-                                              DeviceInfoHelper.instance;
-                                          final deviceOs = await deviceInfo
-                                              .getPlatformInfo();
-                                          final deviceName = await deviceInfo
-                                              .getDeviceInfo();
-                                          final fcmToken =
-                                              CommonNotificationService
-                                                  .instance
-                                                  .token ??
-                                              '';
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            cubit.signUp(
-                                              fcmToken: fcmToken,
-                                              deviceName: deviceName,
-                                              deviceOs: deviceOs,
-                                              email: _emailController.text
-                                                  .trim(),
-                                              password:
-                                                  _passwordController.text,
-                                            );
-                                          }
+                                        orElse: () => () {
+                                          _submit(cubit);
                                         },
                                       ),
                                       style: ElevatedButton.styleFrom(
