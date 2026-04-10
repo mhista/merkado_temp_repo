@@ -1,66 +1,103 @@
-# merkado_auth
+# merkado_auth — Developer Integration Guide
 
-Shared authentication package for all Grascope apps built on Merkado OS.
+**Merkado OS · Grascope Technology**
+Version 0.1.0 · February 2026
 
-Handles the full identity lifecycle — signup, email OTP verification, onboarding, login, social login, biometrics, 2FA, cross-app SSO, token refresh, and session recovery — so each product app ships with zero auth code of its own.
+---
 
-> **Not published to pub.dev.** Distributed via the Merkado monorepo on GitHub and referenced via `git:` or local `path:` dependency.
+`merkado_auth` is a Flutter package that delivers the complete Merkado OS authentication lifecycle — signup, email OTP verification, onboarding, login, social login, biometrics, 2FA, cross-app SSO, session recovery, and token refresh — as a drop-in integration. Apps ship zero auth code of their own; the package handles every state, token, and screen internally.
+
+This document is the complete reference for developers integrating `merkado_auth` into a new Grascope product.
 
 ---
 
 ## Contents
 
-- [How it fits into the ecosystem](#how-it-fits-into-the-ecosystem)
-- [Installation](#installation)
-- [Quick start](#quick-start)
-- [Auth flow reference](#auth-flow-reference)
-- [Terminated state resumption](#terminated-state-resumption)
-- [Cross-app SSO](#cross-app-sso)
-- [Social login](#social-login)
-- [Feature flags](#feature-flags)
-- [Custom screens](#custom-screens)
-- [Logging](#logging)
-- [Platform IDs](#platform-ids)
-- [Android keystore](#android-keystore)
-- [iOS keychain setup](#ios-keychain-setup)
-- [Testing](#testing)
-- [Package structure](#package-structure)
-- [Troubleshooting](#troubleshooting)
+1. [Prerequisites](#1-prerequisites)
+2. [Installation](#2-installation)
+3. [Initialisation](#3-initialisation)
+4. [Configuration](#4-configuration)
+5. [Launching the Auth Flow](#5-launching-the-auth-flow)
+6. [Listening to Auth Results](#6-listening-to-auth-results)
+7. [Auth Flows in Detail](#7-auth-flows-in-detail)
+8. [Custom Screens](#8-custom-screens)
+9. [Cross-App SSO](#9-cross-app-sso)
+10. [Android Manifest](#10-android-manifest)
+11. [Token Management](#11-token-management)
+12. [Logging](#12-logging)
+13. [Storage Architecture](#13-storage-architecture)
+14. [Troubleshooting](#14-troubleshooting)
+15. [Package Structure](#15-package-structure)
+16. [Changelog](#16-changelog)
 
 ---
 
-## How it fits into the ecosystem
+## 1. Prerequisites
 
-```
-merkado_systems/
-└── packages/
-    ├── merkado/_design_system        ← SecureStorageService, StorageService, LoggerService, HttpClient
-    └── merkado_auth/        ← this package (depends on common_utils)
+Before integrating `merkado_auth`, ensure the following are in place.
 
-```
+### 1.1 Flutter & Dart SDK
 
-The package is **state-management agnostic**. It uses Bloc internally but exposes zero Bloc types to consuming apps. Apps interact only through `MerkadoAuth.instance` and listen to an `authStream` that emits sealed `AuthResult` subclasses — compatible with Bloc, Riverpod, Provider, GetX, or plain `StreamSubscription`.
+| Requirement | Minimum Version |
+|---|---|
+| Flutter | 3.0.0 |
+| Dart SDK | 3.0.0 |
+| Xcode (iOS) | 14.0 |
+| Android SDK | API 21 (Android 5.0) |
 
-**Dependency registration** is fully self-contained. The package registers its own `AuthRemoteDatasource`, `AuthRepository`, use cases, and `AuthCubit` into GetIt during `initialize()`. Consuming apps do not need to register anything auth-related.
+### 1.2 Repository access
+
+The package is not published to pub.dev. It lives in the Grascope monorepo on GitHub. You need read access to the repository before you can reference it as a dependency.
+
+> **Note:** Contact the Grascope platform team to be added as a collaborator on the `merkado_designs` repository if you have not already received an invitation.
+
+### 1.3 common_utils2
+
+`merkado_auth` depends on `common_utils2`, the shared utility package from the same monorepo. It provides `SecureStorageService`, `LoggerService`, and the `HttpClient` that the auth package builds on. Both packages must be declared together in your `pubspec.yaml`.
+
+### 1.4 Platform registration
+
+Every Grascope product that uses `merkado_auth` must be registered with the Merkado Identity Service backend. Registration produces a Platform UUID that is required during initialisation. Contact the backend team to register a new platform and receive your UUID.
 
 ---
 
-## Installation
+## 2. Installation
 
-### From GitHub (recommended for CI and shared machines)
+### 2.1 pubspec.yaml — GitHub reference (recommended)
+
+Pin to a release tag in production. Never reference `main` in a shipping app.
 
 ```yaml
-# your_app/pubspec.yaml
 dependencies:
+  flutter:
+    sdk: flutter
+
   merkado_auth:
     git:
-      url: https://github.com/mhista/merkado_temp_repo.git
+      url: https://github.com/grascope/merkado_designs.git
       path: packages/merkado_auth
-      ref: v1.0.1   # pin to a tag — don't use main in production
+      ref: v0.1.0          # pin to a release tag
 
+  common_utils2:
+    git:
+      url: https://github.com/grascope/merkado_designs.git
+      path: packages/common_utils
+      ref: v0.1.0
 ```
 
-Then run:
+### 2.2 pubspec.yaml — Local path (development only)
+
+Use path references when actively developing the package alongside your app. Switch back to a git reference before merging to main.
+
+```yaml
+dependencies:
+  merkado_auth:
+    path: ../../../merkado_designs/packages/merkado_auth
+  common_utils2:
+    path: ../../../merkado_designs/packages/common_utils
+```
+
+### 2.3 Install
 
 ```bash
 flutter pub get
@@ -68,9 +105,11 @@ flutter pub get
 
 ---
 
-## Quick start
+## 3. Initialisation
 
-### 1. `main.dart`
+Call `MerkadoAuth.initialize()` in `main()` before `runApp()`. The call is async and must be awaited. By the time `runApp()` executes, the package has already performed a startup session check and the current auth state is available synchronously via `MerkadoAuth.instance.currentAuthResult`.
+
+### 3.1 Minimal setup
 
 ```dart
 import 'package:merkado_auth/merkado_auth.dart';
@@ -79,321 +118,94 @@ import 'package:common_utils2/common_utils2.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize logger first — pass it to MerkadoAuth so auth logs
-  // appear inline with the rest of your Talker output
+  // 1. Initialise logger first — must be before MerkadoAuth.initialize()
   LoggerService.init(enabled: true, logLevel: LogLevel.debug);
   Bloc.observer = LoggerService.getBlocObserver();
 
-  // Initialize your app's DI, Firebase, notifications, etc.
+  // 2. Your app's own DI, Firebase, notifications, etc.
   await configureDependencies();
 
-  // Initialize MerkadoAuth — runs startup session check internally.
-  // By the time runApp() is called, currentAuthResult already reflects
-  // the user's state (authenticated, mid-OTP, mid-onboarding, etc.)
+  // 3. Initialise auth — performs startup session check internally
   await MerkadoAuth.initialize(
     config: MerkadoAuthConfig(
-      platformId: MerkadoPlatform.mycut,
-      baseUrl: 'https://auth-api.merkado.site',
-      appName: 'MyCut',
-      appLogo: const AssetImage('assets/images/logo.png'),
-      termsUrl: 'https://mycut.app/terms',
-      privacyUrl: 'https://mycut.app/privacy',
-      enableSharedKeychain: false, // see Cross-app SSO section
-      features: AuthFeatures(
-        biometrics: true,
-        socialLogin: true,
-        socialProviders: {SocialProvider.google, SocialProvider.apple},
-      ),
+      platformId: MerkadoPlatform.myPlatform,   // your platform UUID constant
+      baseUrl:    'https://auth-api.merkado.site',
+      appName:    'My App',
     ),
-    logger: LoggerService.instance, // optional but strongly recommended
+    logger: LoggerService.instance,   // optional but strongly recommended
   );
 
   runApp(const MyApp());
 }
 ```
 
-### 2. Listen to auth results
+### 3.2 Initialisation order rule
 
-Subscribe from anywhere in the app. Works with any state manager.
+> **Critical:** `LoggerService.init()` must be called before `MerkadoAuth.initialize()`. If you pass `logger: LoggerService.instance` and the logger is not yet initialised, the app will throw at runtime. Always initialise utilities before passing them to the package.
 
-```dart
-MerkadoAuth.instance.authStream.listen((result) {
-  switch (result) {
-    case AuthSuccess():
-      router.go('/home');
-    case AuthLoggedOut():
-    case AuthExpired():
-      router.go('/');
-    case AuthFailure(:final message):
-      showSnackBar(message);
-    default:
-      break;
-  }
-});
-```
+### 3.3 What happens during initialize()
 
-### 3. Show the auth flow
+The call performs the following steps in order:
 
-The package manages its own internal navigation stack — login, signup, OTP, onboarding, and account picker screens are all handled internally.
-
-```dart
-await MerkadoAuth.instance.pushAuth(context);
-```
-
-### 4. Read current state synchronously
-
-Safe to call in GoRouter's `redirect` function without awaiting.
-
-```dart
-final isAuthenticated = MerkadoAuth.instance.currentAuthResult is AuthSuccess;
-```
-
-### 5. GoRouter integration
-
-```dart
-GoRouter(
-  refreshListenable: _AuthRefreshNotifier(),
-  redirect: (context, state) {
-    final isAuthenticated =
-        MerkadoAuth.instance.currentAuthResult is AuthSuccess;
-
-    if (!isAuthenticated && state.matchedLocation != '/') return '/';
-    return null;
-  },
-);
-
-/// Bridges MerkadoAuth's stream to GoRouter's refreshListenable.
-/// Router re-evaluates redirect on every auth state change automatically.
-class _AuthRefreshNotifier extends ChangeNotifier {
-  late final StreamSubscription<AuthResult> _sub;
-
-  _AuthRefreshNotifier() {
-    _sub = MerkadoAuth.instance.authStream.listen((_) => notifyListeners());
-  }
-
-  @override
-  void dispose() {
-    _sub.cancel();
-    super.dispose();
-  }
-}
-```
+1. Sets up the package logger and wires it to `AuthEventBus` and `ReLoginEventBus`.
+2. Initialises `AuthSecureStorageService` with two scoped storage instances (shared and local).
+3. Registers `AuthRemoteDatasource`, `AuthRepository`, all use cases, and `AuthCubit` into GetIt.
+4. Adds `MerkadoAuthInterceptor` to the app's Dio instance.
+5. Runs `_checkStartupSession()` — reads stored tokens and flags, performs timeout checks, and emits an initial `AuthResult` to `authStream`.
 
 ---
 
-## Auth flow reference
+## 4. Configuration
 
-### Signup
+All configuration is passed through a single `MerkadoAuthConfig` object. There is no global state to manage — the config is stored internally and referenced for every auth operation and UI render.
 
-```
-signUp(email, password)
-  → backend issues tokens immediately (before email verification)
-  → tokens saved to storage  ← enables terminated state resumption
-  → emits AuthEmailNotVerified
-  ↓
-verifyEmail(email, otp)
-  → backend returns { message: "Email verified successfully" }
-  → isEmailVerified flag saved
-  → emits AuthOtpVerified → AuthOnboardingRequired
-  ↓
-completeOnboarding(firstName, lastName, country, avatarUrl?)
-  → POST /onboarding/complete
-  → shared SSO hint updated with real display name
-  → emits AuthSuccess ✓
-```
+### 4.1 MerkadoAuthConfig — all fields
 
-### Login
+| Field | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `platformId` | `String` | Yes | — | Platform UUID. Use `MerkadoPlatform` constants. |
+| `baseUrl` | `String` | Yes | — | Base URL of the Merkado Identity Service. |
+| `appName` | `String` | Yes | — | Shown in UI headings and error messages. |
+| `appLogo` | `ImageProvider?` | No | `null` | Logo displayed on auth screens. Accepts `AssetImage`, `NetworkImage`, etc. |
+| `logoHeight` | `double` | No | `80` | Height in logical pixels of the logo widget. |
+| `termsUrl` | `String?` | No | `null` | URL for Terms of Service link on signup screen. |
+| `privacyUrl` | `String?` | No | `null` | URL for Privacy Policy link on signup screen. |
+| `features` | `AuthFeatures` | No | `AuthFeatures()` | Feature flag set. See Section 4.2. |
+| `customScreens` | `CustomAuthScreens?` | No | `null` | Custom screen builders. See Section 8. |
+| `primaryColor` | `Color?` | No | Merkado brand | Brand colour used on buttons and accents. |
+| `enableSharedKeychain` | `bool` | No | `false` | Enable cross-app SSO shared storage. See Section 9. |
 
-```
-login(email, password)
-  → if isMfa=true           → emits AuthMfaRequired → verifyTwoFactor()
-  → if verified=false       → emits AuthEmailNotVerified → OTP flow
-  → if onboarding=false     → emits AuthOnboardingRequired → onboarding flow
-  → all good                → emits AuthSuccess ✓
-```
+### 4.2 AuthFeatures — feature flags
 
-### Token refresh
+`AuthFeatures` controls which screens and capabilities are active for a given app. Pass it inside `MerkadoAuthConfig`. All fields default to sensible values — only override what you need to change.
 
-The `MerkadoAuthInterceptor` handles token refresh transparently on every 401 response. Apps never call refresh manually. On startup, if the stored access token has expired but a refresh token exists, the package attempts a refresh before emitting `AuthSuccess` or `AuthExpired`.
+| Flag | Default | Description |
+|---|---|---|
+| `emailOtpVerification` | `true` | Show OTP screen after signup. Disable if your backend skips OTP. |
+| `forgotPassword` | `true` | Show "Forgot password?" link on login and trigger the reset flow. |
+| `resetPassword` | `true` | Allow password reset via email link or OTP. |
+| `twoFactorAuth` | `false` | Show 2FA screen when backend returns `isMfa: true`. |
+| `biometrics` | `false` | Enable Face ID / Fingerprint login on subsequent opens. |
+| `crossAppSso` | `true` | Detect existing Grascope accounts from other apps on the same device. |
+| `resendOtp` | `true` | Show "Resend code" button on the OTP screen. |
+| `socialLogin` | `false` | Show Google / Apple sign-in buttons. |
+| `socialProviders` | `{}` | Which social providers to show when `socialLogin` is `true`. |
 
----
+**Presets**
 
-## Terminated state resumption
-
-The package stores enough state to resume any interrupted auth flow. On every app launch, the startup check reads stored flags and emits the correct initial `AuthResult` — no manual routing logic needed in the app.
-
-| Stored state | Emitted on relaunch |
-|---|---|
-| No tokens | `AuthUnauthenticated` → check SSO → show login |
-| Token + `verified=false` | `AuthEmailNotVerified(email)` → OTP screen pre-filled |
-| Token + `verified=true` + `onboarding=false` | `AuthOnboardingRequired` → onboarding screen |
-| Token + both true + token valid | `AuthSuccess` → straight to home |
-| Token + both true + token expired | Attempts refresh → `AuthSuccess` or `AuthExpired` |
-
-A user who signs up, receives their verification email, kills the app, and relaunches two hours later will land directly on the OTP screen with their email pre-filled — not on the login screen.
-
----
-
-## Cross-app SSO
-
-When a user is signed into MyCut and opens Driply for the first time, Driply detects the MyCut session and shows **"Continue as Amara Okafor"** — no re-login needed.
-
-### Requirements
-
-All Grascope apps must share the same Android signing keystore AND declare the same iOS Keychain Access Group. Until that is in place, set `enableSharedKeychain: false`. SSO detection will not work but everything else functions normally.
-
-### Enabling
-
-1. All apps signed with the same `keystore_grascope.jks` (see [Android keystore](#android-keystore))
-2. All apps declare `com.grascope.sharedauth` in Xcode Keychain Sharing (see [iOS keychain setup](#ios-keychain-setup))
-3. Set `enableSharedKeychain: true` in `MerkadoAuthConfig`
-4. Set `features: AuthFeatures(crossAppSso: true)`
-
-### What the user sees
-
-```
-Driply first launch
-  → detects MyCut session in shared storage
-  → shows account picker: "Continue as Amara Okafor" / "Use different account"
-  → user selects account
-  → package exchanges refresh token for Driply-scoped access token
-  → emits AuthSuccess(fromCrossAppSso: true) ✓
-```
-
----
-
-## Social login
-
-The package handles the backend exchange. The consuming app triggers the native SDK and passes the token through.
-
-### Google
+Two convenience constructors are available for common configurations:
 
 ```dart
-// 1. Add google_sign_in to your app's pubspec.yaml (not this package's)
-// 2. Obtain the token:
-final googleUser = await GoogleSignIn().signIn();
-final auth = await googleUser!.authentication;
+// Login + signup only — no OTP, no SSO, no social
+features: const AuthFeatures.minimal()
 
-// 3. Pass to the package — it calls POST /auth/social/google internally:
-MerkadoAuth.instance.cubit.signInWithGoogle(
-  idToken: auth.idToken!,
-  deviceName: deviceInfo.name,
-  deviceOs: deviceInfo.systemVersion,
-);
-
-// 4. Same AuthSuccess/AuthFailure events on authStream as normal login
+// Every feature enabled
+features: const AuthFeatures.full()
 ```
 
-### Apple
+### 4.3 Platform IDs
 
-```dart
-// 1. Add sign_in_with_apple to your app's pubspec.yaml
-// 2. Apple only provides name on FIRST login — cache it yourself
-final credential = await SignInWithApple.getAppleIDCredential(
-  scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName],
-);
-
-// 3. Pass to the package:
-MerkadoAuth.instance.cubit.signInWithApple(
-  identityToken: credential.identityToken!,
-  authorizationCode: credential.authorizationCode,
-  firstName: credential.givenName,   // null on second+ login
-  lastName: credential.familyName,
-);
-```
-
----
-
-## Feature flags
-
-Control which screens and capabilities are active per app without modifying the package.
-
-```dart
-AuthFeatures(
-  emailOtpVerification: true,   // OTP screen after signup (default: true)
-  forgotPassword: true,         // Forgot password link + flow (default: true)
-  resetPassword: true,          // Reset password via email (default: true)
-  twoFactorAuth: false,         // 2FA screen when backend requests it (default: false)
-  biometrics: false,            // Face ID / Fingerprint login (default: false)
-  crossAppSso: true,            // Account picker on startup (default: true)
-  resendOtp: true,              // Resend button on OTP screen (default: true)
-  socialLogin: false,           // Google / Apple buttons (default: false)
-  socialProviders: {            // Which providers to show
-    SocialProvider.google,
-    SocialProvider.apple,
-  },
-)
-
-// Presets:
-AuthFeatures.minimal()   // login + signup only
-AuthFeatures.full()      // everything enabled
-```
-
----
-
-## Custom screens
-
-Replace any built-in screen while the package manages all state, tokens, and navigation internally.
-
-```dart
-MerkadoAuthConfig(
-  // ...
-  customScreens: CustomAuthScreens(
-    loginScreenBuilder: (context, cubit) =>
-        MyBrandedLoginScreen(cubit: cubit),
-    otpScreenBuilder: (context, cubit) =>
-        MyOtpScreen(cubit: cubit),
-    onboardingScreenBuilder: (context, cubit) =>
-        MyOnboardingScreen(cubit: cubit),
-  ),
-)
-```
-
-Your custom screen calls cubit methods directly and listens to cubit state. The package still handles storage, token management, and `authStream` emission.
-
-```dart
-class MyBrandedLoginScreen extends StatelessWidget {
-  final AuthCubit cubit;
-  const MyBrandedLoginScreen({required this.cubit, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => cubit.login(email: _email, password: _password),
-      child: const Text('Sign In'),
-    );
-  }
-}
-```
-
----
-
-## Logging
-
-At the moment, the package never creates its own `LoggerService`. Pass the app's instance to `initialize()` and all auth logs route through your existing Talker setup automatically.
-
-```dart
-await MerkadoAuth.initialize(
-  config: ...,
-  logger: LoggerService.instance,
-);
-```
-
-Logs are tagged by layer so you can filter in Talker:
-
-| Tag | Source |
-|---|---|
-| `[MerkadoAuth]` | Package initialization and navigation |
-| `[AuthCubit]` | Every state transition, startup check, session management |
-| `[AuthDatasource]` | Every HTTP request and response with status code |
-
-If `logger` is omitted, all logs are silently discarded — no errors thrown.
-
----
-
-## Platform IDs
-
-Each Grascope product has a unique UUID registered with the Identity Service. Use the correct constant — never hardcode the raw UUID.
+Use `MerkadoPlatform` constants. Never hardcode raw UUIDs in app code.
 
 | App | Constant | UUID |
 |---|---|---|
@@ -403,102 +215,568 @@ Each Grascope product has a unique UUID registered with the Identity Service. Us
 | FeastFeed | `MerkadoPlatform.feastFeed` | `019c761c-d265-7a25-a095-ec9bfcd940d6` |
 | ItsYourDay | `MerkadoPlatform.itsYourDay` | `019c761c-d265-7a25-a095-ec9c5ad364f5` |
 
-To add a new platform, add a constant to `MerkadoPlatform` and register the UUID with the backend team.
+> **Note:** To add a new platform, add a `static const` to `MerkadoPlatform` in the package source, then ask the backend team to register the UUID with the Identity Service. Both steps are required.
 
 ---
 
-## Android keystore
+## 5. Launching the Auth Flow
 
-Cross-app SSO requires all Grascope apps to share the same signing keystore so Android grants them access to the same `sharedPreferencesName`.
+The package manages its own internal navigation stack. Login, signup, OTP, onboarding, 2FA, and the cross-app account picker are all handled inside the package. Your app never navigates between these screens — it only triggers the flow and listens for the result.
 
-### Shared keystore (for new apps)
+### 5.1 Show the auth flow
 
-Create one keystore used by all apps:
+Call `pushAuth()` from anywhere in your app that has a `BuildContext`. The call is awaitable — it resolves when the user completes authentication, dismisses the flow, or the session expires.
+
+```dart
+// From a button press, a redirect, wherever you need auth:
+await MerkadoAuth.instance.pushAuth(context);
+
+// After this line, check authStream for the result.
+// The stream already has the latest value — no need to re-subscribe.
+```
+
+### 5.2 Check auth state synchronously
+
+`currentAuthResult` holds the most recent `AuthResult` without requiring an `await`. Use it in GoRouter `redirect` callbacks or any place where async is not permitted.
+
+```dart
+final isAuthenticated =
+    MerkadoAuth.instance.currentAuthResult is AuthSuccess;
+```
+
+### 5.3 GoRouter integration
+
+Bridge `authStream` to GoRouter's `refreshListenable` so the router re-evaluates its redirect on every auth state change.
+
+```dart
+final _router = GoRouter(
+  refreshListenable: _AuthNotifier(),
+  redirect: (context, state) {
+    final authed =
+        MerkadoAuth.instance.currentAuthResult is AuthSuccess;
+    if (!authed && state.matchedLocation != '/') return '/';
+    return null;
+  },
+  routes: [ /* your routes */ ],
+);
+
+class _AuthNotifier extends ChangeNotifier {
+  late final StreamSubscription<AuthResult> _sub;
+
+  _AuthNotifier() {
+    _sub = MerkadoAuth.instance.authStream.listen((_) => notifyListeners());
+  }
+
+  @override
+  void dispose() { _sub.cancel(); super.dispose(); }
+}
+```
+
+---
+
+## 6. Listening to Auth Results
+
+The package emits `AuthResult` events through `authStream` — a broadcast stream that works with any state management solution. You never need to import Bloc or any package-internal type to handle auth results.
+
+### 6.1 AuthResult sealed class — all types
+
+| Type | When emitted | Key fields |
+|---|---|---|
+| `AuthLoading` | Any operation has started | — |
+| `AuthSuccess` | User is fully authenticated | `accessToken`, `fromCrossAppSso` |
+| `AuthEmailNotVerified` | Signup/login returns `verified: false` | `email` |
+| `AuthOtpVerified` | OTP accepted (informational) | `message` |
+| `AuthOnboardingRequired` | Email verified but onboarding not done | — |
+| `AuthMfaRequired` | Backend requests 2FA | `userId`, `message` |
+| `AuthFailure` | Any operation failed | `message` |
+| `AuthExpired` | Refresh token is dead | `userId?`, `displayName?` |
+| `AuthLoggedOut` | User explicitly logged out | — |
+| `AuthAccountsDetected` | Cross-app accounts found on device | `accounts` |
+| `AuthUnauthenticated` | No session, no known accounts | — |
+
+### 6.2 Listening — any state manager
+
+Subscribe at app startup (e.g. in a root widget's `initState` or a Riverpod provider). Cancel the subscription in `dispose`.
+
+```dart
+late final StreamSubscription<AuthResult> _authSub;
+
+@override
+void initState() {
+  super.initState();
+  _authSub = MerkadoAuth.instance.authStream.listen((result) {
+    switch (result) {
+      case AuthSuccess(:final accessToken):
+        // Store token if needed, navigate home
+        _myTokenStore.set(accessToken);
+        router.go('/home');
+      case AuthLoggedOut():
+      case AuthExpired():
+        router.go('/');
+      case AuthFailure(:final message):
+        showErrorSnackBar(message);
+      default:
+        break;
+    }
+  });
+}
+
+@override
+void dispose() {
+  _authSub.cancel();
+  super.dispose();
+}
+```
+
+### 6.3 Listening — Riverpod
+
+```dart
+final authResultProvider = StreamProvider<AuthResult>((ref) {
+  return MerkadoAuth.instance.authStream;
+});
+
+// In a widget:
+final result = ref.watch(authResultProvider);
+result.whenData((r) {
+  if (r is AuthSuccess) ref.read(routerProvider).go('/home');
+});
+```
+
+### 6.4 Accessing the access token
+
+`AuthSuccess` carries the short-lived access token scoped to your platform. Store it in your own state layer and attach it to your API calls. The package automatically refreshes it on 401 responses through `MerkadoAuthInterceptor` — you never call refresh manually.
+
+> **Warning:** Access tokens expire in approximately 15 minutes. Do not persist them to disk. Store them in memory only. The package handles re-issuance via the stored refresh token.
+
+---
+
+## 7. Auth Flows in Detail
+
+### 7.1 Signup flow
+
+The signup flow is fully managed internally. Your app calls `pushAuth()` and receives `AuthSuccess` at the end. The intermediate states (OTP verification, onboarding) are handled by the package's own screens unless you provide custom ones.
 
 ```
-grascope_keystore/
-├── keystore_grascope_dev.jks
-├── keystore_grascope_staging.jks
-└── keystore_grascope_production.jks
+signUp(email, password)
+  → POST /auth/register
+  → backend issues tokens immediately
+  → tokens saved to secure storage
+  → emits AuthEmailNotVerified
+  ↓
+OTP screen shown automatically
+  → user enters 6-digit code
+  → POST /auth/verify-email   (requires Bearer token)
+  → emits AuthOtpVerified → AuthOnboardingRequired
+  ↓
+Onboarding screen shown automatically
+  → user enters firstName, lastName, country, avatarUrl
+  → POST /onboarding/complete
+  → emits AuthSuccess ✓
 ```
 
-`key.properties`:
+### 7.2 Login flow
+
+Login adapts to whatever the backend returns. If the account requires OTP or onboarding to be completed, the package resumes those screens automatically.
+
+```
+login(email, password)
+  → if isMfa: true       → 2FA screen  → verifyTwoFactor()
+  → if verified: false   → OTP screen  → verifyEmail()
+  → if onboarding: false → Onboarding  → completeOnboarding()
+  → all checks pass      → emits AuthSuccess ✓
+```
+
+### 7.3 Social login — Google
+
+The package handles the backend exchange. Your app is responsible for obtaining the ID token from the native Google Sign-In SDK.
+
+```dart
+// 1. Add google_sign_in to YOUR app's pubspec.yaml (not this package)
+// 2. Obtain the token from the native SDK:
+final googleUser = await GoogleSignIn().signIn();
+final auth = await googleUser!.authentication;
+
+// 3. Hand it to the package cubit:
+MerkadoAuth.instance.cubit.signInWithGoogle(
+  idToken:    auth.idToken!,
+  deviceName: deviceInfo.name,
+  deviceOs:   deviceInfo.systemVersion,
+);
+
+// 4. Result arrives on authStream — same as email login.
+```
+
+### 7.4 Social login — Apple
+
+> **Warning:** Apple only provides `givenName` and `familyName` on the very first authentication. On all subsequent logins these fields are `null`. Cache the name on first login in your own storage.
+
+```dart
+// 1. Add sign_in_with_apple to YOUR app's pubspec.yaml
+final credential = await SignInWithApple.getAppleIDCredential(
+  scopes: [
+    AppleIDAuthorizationScopes.email,
+    AppleIDAuthorizationScopes.fullName,
+  ],
+);
+
+MerkadoAuth.instance.cubit.signInWithApple(
+  identityToken:     credential.identityToken!,
+  authorizationCode: credential.authorizationCode,
+  firstName: credential.givenName,   // null on 2nd+ login
+  lastName:  credential.familyName,
+);
+```
+
+### 7.5 Terminated-state resumption
+
+The package saves a checkpoint after every significant auth step. If the app is killed mid-signup, the correct screen is shown automatically on the next launch — the user is not sent back to login.
+
+| Stored state at app kill | Screen shown on relaunch |
+|---|---|
+| No tokens at all | Login (or account picker if SSO accounts found) |
+| Token + `verified: false` + OTP window not expired | OTP screen with email pre-filled |
+| Token + `verified: false` + OTP window **expired** (> 15 min) | Login — OTP has expired, user re-authenticates |
+| Token + `verified: true` + `onboarding: false` + window not expired | Onboarding screen |
+| Token + `verified: true` + `onboarding: false` + window **expired** (> 30 min) | Login — session cleared |
+| Token + all complete + token valid | `AuthSuccess` emitted — straight to home |
+| Token + all complete + token expired | Refresh attempted → `AuthSuccess` or `AuthExpired` |
+
+### 7.6 Logout
+
+```dart
+// Logout current session only:
+await MerkadoAuth.instance.cubit.logout();
+
+// Logout all sessions for this user across all devices:
+await MerkadoAuth.instance.cubit.logoutAll();
+
+// Both emit AuthLoggedOut on authStream when complete.
+```
+
+---
+
+## 8. Custom Screens
+
+Replace any or all built-in auth screens with your own UI. The package continues to manage all state, tokens, API calls, session storage, and navigation. Your screens only render state and call cubit actions.
+
+### 8.1 Replacing screens
+
+Pass a `CustomAuthScreens` instance inside `MerkadoAuthConfig`. Each builder is optional — omit any screen you want to keep as the built-in.
+
+```dart
+MerkadoAuthConfig(
+  platformId: MerkadoPlatform.myPlatform,
+  baseUrl:    'https://auth-api.merkado.site',
+  appName:    'My App',
+  customScreens: CustomAuthScreens(
+    loginScreenBuilder:      (ctx, cubit) => MyLoginScreen(cubit: cubit),
+    signupScreenBuilder:     (ctx, cubit) => MySignupScreen(cubit: cubit),
+    otpScreenBuilder:        (ctx, cubit, email) => MyOtpScreen(cubit: cubit, email: email),
+    onboardingScreenBuilder: (ctx, cubit) => MyOnboardingScreen(cubit: cubit),
+    // forgotPasswordScreenBuilder, resetPasswordScreenBuilder,
+    // twoFactorScreenBuilder, accountPickerScreenBuilder
+  ),
+)
+```
+
+### 8.2 Available screen builders
+
+| Builder | Arguments | Cubit method to call |
+|---|---|---|
+| `loginScreenBuilder` | `context, cubit` | `cubit.login(email:, password:)` |
+| `signupScreenBuilder` | `context, cubit` | `cubit.signUp(email:, password:)` |
+| `otpScreenBuilder` | `context, cubit, email` | `cubit.verifyEmail(email:, otp:)` / `cubit.resendOtp(email:)` |
+| `forgotPasswordScreenBuilder` | `context, cubit` | `cubit.forgotPassword(email:)` |
+| `resetPasswordScreenBuilder` | `context, cubit, token` | `cubit.resetPassword(token:, newPassword:)` |
+| `twoFactorScreenBuilder` | `context, cubit, userId, message` | `cubit.verifyTwoFactor(userId:, otp:)` |
+| `accountPickerScreenBuilder` | `context, cubit, hints` | `cubit.continueAsAccount(hint)` |
+| `onboardingScreenBuilder` | `context, cubit` | `cubit.completeOnboarding(firstName:, lastName:, country:)` |
+
+### 8.3 Navigation contract for pushed screens
+
+> **Critical:** Two screens are pushed on top of `AuthShell` via `Navigator.push` from the login screen: `SignupScreen` and `ForgotPasswordScreen`. If you replace these with custom screens, you **must** include a `BlocListener` that pops the screen when the cubit emits the correct transition state — `emailNotVerified` for signup, and `passwordResetSent` for forgot password. Failing to do this causes the next screen to render underneath your custom screen rather than replacing it.
+
+```dart
+// In your custom signup screen:
+BlocListener<AuthCubit, AuthState>(
+  listener: (context, state) {
+    state.whenOrNull(
+      emailNotVerified: (_) {
+        if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+      },
+    );
+  },
+  child: /* your UI */,
+)
+
+// In your custom forgot password screen:
+// Listen for passwordResetSent and pop in the same way.
+```
+
+### 8.4 Listening to cubit state in custom screens
+
+Use `BlocBuilder` or `BlocListener` from `flutter_bloc`. The cubit is already provided in the `BuildContext` by `AuthShell` via `BlocProvider.value`.
+
+```dart
+class MyLoginScreen extends StatelessWidget {
+  final AuthCubit cubit;
+  const MyLoginScreen({required this.cubit, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        final isLoading = state.maybeWhen(
+          loading: () => true,
+          orElse: () => false,
+        );
+        return ElevatedButton(
+          onPressed: isLoading
+              ? null
+              : () => cubit.login(
+                    email: _emailCtrl.text,
+                    password: _passCtrl.text,
+                  ),
+          child: isLoading
+              ? const CircularProgressIndicator()
+              : const Text('Sign in'),
+        );
+      },
+    );
+  }
+}
+```
+
+---
+
+## 9. Cross-App SSO
+
+When a user is signed into one Grascope app, other Grascope apps on the same device detect that session and present a "Continue as [name]" account picker — no re-authentication needed. The feature requires platform-level configuration before it can be enabled.
+
+### 9.1 Requirements
+
+- All Grascope apps must be signed with the same Android signing keystore.
+- All Grascope apps must declare `com.grascope.sharedauth` in Xcode Keychain Sharing.
+- All Grascope apps must belong to the same Apple Developer Team.
+- `enableSharedKeychain: true` must be set in `MerkadoAuthConfig` for every app.
+
+> **Note:** Set `enableSharedKeychain: false` (the default) until all apps meet the requirements above. Login, signup, and all other flows work normally without it. Only the cross-app account detection is inactive.
+
+### 9.2 Android — shared keystore
+
+All apps must share the same keystore file so Android grants them access to the same `sharedPreferencesName` bucket.
+
 ```properties
-storePassword.production=your_password
-keyPassword.production=your_password
-keyAlias.production=grascope-production-key
-storeFile.production=../../grascope_keystore/keystore_grascope_production.jks
+# key.properties (in your Android app root — gitignored)
+storePassword=your_keystore_password
+keyPassword=your_key_password
+keyAlias=grascope-production
+storeFile=../../grascope_keystore/keystore_grascope_production.jks
 ```
 
-### Reusing MyCut's keystore for other apps
+> **Critical:** If your app is already on the Play Store, its production signing key cannot change. Point other apps at the existing keystore file. The `keyAlias` is internal — users never see it.
 
-If MyCut is already on the Play Store, its production key cannot change. Point other apps at `keystore_mycut_production.jks` using alias `mycut-production-key`. The alias name is internal — users never see it. This is valid and fully functional.
+### 9.3 iOS — Keychain Sharing
 
-> **Important:** Do not set `enableSharedKeychain: true` until all production apps share the same signing key. Mixing keys silently breaks cross-app storage access — each app sees its own isolated bucket.
+Configure Keychain Sharing in Xcode for every app. This is separate from your bundle ID.
+
+1. Open the app target in Xcode.
+2. Navigate to **Signing & Capabilities**.
+3. Click **+ Capability** and add **Keychain Sharing**.
+4. Add group: `com.grascope.sharedauth`
+
+> **Note:** Apple automatically prefixes the keychain group with your Team ID internally. You declare `com.grascope.sharedauth`; it is stored as `TEAMID.com.grascope.sharedauth`. All apps must belong to the same Team ID.
 
 ---
 
-## iOS keychain setup
+## 10. Android Manifest
 
-Required for cross-app SSO on iOS. Configure per app in Xcode — not on App Store Connect.
+Add the following attribute to the `<application>` tag in `android/app/src/main/AndroidManifest.xml`. This enables Flutter's predictive back gesture support on Android 13+ and prevents a system warning at runtime.
 
-1. Open the app target in Xcode
-2. **Signing & Capabilities** → **+ Capability** → **Keychain Sharing**
-3. Add group: `com.grascope.sharedauth`
+```xml
+<application
+    android:label="My App"
+    android:name="${applicationName}"
+    android:icon="@mipmap/ic_launcher"
+    android:enableOnBackInvokedCallback="true">   <!-- ADD THIS -->
+    ...
+</application>
+```
 
-This is separate from your bundle ID (`com.grascope.mycut`). The keychain group is a shared storage bucket — Apple prefixes it internally with your Team ID. All apps must belong to the same Apple Developer Team.
+> **Note:** This must be added per app. It is not applied by the package automatically. Without it, Android 13+ logs a warning and the system back gesture may behave inconsistently.
 
 ---
 
-## Testing
+## 11. Token Management
 
-### Run package tests
+The package manages the full token lifecycle. Consuming apps do not call any token API directly — they receive the access token once via `AuthSuccess` and let the package handle refresh from that point on.
 
-```bash
-cd packages/merkado_auth
-flutter test
-```
+### 11.1 Token types
 
-### Simulate auth events in widget tests
+| Token | Lifetime | Scope | Stored in |
+|---|---|---|---|
+| Access token | ~15 minutes | Platform-scoped (per app) | Local secure storage (private to this app) |
+| Refresh token | Long-lived | Cross-platform identity | Local storage + shared SSO list |
+
+### 11.2 Automatic refresh
+
+`MerkadoAuthInterceptor` is added to the Dio instance during `initialize()`. It intercepts every outgoing request and:
+
+1. Checks whether the stored access token has more than 30 seconds remaining.
+2. If yes — attaches it as a `Bearer` header and proceeds.
+3. If the request returns `401` — silently attempts a token refresh using the stored refresh token.
+4. On successful refresh — retries the original request with the new token.
+5. On failed refresh — emits on `ReLoginEventBus`, which `AuthCubit` picks up and converts into `AuthExpired` on `authStream`.
+
+> **Note — public paths:** The interceptor does not attach tokens to `/auth/login`, `/auth/register`, `/auth/forgot-password`, `/auth/reset-password`, or social login endpoints. All other endpoints — including `/auth/verify-email`, `/auth/resend-otp`, and `/onboarding/complete` — receive the token automatically.
+
+---
+
+## 12. Logging
+
+The package uses the `LoggerService` from `common_utils2` (backed by Talker). Pass `LoggerService.instance` to `initialize()` and all package logs appear inline with your app's Talker output. The package never creates its own logger instance.
+
+### 12.1 Wiring the logger
 
 ```dart
-setUp(() {
-  // Simulate an authenticated session
-  AuthEventBus.instance.emit(const AuthSuccess(accessToken: 'test_token'));
-});
+await MerkadoAuth.initialize(
+  config: /* ... */,
+  logger: LoggerService.instance,   // pass your app's logger
+);
 
-tearDown(() {
-  AuthEventBus.instance.dispose();
-});
+// If logger is omitted, all package logs are silently discarded.
+// No errors are thrown — logging is entirely optional.
 ```
 
-### Test terminated state resumption
+### 12.2 Log tags by layer
 
-Mock `AuthSecureStorageService` to pre-populate storage flags:
+| Tag | Source layer | What it covers |
+|---|---|---|
+| `[MerkadoAuth]` | Entry point | Initialisation, storage setup, DI registration, `pushAuth` calls |
+| `[AuthCubit]` | Presentation | Every method call, state transition, session check, timeout decision |
+| `[AuthRepo]` | Data — repository | Every repository method with success/failure outcome |
+| `[AuthDatasource]` | Data — HTTP | Every HTTP request with status code, error body, and stack trace on failure |
+| `[AuthStorage]` | Infrastructure — storage | Every significant read/write to secure storage |
+| `[Interceptor]` | Infrastructure — HTTP | Token attachment decisions, refresh attempts, retry outcomes |
+| `[AuthEventBus]` | Infrastructure — bus | Every `AuthResult` emitted to the stream |
+| `[ReLoginEventBus]` | Infrastructure — bus | Session expiry signals from the interceptor |
 
-```dart
-// Simulate: signed up, killed app before OTP
-when(() => mockStorage.getAccessToken()).thenAnswer((_) async => 'token');
-when(() => mockStorage.isEmailVerified()).thenAnswer((_) async => false);
-when(() => mockStorage.getPendingVerificationEmail())
-    .thenAnswer((_) async => 'user@test.com');
+### 12.3 Log levels
 
-await cubit.init(testConfig);
-
-expect(cubit.state, isA<AuthState>());
-// authStream emits AuthEmailNotVerified(email: 'user@test.com')
-```
+| Level | When used |
+|---|---|
+| `info` | Major operations: initialisation, login attempt, logout, session checks |
+| `debug` | Detailed flow: token validation, storage reads, HTTP success responses |
+| `warning` | Non-critical issues: session expiry, logout HTTP errors, timeout decisions |
+| `error` | Failures: HTTP errors, exceptions with stack traces, DI registration failures |
 
 ---
 
-## Package structure
+## 13. Storage Architecture
+
+The package uses two isolated secure storage scopes. Consuming apps should never read or write to either scope directly — use the public methods on `MerkadoAuth.instance` or observe `authStream` instead.
+
+### 13.1 Two-scope model
+
+| Scope | Purpose | Visible to other apps? | Requires shared keychain? |
+|---|---|---|---|
+| Shared | Cross-app SSO account list (known accounts, active user ID) | Yes, if shared keychain enabled | Yes |
+| Local | Per-app tokens, session flags, flow state | No — private to this app | No |
+
+### 13.2 Flow-state keys (for reference only)
+
+These keys power terminated-state resumption. They are set and cleared by the package automatically. Documented here for debugging purposes — do not read or write them from app code.
+
+| Key | Type | Purpose |
+|---|---|---|
+| `merkado_access_token` | `String` | Short-lived platform-scoped JWT |
+| `merkado_access_token_expires_at` | `String` (ms timestamp) | Unix ms timestamp of token expiry |
+| `merkado_refresh_token` | `String` | Long-lived refresh token |
+| `merkado_session_id` | `String` | Backend session ID for server-side logout |
+| `merkado_is_email_verified` | `bool` | Whether OTP verification is complete |
+| `merkado_onboarding_completed` | `bool` | Whether onboarding profile is complete |
+| `merkado_pending_verification_email` | `String` | Email pre-fills OTP screen after app kill |
+| `merkado_otp_started_at` | `String` (ms timestamp) | When OTP flow started — gates 15-minute timeout |
+| `merkado_onboarding_started_at` | `String` (ms timestamp) | When onboarding started — gates 30-minute timeout |
+
+---
+
+## 14. Troubleshooting
+
+### "GetIt: Object/factory with type AuthRepository is not registered"
+
+**Cause:** `MerkadoAuth.initialize()` was not called before something tried to resolve `AuthRepository` from GetIt.
+
+**Fix:** Ensure `initialize()` is called and awaited in `main()` before `runApp()` and before any code that might trigger GetIt resolution.
+
+---
+
+### "MerkadoAuth not initialized" / Null check operator on null value
+
+**Cause:** `MerkadoAuth.instance` was accessed before `initialize()` completed.
+
+**Fix:** `await MerkadoAuth.initialize(...)` before calling `MerkadoAuth.instance`.
+
+---
+
+### /auth/resend-otp returns 401
+
+**Cause:** The backend requires an `Authorization` header on this endpoint, but it was listed in the interceptor's public paths (now fixed in v0.1.0+).
+
+**Fix:** Ensure you are on package version 0.1.0 or later. The interceptor no longer treats `/auth/resend-otp`, `/auth/verify-email`, or `/onboarding/complete` as public paths — all three now receive the Bearer token automatically.
+
+---
+
+### OTP screen shown on relaunch even after hours away
+
+**Cause:** No timeout was enforced on the pending-verification state in earlier versions.
+
+**Fix:** The package now enforces a 15-minute OTP window and a 30-minute onboarding window. After either window expires, the incomplete session is cleared and the user is routed to login. Within the window, users return to exactly where they left off.
+
+---
+
+### Signup shows OTP beneath the signup screen instead of replacing it
+
+**Cause:** `SignupScreen` was `Navigator.push`ed on top of `AuthShell`. When `AuthShell` rebuilt its body to `OtpScreen`, the signup screen was still on top of the navigator stack.
+
+**Fix:** `SignupScreen` now includes a `BlocListener` that pops itself on `emailNotVerified`. The same fix applies to `ForgotPasswordScreen` on `passwordResetSent`. If you use custom screens, apply the same pattern (see Section 8.3).
+
+---
+
+### Cross-app SSO not detecting accounts from other Grascope apps
+
+Confirm all of the following:
+
+- All apps are signed with the same Android keystore (same `storeFile`, same `keyAlias`).
+- All apps declare `com.grascope.sharedauth` under Keychain Sharing in Xcode.
+- All apps belong to the same Apple Developer Team ID.
+- `enableSharedKeychain: true` is set in `MerkadoAuthConfig` in every app.
+- All apps have been freshly installed after the above configuration was applied.
+
+---
+
+### Package symbols not resolving / red underlines after pub get
+
+**Fix:** Restart the Dart Analysis Server. In VS Code: Command Palette → **Dart: Restart Analysis Server**. In Android Studio: **File → Invalidate Caches → Restart**.
+
+---
+
+### "Target of URI doesn't exist: package:merkado_auth/merkado_auth.dart"
+
+**Cause:** The path or git ref in `pubspec.yaml` does not resolve to a valid package.
+
+**Fix:** Verify the path from your app root. For git references, confirm the tag exists in the repository. Run `flutter pub get` and check the output for resolution errors.
+
+---
+
+## 15. Package Structure
 
 ```
 merkado_auth/
 ├── lib/
-│   ├── merkado_auth.dart              ← public barrel (import this)
+│   ├── merkado_auth.dart               ← Public barrel — import this file only
 │   └── src/
-│       ├── merkado_auth.dart          ← MerkadoAuth entry point + DI
+│       ├── merkado_auth.dart            ← MerkadoAuth entry point + DI setup
 │       ├── core/
 │       │   ├── config/
 │       │   │   ├── merkado_auth_config.dart
@@ -506,12 +784,12 @@ merkado_auth/
 │       │   │   ├── auth_features.dart
 │       │   │   └── custom_auth_screens.dart
 │       │   ├── events/
-│       │   │   ├── auth_event_bus.dart     ← authStream source
-│       │   │   └── re_login_event_bus.dart ← interceptor → cubit bridge
+│       │   │   ├── auth_event_bus.dart       ← authStream source
+│       │   │   └── re_login_event_bus.dart   ← interceptor → cubit bridge
 │       │   ├── interceptors/
 │       │   │   └── merkado_auth_interceptor.dart
 │       │   ├── models/
-│       │   │   ├── auth_result.dart        ← sealed AuthResult subclasses
+│       │   │   ├── auth_result.dart          ← sealed AuthResult types
 │       │   │   ├── grascope_session_hint.dart
 │       │   │   └── merkado_user.dart
 │       │   └── storage/
@@ -532,48 +810,29 @@ merkado_auth/
 │                   ├── auth_shell.dart
 │                   ├── auth_screens.dart
 │                   ├── login_screen.dart
-│                   ├── onboarding_screen.dart
-│                   └── account_picker_screen.dart
+│                   ├── signup_screen.dart
+│                   └── onboarding_screen.dart
 └── test/
     └── auth_cubit_test.dart
 ```
 
 ---
 
-## Troubleshooting
+## 16. Changelog
 
-**`GetIt: Object/factory with type AuthRepository is not registered`**
+### v0.1.0 — February 2026
 
-You're using an older version of the package where `AuthRepositoryImpl` wasn't registered in `_setupDependencies`. Update to the latest version — the registration order is now: datasource → repository → use cases → cubit.
+- Initial release
+- Full signup / login / OTP / onboarding flows
+- Social login (Google, Apple)
+- Cross-app SSO with account picker
+- Terminated-state resumption with flow checkpoints
+- OTP 15-minute and onboarding 30-minute timeout windows
+- 180 log calls across all layers with tagged output per layer
+- `MerkadoAuthInterceptor` with automatic token refresh and retry
+- Android predictive back gesture support (`enableOnBackInvokedCallback`)
+- Navigation fix: `SignupScreen` and `ForgotPasswordScreen` pop themselves on state transition
 
-**`MerkadoAuth not initialized`**
+---
 
-`MerkadoAuth.instance` was accessed before `MerkadoAuth.initialize()` completed. Move `initialize()` above `runApp()` and await it.
-
-**`AuthSecureStorageService not initialized`**
-
-`AuthSecureStorageService.instance` was called before `MerkadoAuth.initialize()`. The package initializes storage internally during `initialize()` — never call `AuthSecureStorageService.init()` directly from the app.
-
-**`Target of URI doesn't exist: 'package:merkado_auth/merkado_auth.dart'`**
-
-Usually means the path in `pubspec.yaml` doesn't resolve. Verify from the app root:
-```bash
-ls path/to/merkado_designs/packages/merkado_auth/pubspec.yaml
-```
-Also ensure `resolution: workspace` is removed from `merkado_auth/pubspec.yaml` if present.
-
-**Cross-app SSO not detecting accounts**
-
-Both apps must be signed with the same keystore (Android) and share `com.grascope.sharedauth` in Keychain Sharing (iOS). Verify `enableSharedKeychain: true` is set in both apps' `MerkadoAuthConfig`.
-
-**Token expired on startup — user sent to login instead of home**
-
-The backend's `/auth/refresh` response must include `expiresIn` (seconds). If missing, the package cannot track expiry and falls back to treating the token as expired on every launch.
-
-**Apple Sign In: name is null on second login**
-
-This is Apple's intended behaviour — they only send `givenName` and `familyName` on the first authentication. Cache the name during first login in your own storage. The package passes through whatever the app provides.
-
-**Import shows no autocomplete / red underline despite `pub get` succeeding**
-
-Restart the Dart Analysis Server in your IDE: in VS Code, open the Command Palette → `Dart: Restart Analysis Server`. In Android Studio: **File → Invalidate Caches → Restart**.
+*Grascope Technology · Merkado OS · Confidential*

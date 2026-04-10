@@ -54,3 +54,6 @@ export 'src/service/auth_media_service.dart';
 
 // Google service
 export 'src/google/google.dart';
+
+// auth cubit
+export 'src/features/auth/presentation/cubit/auth_cubit.dart';
