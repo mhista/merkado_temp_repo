@@ -271,6 +271,6 @@ class WithdrawalRemoteDatasourceImpl implements WithdrawalRemoteDatasource {
       debugPrint('📦 Error Body: ${e.response?.data}');
     }
 
-    return Exception('$label error [$statusCode]: $msg');
+    return Exception(' $msg');
   }
 }

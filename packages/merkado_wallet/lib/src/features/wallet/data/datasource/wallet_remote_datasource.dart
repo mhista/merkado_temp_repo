@@ -44,7 +44,9 @@ class WalletRemoteDatasourceImpl implements WalletRemoteDatasource {
       return await call();
     } finally {
       _http.updateBaseUrl(WalletUrls.instance.alternateBaseUrl);
-      debugPrint('Restored alternate URL: ${WalletUrls.instance.alternateBaseUrl}');
+      debugPrint(
+        'Restored alternate URL: ${WalletUrls.instance.alternateBaseUrl}',
+      );
     }
   }
 
@@ -110,22 +112,21 @@ class WalletRemoteDatasourceImpl implements WalletRemoteDatasource {
 
   // ── POST /v1/wallet/demo/withdraw ───────────────────────────────────
   @override
-  Future<DemoWithdrawResponse> demoWithdrawWallet({
-    required double amount,
-  }) => _withWalletUrl(() async {
-    try {
-      final response = await _http.post(
-        '/v1/wallet/demo/withdraw',
-        data: {'amount': amount},
-      );
-      _assertSuccess(response, '/v1/wallet/demo/withdraw POST');
-      return DemoWithdrawResponse.fromJson(
-        response.data is Map ? response.data as Map<String, dynamic> : {},
-      );
-    } on DioException catch (e) {
-      throw _dioError(e, '/v1/wallet/demo/withdraw POST');
-    }
-  });
+  Future<DemoWithdrawResponse> demoWithdrawWallet({required double amount}) =>
+      _withWalletUrl(() async {
+        try {
+          final response = await _http.post(
+            '/v1/wallet/demo/withdraw',
+            data: {'amount': amount},
+          );
+          _assertSuccess(response, '/v1/wallet/demo/withdraw POST');
+          return DemoWithdrawResponse.fromJson(
+            response.data is Map ? response.data as Map<String, dynamic> : {},
+          );
+        } on DioException catch (e) {
+          throw _dioError(e, '/v1/wallet/demo/withdraw POST');
+        }
+      });
 
   // ── Helpers ─────────────────────────────────────────────────────────
 
@@ -150,6 +151,6 @@ class WalletRemoteDatasourceImpl implements WalletRemoteDatasource {
   Exception _dioError(DioException e, String label) {
     final code = e.response?.statusCode;
     final msg = _extractMessage(e.response?.data);
-    return Exception('$label error [$code]: $msg');
+    return Exception('$msg');
   }
 }
