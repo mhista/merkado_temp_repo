@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:iconsax/iconsax.dart';
 
 class TextFieldForm extends StatefulWidget {
   const TextFieldForm({
@@ -24,8 +24,8 @@ class TextFieldForm extends StatefulWidget {
   final String fieldName;
   final String? Function(String?)? validator;
   final String? labelText, hintText;
-  final List<List<dynamic>>? icon;
-  final List<List<dynamic>>? suffixIcon;
+  final IconData? icon;
+  final IconData? suffixIcon;
   final int? minLines, maxLines;
   final bool obscureText;
   final bool expands, useSuffixIcon, enabled;
@@ -75,9 +75,7 @@ class _TextFieldFormState extends State<TextFieldForm> {
               color: Colors.black, //PColors.accent.withValues(alpha: 0.9),
             ),
 
-            prefixIcon: widget.icon != null
-                ? HugeIcon(icon: widget.icon!)
-                : null,
+            prefixIcon: widget.icon != null ? Icon(widget.icon!) : null,
             suffixIcon: widget.useSuffixIcon
                 ? IconButton(
                     onPressed: () {
@@ -88,14 +86,14 @@ class _TextFieldFormState extends State<TextFieldForm> {
                       });
                     },
                     icon: widget.obscureText
-                        ? HugeIcon(
+                        ? Icon(
                             color: Theme.of(context).iconTheme.color,
-                            icon: (shouldShow ?? false)
-                                ? HugeIcons.strokeRoundedViewOffSlash
-                                : HugeIcons.strokeRoundedViewOff,
+                            (shouldShow ?? false)
+                                ? Iconsax.eye
+                                : Iconsax.eye_slash,
                           )
                         : widget.suffixIcon != null
-                        ? HugeIcon(icon: widget.suffixIcon!)
+                        ? Icon(widget.suffixIcon!)
                         : const SizedBox(),
                   )
                 : null,

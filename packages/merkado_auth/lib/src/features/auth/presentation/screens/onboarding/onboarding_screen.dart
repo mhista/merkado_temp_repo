@@ -5,12 +5,10 @@ import 'package:common_utils2/common_utils2.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_ds/merkado_ds.dart';
 import 'package:mix/mix.dart';
-import '../../cubit/auth_cubit.dart';
 import '../styles.dart';
 
 /// OnboardingScreen

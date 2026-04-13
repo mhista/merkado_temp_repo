@@ -770,10 +770,10 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "hugeicons",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/hugeicons-1.1.6",
+      "name": "iconsax",
+      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/iconsax-0.0.8",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "2.12"
     },
     {
       "name": "image_picker",

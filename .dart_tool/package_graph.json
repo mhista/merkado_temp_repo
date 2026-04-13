@@ -21,7 +21,7 @@
       "dependencies": [
         "common_designs",
         "flutter",
-        "hugeicons"
+        "iconsax"
       ],
       "devDependencies": [
         "flutter_lints",
@@ -44,7 +44,7 @@
         "get_it",
         "go_router",
         "google_sign_in",
-        "hugeicons",
+        "iconsax",
         "injectable",
         "loading_animation_widget",
         "local_auth",
@@ -449,6 +449,13 @@
       ]
     },
     {
+      "name": "iconsax",
+      "version": "0.0.8",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
       "name": "google_sign_in",
       "version": "7.2.0",
       "dependencies": [
@@ -457,14 +464,6 @@
         "google_sign_in_ios",
         "google_sign_in_platform_interface",
         "google_sign_in_web"
-      ]
-    },
-    {
-      "name": "hugeicons",
-      "version": "1.1.6",
-      "dependencies": [
-        "flutter",
-        "flutter_svg"
       ]
     },
     {

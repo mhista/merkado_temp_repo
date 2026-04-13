@@ -2,13 +2,11 @@ import 'package:common_designs/common_designs.dart';
 import 'package:common_utils2/common_utils2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_ds/merkado_ds.dart';
 import 'package:mix/mix.dart';
 
-import '../../cubit/auth_cubit.dart';
 import '../password/forgot_password_screen.dart';
 import '../signup/signup_screen.dart';
 import '../styles.dart';
@@ -155,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _emailController,
                       fieldName: 'Email',
                       labelText: 'Your email',
-                      suffixIcon: HugeIcons.strokeRoundedMail01,
+                      suffixIcon: Icons.mail_outline,
                       useSuffixIcon: true,
                       validator: CommonValidators.emailValidator,
                       enabled: true,
