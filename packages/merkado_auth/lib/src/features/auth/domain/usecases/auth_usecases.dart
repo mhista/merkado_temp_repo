@@ -45,8 +45,13 @@ class VerifyEmailUseCase {
   Future<Result<Map<String, dynamic>>> call({
     required String email,
     required String otp,
+    required String platformId,
   }) async {
-    return await _repository.verifyEmail(email: email, otp: otp);
+    return await _repository.verifyEmail(
+      email: email,
+      otp: otp,
+      platformId: platformId,
+    );
   }
 }
 
@@ -55,8 +60,12 @@ class ResendOtpUseCase {
   final AuthRepository _repository;
   ResendOtpUseCase(this._repository);
 
-  Future<Result<Map<String, dynamic>>> call({required String email}) async {
-    return await _repository.resendOtp(email: email);
+  Future<Result<Map<String, dynamic>>> call({
+    required String email,
+
+    required String platformId,
+  }) async {
+    return await _repository.resendOtp(email: email, platformId: platformId);
   }
 }
 
@@ -76,6 +85,7 @@ class CompleteOnboardingUseCase {
     required String firstName,
     required String lastName,
     required String country,
+    required String platformId,
     required String phone,
     String? avatarUrl,
   }) async {
@@ -83,6 +93,7 @@ class CompleteOnboardingUseCase {
       firstName: firstName,
       lastName: lastName,
       country: country,
+      platformId: platformId,
       phone: phone,
       avatarUrl: avatarUrl,
     );
@@ -96,8 +107,14 @@ class RequestPasswordResetUseCase {
   final AuthRepository _repository;
   RequestPasswordResetUseCase(this._repository);
 
-  Future<Result<Map<String, dynamic>>> call({required String email}) async {
-    return await _repository.requestPasswordReset(email: email);
+  Future<Result<Map<String, dynamic>>> call({
+    required String email,
+    required String platformId,
+  }) async {
+    return await _repository.requestPasswordReset(
+      email: email,
+      platformId: platformId,
+    );
   }
 }
 
@@ -109,8 +126,13 @@ class VerifyPasswordResetUseCase {
   Future<Result<Map<String, dynamic>>> call({
     required String email,
     required String otp,
+    required String platformId,
   }) async {
-    return await _repository.verifyPasswordResetOtp(email: email, otp: otp);
+    return await _repository.verifyPasswordResetOtp(
+      email: email,
+      otp: otp,
+      platformId: platformId,
+    );
   }
 }
 
@@ -122,10 +144,12 @@ class ResetPasswordUseCase {
   Future<Result<Map<String, dynamic>>> call({
     required String token,
     required String newPassword,
+    required String platformId,
   }) async {
     return await _repository.resetPassword(
       token: token,
       newPassword: newPassword,
+      platformId: platformId,
     );
   }
 }
@@ -140,8 +164,13 @@ class VerifyTwoFactorUseCase {
   Future<Result<Map<String, dynamic>>> call({
     required String userId,
     required String otp,
+    required String platformId,
   }) async {
-    return await _repository.verifyTwoFactor(userId: userId, otp: otp);
+    return await _repository.verifyTwoFactor(
+      userId: userId,
+      otp: otp,
+      platformId: platformId,
+    );
   }
 }
 
@@ -194,10 +223,12 @@ class SignInWithGoogleUseCase {
   Future<Result<Map<String, dynamic>>> call({
     required String idToken,
     required Map<String, dynamic> deviceInfo,
+    required String platformId,
   }) async {
     return await _repository.signInWithGoogle(
       idToken: idToken,
       deviceInfo: deviceInfo,
+      platformId: platformId,
     );
   }
 }
@@ -216,6 +247,7 @@ class SignInWithAppleUseCase {
   Future<Result<Map<String, dynamic>>> call({
     required String identityToken,
     required String authorizationCode,
+    required String platformId,
     String? firstName,
     String? lastName,
     required Map<String, dynamic> deviceInfo,
@@ -226,6 +258,7 @@ class SignInWithAppleUseCase {
       firstName: firstName,
       lastName: lastName,
       deviceInfo: deviceInfo,
+      platformId: platformId,
     );
   }
 }

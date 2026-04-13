@@ -397,6 +397,7 @@ class AuthCubit extends Cubit<AuthState> {
     _eventBus.emit(const AuthLoading());
 
     final result = await _signInWithGoogleUseCase(
+      platformId: _config.platformId,
       idToken: idToken,
       deviceInfo: {
         'platformId': _config.platformId,
@@ -458,6 +459,7 @@ class AuthCubit extends Cubit<AuthState> {
       authorizationCode: authorizationCode,
       firstName: firstName,
       lastName: lastName,
+      platformId: _config.platformId,
       deviceInfo: {
         'platformId': _config.platformId,
         'deviceName': deviceName ?? 'Unknown Device',
@@ -597,7 +599,11 @@ class AuthCubit extends Cubit<AuthState> {
     _log?.info('[AuthCubit] Verifying OTP for $email');
     _emit(const AuthState.loading());
 
-    final result = await _verifyEmailUseCase(email: email, otp: otp);
+    final result = await _verifyEmailUseCase(
+      email: email,
+      otp: otp,
+      platformId: _config.platformId,
+    );
 
     result.when(
       failure: (error, _) {
@@ -625,7 +631,10 @@ class AuthCubit extends Cubit<AuthState> {
     _log?.info('[AuthCubit] Resending OTP — $email');
     _emit(const AuthState.loading());
 
-    final result = await _resendOtpUseCase(email: email);
+    final result = await _resendOtpUseCase(
+      email: email,
+      platformId: _config.platformId,
+    );
 
     result.when(
       failure: (error, _) {
@@ -712,6 +721,7 @@ class AuthCubit extends Cubit<AuthState> {
       country: country,
       phone: phone,
       avatarUrl: uploadedAvatarUrl,
+      platformId: _config.platformId,
     );
 
     result.when(
@@ -810,7 +820,11 @@ class AuthCubit extends Cubit<AuthState> {
     _log?.info('[AuthCubit] Verifying 2FA — userId: $userId');
     _emit(const AuthState.loading());
 
-    final result = await _verifyTwoFactorUseCase(userId: userId, otp: otp);
+    final result = await _verifyTwoFactorUseCase(
+      userId: userId,
+      otp: otp,
+      platformId: _config.platformId,
+    );
 
     result.when(
       failure: (error, _) {
@@ -832,7 +846,10 @@ class AuthCubit extends Cubit<AuthState> {
     _log?.info('[AuthCubit] Forgot password — $email');
     _emit(const AuthState.loading());
 
-    final result = await _requestPasswordResetUseCase(email: email);
+    final result = await _requestPasswordResetUseCase(
+      email: email,
+      platformId: _config.platformId,
+    );
 
     result.when(
       failure: (error, _) {
@@ -854,7 +871,11 @@ class AuthCubit extends Cubit<AuthState> {
     _log?.info('[AuthCubit] Forgot password — $email');
     _emit(const AuthState.loading());
 
-    final result = await _verifyPasswordResetUseCase(email: email, otp: otp);
+    final result = await _verifyPasswordResetUseCase(
+      email: email,
+      otp: otp,
+      platformId: _config.platformId,
+    );
 
     result.when(
       failure: (error, _) {
@@ -879,6 +900,7 @@ class AuthCubit extends Cubit<AuthState> {
     final result = await _resetPasswordUseCase(
       token: token,
       newPassword: newPassword,
+      platformId: _config.platformId,
     );
 
     result.when(

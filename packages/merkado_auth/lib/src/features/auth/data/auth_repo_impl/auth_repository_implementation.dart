@@ -46,12 +46,14 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<Map<String, dynamic>>> verifyEmail({
     required String email,
     required String otp,
+    required String platformId,
   }) async {
     _log?.debug('[AuthRepo] verifyEmail — $email');
     try {
       final result = await authRemoteDatasource.verifyEmail(
         email: email,
         otp: otp,
+        platformId: platformId,
       );
       _log?.info('[AuthRepo] verifyEmail success — $email');
       return Result.success(result);
@@ -65,10 +67,14 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Result<Map<String, dynamic>>> resendOtp({
     required String email,
+    required String platformId,
   }) async {
     _log?.debug('[AuthRepo] resendOtp — $email');
     try {
-      final result = await authRemoteDatasource.resendOtp(email: email);
+      final result = await authRemoteDatasource.resendOtp(
+        email: email,
+        platformId: platformId,
+      );
       _log?.info('[AuthRepo] resendOtp success — $email');
       return Result.success(result);
     } catch (e, st) {
@@ -127,11 +133,13 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Result<Map<String, dynamic>>> requestPasswordReset({
     required String email,
+    required String platformId,
   }) async {
     _log?.debug('[AuthRepo] resetPassword');
     try {
       final result = await authRemoteDatasource.requestPasswordReset(
         email: email,
+        platformId: platformId,
       );
       _log?.info('[AuthRepo] reset password reset success');
       return Result.success(result);
@@ -147,12 +155,14 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<Map<String, dynamic>>> verifyPasswordResetOtp({
     required String email,
     required String otp,
+    required String platformId,
   }) async {
     _log?.debug('[AuthRepo] resetPassword');
     try {
       final result = await authRemoteDatasource.verifyPasswordResetOtp(
         otp: otp,
         email: email,
+        platformId: platformId,
       );
       _log?.info('[AuthRepo] Verify password reset success');
       return Result.success(result);
@@ -167,12 +177,14 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<Map<String, dynamic>>> resetPassword({
     required String token,
     required String newPassword,
+    required String platformId,
   }) async {
     _log?.debug('[AuthRepo] resetPassword');
     try {
       final result = await authRemoteDatasource.resetPassword(
         token: token,
         newPassword: newPassword,
+        platformId: platformId,
       );
       _log?.info('[AuthRepo] resetPassword success');
       return Result.success(result);
@@ -187,12 +199,14 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<Map<String, dynamic>>> verifyTwoFactor({
     required String userId,
     required String otp,
+    required String platformId,
   }) async {
     _log?.debug('[AuthRepo] verifyTwoFactor — userId: $userId');
     try {
       final result = await authRemoteDatasource.verifyTwoFactor(
         userId: userId,
         otp: otp,
+        platformId: platformId,
       );
       _log?.info('[AuthRepo] verifyTwoFactor success');
       return Result.success(result);
@@ -229,12 +243,14 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Result<Map<String, dynamic>>> signInWithGoogle({
     required String idToken,
     required Map<String, dynamic> deviceInfo,
+    required String platformId,
   }) async {
     _log?.debug('[AuthRepo] signInWithGoogle');
     try {
       final result = await authRemoteDatasource.loginWithGoogle(
         idToken: idToken,
         deviceInfo: deviceInfo,
+        platformId: platformId,
       );
       _log?.info('[AuthRepo] signInWithGoogle success');
       return Result.success(result);
@@ -252,6 +268,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String? firstName,
     String? lastName,
     required Map<String, dynamic> deviceInfo,
+    required String platformId,
   }) async {
     _log?.debug('[AuthRepo] signInWithApple');
     try {
@@ -261,6 +278,7 @@ class AuthRepositoryImpl implements AuthRepository {
         firstName: firstName,
         lastName: lastName,
         deviceInfo: deviceInfo,
+        platformId: platformId,
       );
       _log?.info('[AuthRepo] signInWithApple success');
       return Result.success(result);
@@ -278,6 +296,8 @@ class AuthRepositoryImpl implements AuthRepository {
     required String lastName,
     required String country,
     required String phone,
+    required String platformId,
+
     String? avatarUrl,
   }) async {
     _log?.debug(
@@ -290,6 +310,7 @@ class AuthRepositoryImpl implements AuthRepository {
           'lastName': lastName,
           'country': country,
           'phone': phone,
+          'platformId': platformId,
           if (avatarUrl != null) 'avatarUrl': avatarUrl,
         },
       );

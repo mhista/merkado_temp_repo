@@ -25,12 +25,17 @@ abstract interface class AuthRepository {
   Future<Result<Map<String, dynamic>>> verifyEmail({
     required String email,
     required String otp,
+    required String platformId,
   });
 
   /// Resend OTP to the given email.
   ///
   /// Response: { message: "OK" }
-  Future<Result<Map<String, dynamic>>> resendOtp({required String email});
+  Future<Result<Map<String, dynamic>>> resendOtp({
+    required String email,
+
+    required String platformId,
+  });
 
   /// Login with email and password.
   ///
@@ -49,6 +54,8 @@ abstract interface class AuthRepository {
     required String lastName,
     required String country,
     required String phone,
+    required String platformId,
+
     String? avatarUrl,
   });
 
@@ -61,24 +68,28 @@ abstract interface class AuthRepository {
   /// Request password reset.
   Future<Result<Map<String, dynamic>>> requestPasswordReset({
     required String email,
+    required String platformId,
   });
 
   /// Verify password reset otp sent to email
   Future<Result<Map<String, dynamic>>> verifyPasswordResetOtp({
     required String email,
     required String otp,
+    required String platformId,
   });
 
   /// Reset password using the token from the reset email.
   Future<Result<Map<String, dynamic>>> resetPassword({
     required String token,
     required String newPassword,
+    required String platformId,
   });
 
   /// Verify a 2FA OTP when backend returns [isMfa: true] on login.
   Future<Result<Map<String, dynamic>>> verifyTwoFactor({
     required String userId,
     required String otp,
+    required String platformId,
   });
 
   /// Exchange a shared refresh token for a product-scoped access token.
@@ -97,6 +108,7 @@ abstract interface class AuthRepository {
   Future<Result<Map<String, dynamic>>> signInWithGoogle({
     required String idToken,
     required Map<String, dynamic> deviceInfo,
+    required String platformId,
   });
 
   /// Sign in or register via Apple.
@@ -108,6 +120,8 @@ abstract interface class AuthRepository {
   Future<Result<Map<String, dynamic>>> signInWithApple({
     required String identityToken,
     required String authorizationCode,
+    required String platformId,
+
     String? firstName,
     String? lastName,
     required Map<String, dynamic> deviceInfo,
