@@ -89,6 +89,7 @@ class _TextFieldFormState extends State<TextFieldForm> {
                     },
                     icon: widget.obscureText
                         ? HugeIcon(
+                            color: Theme.of(context).iconTheme.color,
                             icon: (shouldShow ?? false)
                                 ? HugeIcons.strokeRoundedViewOffSlash
                                 : HugeIcons.strokeRoundedViewOff,
