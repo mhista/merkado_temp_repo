@@ -99,9 +99,11 @@ class _AuthShellState extends State<AuthShell> {
       // also respect your forced light theme inside the auth shell.
       data: MediaQuery.of(
         context,
-      ).copyWith(platformBrightness: Brightness.light),
+      ).copyWith(platformBrightness: widget.config.brightness),
       child: Theme(
-        data: MycutTheme.light, // wrap in our custom theme
+        data:
+            widget.config.theme ??
+            ThemeData.fallback(), // wrap in our custom theme
 
         child: BlocProvider.value(
           value: widget.cubit,

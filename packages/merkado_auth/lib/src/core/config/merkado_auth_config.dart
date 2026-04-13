@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'auth_features.dart';
 import 'custom_auth_screens.dart';
@@ -85,6 +86,12 @@ class MerkadoAuthConfig {
   /// Default: false (safe default — SSO still works via Firebase).
   final bool enableSharedKeychain;
 
+  // Theme data
+  final ThemeData? theme;
+
+  // Brightness
+  final Brightness? brightness;
+
   const MerkadoAuthConfig({
     required this.platformId,
     required this.baseUrl,
@@ -101,6 +108,8 @@ class MerkadoAuthConfig {
     this.primaryColor,
     this.enableLogging = false,
     this.enableSharedKeychain = false,
+    this.theme,
+    this.brightness,
   }) : assert(
          platformId.length > 0,
          'platformId must not be empty. Use MerkadoPlatform constants.',
