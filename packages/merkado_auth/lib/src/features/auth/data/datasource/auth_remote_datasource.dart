@@ -269,7 +269,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     _log?.info('[AuthDatasource] POST /auth/password-reset/reset');
     final result = await _http.post(
       '/auth/password-reset/reset',
-      data: {'token': token, 'password': newPassword, 'platformId': platformId},
+      data: {'resetToken': token, 'newPassword': newPassword, 'platformId': platformId},
     );
     if (result.isSuccess && result.data != null) return result.data!;
     throw Exception(_errorMsg(result, 'Password reset failed'));
