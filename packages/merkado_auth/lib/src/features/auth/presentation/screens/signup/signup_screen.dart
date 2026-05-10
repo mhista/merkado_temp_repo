@@ -8,6 +8,7 @@ import 'package:merkado_ds/merkado_ds.dart';
 import 'package:mix/mix.dart';
 import '../../../../../../merkado_auth.dart';
 import '../../cubit/auth_cubit.dart';
+import '../../widgets/terms_and_service_widget.dart';
 import '../styles.dart';
 
 /// SignupScreen
@@ -291,61 +292,3 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 }
 
-class TermsAndServiceWidget extends StatelessWidget {
-  const TermsAndServiceWidget({super.key, required this.config});
-  final MerkadoAuthConfig config;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: kToolbarHeight),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Divider(),
-          StyledText(
-            'By continuing, you agree to ${config.appName} ',
-            style: LoginPageStyler.textStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-
-          TextButton(
-            style: LoginPageStyler.textButtonStyle(),
-            onPressed: () {
-              // getIt<AppRouter>().pushNamed(Routes.terms);
-            },
-            child: StyledText(
-              'Terms ',
-              style: LoginPageStyler.textStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-          StyledText(
-            '&',
-            style: LoginPageStyler.textStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-          TextButton(
-            style: LoginPageStyler.textButtonStyle(),
-            onPressed: () {
-              // getIt<AppRouter>().pushNamed(Routes.privacy);
-            },
-            child: StyledText(
-              ' Privacy Policy',
-              style: LoginPageStyler.textStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

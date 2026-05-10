@@ -19,8 +19,8 @@ import 'merkado_platform.dart';
 ///     baseUrl: 'https://auth-api.merkado.site',
 ///     appName: 'MyCut',
 ///     appLogo: AssetImage('assets/images/logo.png'),
-///     termsUrl: 'https://mycut.app/terms',
-///     privacyUrl: 'https://mycut.app/privacy',
+///     termsUrl: 'https://mycut.biz/terms-of-service',
+///     privacyUrl: 'https://mycut.biz/privacy-policy',
 ///     features: AuthFeatures(
 ///       biometrics: true,
 ///       twoFactorAuth: true,

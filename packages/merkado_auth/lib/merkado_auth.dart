@@ -10,8 +10,8 @@
 ///     platformId: MerkadoPlatform.mycut,
 ///     baseUrl: 'https://auth-api.merkado.site',
 ///     appLogo: AssetImage('assets/logo.png'),
-///     termsUrl: 'https://mycut.app/terms',
-///     privacyUrl: 'https://mycut.app/privacy',
+///     termsUrl: 'https://mycut.biz/terms-of-service',
+///     privacyUrl: 'https://mycut.biz/privacy-policy',
 ///   ),
 /// );
 ///

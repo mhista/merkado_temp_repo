@@ -9,6 +9,7 @@ import 'package:mix/mix.dart';
 
 import '../password/forgot_password_screen.dart';
 import '../signup/signup_screen.dart';
+import '../../widgets/terms_and_service_widget.dart';
 import '../styles.dart';
 
 /// LoginScreen
@@ -25,7 +26,7 @@ class LoginScreen extends StatefulWidget {
   final String? errorMessage;
   final String? sessionExpiredMessage;
   final bool showPasswordResetSuccess;
-const LoginScreen({
+  const LoginScreen({
     super.key,
     required this.config,
     this.errorMessage,
@@ -89,34 +90,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: AppSpacing.sm,
                   children: [
-                    // ── Session expired banner ─────────────────────────────
-                    // if (widget.sessionExpiredMessage != null)
-                    //   _Banner(
-                    //     message: widget.sessionExpiredMessage!,
-                    //     color: Colors.orange.shade50,
-                    //     borderColor: Colors.orange,
-                    //     icon: Icons.info_outline,
-                    //   ),
-                    // // ── Password reset success banner ──────────────────────
-                    // if (widget.showPasswordResetSuccess)
-                    //   const _Banner(
-                    //     message: 'Password reset successfully. Please log in.',
-                    //     color: Color(0xFFE8F5E9),
-                    //     borderColor: Colors.green,
-                    //     icon: Icons.check_circle_outline,
-                    //   ),
                     // APP LOGO + NAME
                     Row(
                       spacing: AppSpacing.xs,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // ImagePr
                         EdgeRoundedImages(
                           image: config.appLogo,
                           width: 52.74,
                           height: 52.74,
                           imageType: ImagesType.asset,
-                          // useImageProvider: true,
                         ),
                         StyledText(
                           config.appName,
@@ -164,7 +147,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       fieldName: 'Password',
                       labelText: 'Your password',
-                      // suffixIcon: HugeIcons.strokeRoundedLock,
                       useSuffixIcon: true,
                       validator: CommonValidators.passwordValidator,
                       enabled: true,
@@ -199,9 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     Column(
                       spacing: AppSpacing.xxs,
-
                       children: [
-                        // SizedBox(height: (24).toDouble()),
                         // LOGIN BUTTON
                         SizedBox(
                           width: double.infinity,
@@ -263,34 +243,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ],
                         ),
-                        // SOCIAL SIGN IN AND SSO
-                        // Column(
-                        //   spacing: AppSpacing.sm,
-                        //   children: [
-                        //     StyledText(
-                        //       'You can continue to sign in with',
-                        //       style: LoginPageStyler.textStyle(
-                        //         fontSize: 12,
-                        //         fontWeight: FontWeight.w300,
-                        //       ),
-                        //     ),
-
-                        //     Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       spacing: 16,
-                        //       children: [
-                        //         EdgeRoundedImages(
-                        //           imageType: ImagesType.asset,
-                        //           image: ImageAssets.logo,
-                        //           width: 40,
-                        //           height: 40,
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
                       ],
                     ),
+                    TermsAndServiceWidget(config: config),
                   ],
                 ),
               ),
