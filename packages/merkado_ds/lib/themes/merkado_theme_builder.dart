@@ -242,7 +242,7 @@ static InputDecorationTheme _buildInputDecoration(
   //     : colors.backgroundPrimary;  // light background
 
   return InputDecorationTheme(
-    filled: true,           // ← NEW
+    // filled: true,           // ← NEW
     // fillColor: fillColor,   // ← NEW
     errorMaxLines: 3,
     prefixIconColor: colors.textSecondary,
