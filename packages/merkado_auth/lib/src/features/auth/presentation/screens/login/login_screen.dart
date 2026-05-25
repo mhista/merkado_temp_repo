@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_ds/merkado_ds.dart';
-import 'package:mix/mix.dart';
 
 import '../password/forgot_password_screen.dart';
 import '../signup/signup_screen.dart';
@@ -101,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 52.74,
                           imageType: ImagesType.asset,
                         ),
-                        StyledText(
+                        Text(
                           config.appName,
                           style: LoginPageStyler.textStyle(
                             fontSize: 24,
@@ -114,14 +113,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     Column(
                       spacing: 8,
                       children: [
-                        StyledText(
+                        Text(
                           'Welcome back👋',
                           style: LoginPageStyler.textStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        StyledText(
+                        Text(
                           'Access your ${config.appName} account',
                           style: LoginPageStyler.textStyle(
                             fontSize: 14,
@@ -168,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
-                          child: StyledText(
+                          child: Text(
                             'Forgot password?',
                             style: LoginPageStyler.textStyle(
                               fontSize: 14,
@@ -217,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            StyledText(
+                            Text(
                               'Don\'t have an account?',
                               style: LoginPageStyler.textStyle(
                                 fontSize: 14,
@@ -233,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                               ),
-                              child: StyledText(
+                              child: Text(
                                 'Sign Up',
                                 style: LoginPageStyler.textStyle(
                                   fontSize: 14,

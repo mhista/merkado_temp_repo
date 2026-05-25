@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:common_designs/common_designs.dart';
 import 'package:flutter/material.dart';
-import 'package:mix/mix.dart';
 
 import '../styles.dart';
 
@@ -104,12 +103,13 @@ class _OtpResendTimerState extends State<OtpResendTimer> {
       mainAxisSize: MainAxisSize.min,
       spacing: AppSpacing.xxs,
       children: [
-        StyledText(
+        Text(
           "Didn't receive the code?",
+          textAlign: TextAlign.center,
           style: LoginPageStyler.textStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
-          ).textAlign(TextAlign.center),
+          ),
         ),
         if (!_canResend)
           // ── Counting down ──────────────────────────────────────────────
@@ -117,19 +117,21 @@ class _OtpResendTimerState extends State<OtpResendTimer> {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: AppSpacing.xxs,
             children: [
-              StyledText(
+              Text(
                 'Resend OTP in',
+                textAlign: TextAlign.center,
                 style: LoginPageStyler.textStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                ).textAlign(TextAlign.center),
+                ),
               ),
-              StyledText(
+              Text(
                 _formattedTime,
+                textAlign: TextAlign.center,
                 style: LoginPageStyler.textStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                ).textAlign(TextAlign.center).color(Colors.blue),
+                ).copyWith(color: Colors.blue),
               ),
             ],
           )
@@ -143,12 +145,12 @@ class _OtpResendTimerState extends State<OtpResendTimer> {
                     height: 16,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : StyledText(
+                : Text(
                     'Resend OTP',
                     style: LoginPageStyler.textStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                    ).color(Colors.blue),
+                    ).copyWith(color: Colors.blue),
                   ),
           ),
       ],

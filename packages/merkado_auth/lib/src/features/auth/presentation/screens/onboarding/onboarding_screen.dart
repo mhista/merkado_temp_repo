@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_ds/merkado_ds.dart';
-import 'package:mix/mix.dart';
 import '../styles.dart';
 
 /// OnboardingScreen
@@ -115,19 +114,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           child: Column(
                             // spacing: AppSpacing.xs,
                             children: [
-                              StyledText(
+                              Text(
                                 'Set up your profile',
+                                textAlign: TextAlign.center,
                                 style: LoginPageStyler.textStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w700,
-                                ).textAlign(TextAlign.center),
+                                ),
                               ),
-                              StyledText(
+                              Text(
                                 'Let’s start with creating your profile',
+                                textAlign: TextAlign.center,
                                 style: LoginPageStyler.textStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                ).textAlign(TextAlign.center),
+                                ),
                               ),
                             ],
                           ),
@@ -369,7 +370,7 @@ class _UserProfileImageState extends State<UserProfileImage> {
 
   Future<void> _pickImage() async {
     final result = await MediaUtils.pickImageFromGallery();
-    if (result.isSuccess && result.value != null) {
+    if (result.isSuccess) {
       setState(() {
         _selectedFile = result.value;
         _uploadProgress = null;

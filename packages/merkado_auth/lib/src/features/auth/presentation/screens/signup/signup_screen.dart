@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/src/features/auth/presentation/screens/login/login_screen.dart';
 import 'package:merkado_ds/merkado_ds.dart';
-import 'package:mix/mix.dart';
 import '../../../../../../merkado_auth.dart';
-import '../../cubit/auth_cubit.dart';
 import '../../widgets/terms_and_service_widget.dart';
 import '../styles.dart';
 
@@ -123,7 +121,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   height: 52.74,
                                   imageType: ImagesType.asset,
                                 ),
-                                StyledText(
+                                Text(
                                   config.appName,
                                   style: LoginPageStyler.textStyle(
                                     fontSize: 24,
@@ -136,14 +134,14 @@ class _SignupScreenState extends State<SignupScreen> {
                             Column(
                               spacing: 8,
                               children: [
-                                StyledText(
+                                Text(
                                   'Welcome to ${config.appName}👋',
                                   style: LoginPageStyler.textStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                StyledText(
+                                Text(
                                   'Register your account',
                                   style: LoginPageStyler.textStyle(
                                     fontSize: 14,
@@ -215,7 +213,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    StyledText(
+                                    Text(
                                       'Already have an account?',
                                       style: LoginPageStyler.textStyle(
                                         fontSize: 14,
@@ -226,18 +224,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       style: LoginPageStyler.textButtonStyle(),
                                       onPressed: () =>
                                           Navigator.of(context).pop(),
-                                      // Navigator.of(context).push(
-                                      //   MaterialPageRoute<void>(
-                                      //     builder: (_) =>
-                                      //         BlocProvider.value(
-                                      //           value: cubit,
-                                      //           child: LoginScreen(
-                                      //             config: config,
-                                      //           ),
-                                      //         ),
-                                      //   ),
-                                      // ),
-                                      child: StyledText(
+                                      child: Text(
                                         ' Login',
                                         style: LoginPageStyler.textStyle(
                                           fontSize: 14,
@@ -247,31 +234,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                   ],
                                 ),
-                                // SOCIAL SIGN IN AND SSO
-                                // Column(
-                                //   spacing: AppSpacing.sm,
-                                //   children: [
-                                //     StyledText(
-                                //       'You can also to sign up with',
-                                //       style: LoginPageStyler.textStyle(
-                                //         fontSize: 12,
-                                //         fontWeight: FontWeight.w300,
-                                //       ),
-                                //     ),
-                                //     Row(
-                                //       mainAxisAlignment: MainAxisAlignment.center,
-                                //       spacing: 16,
-                                //       children: [
-                                //         EdgeRoundedImages(
-                                //           imageType: ImagesType.asset,
-                                //           image: ImageAssets.logo,
-                                //           width: 40,
-                                //           height: 40,
-                                //         ),
-                                //       ],
-                                //     ),
-                                //   ],
-                                // ),
                               ],
                             ),
                           ],
@@ -291,4 +253,3 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 }
-

@@ -1,7 +1,5 @@
-import 'package:common_designs/common_designs.dart';
 import 'package:flutter/material.dart';
 import 'package:merkado_auth/merkado_auth.dart';
-import 'package:mix/mix.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../screens/styles.dart';
 
@@ -16,7 +14,7 @@ class TermsAndServiceWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          StyledText(
+          Text(
             'By continuing, you agree to ${config.appName} ',
             style: LoginPageStyler.textStyle(
               fontSize: 10,
@@ -33,7 +31,7 @@ class TermsAndServiceWidget extends StatelessWidget {
                 await launchUrl(url);
               }
             },
-            child: StyledText(
+            child: Text(
               'Terms ',
               style: LoginPageStyler.textStyle(
                 fontSize: 10,
@@ -41,7 +39,7 @@ class TermsAndServiceWidget extends StatelessWidget {
               ),
             ),
           ),
-          StyledText(
+          Text(
             '&',
             style: LoginPageStyler.textStyle(
               fontSize: 10,
@@ -58,7 +56,7 @@ class TermsAndServiceWidget extends StatelessWidget {
                 await launchUrl(url);
               }
             },
-            child: StyledText(
+            child: Text(
               ' Privacy Policy',
               style: LoginPageStyler.textStyle(
                 fontSize: 10,

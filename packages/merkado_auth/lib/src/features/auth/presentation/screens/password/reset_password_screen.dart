@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_ds/merkado_ds.dart';
-import 'package:mix/mix.dart';
 
-import '../../cubit/auth_cubit.dart';
 import '../styles.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -90,7 +88,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               height: 52.74,
                               imageType: ImagesType.asset,
                             ),
-                            StyledText(
+                            Text(
                               widget.config.appName,
                               style: LoginPageStyler.textStyle(
                                 fontSize: 24,
@@ -103,14 +101,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         Column(
                           spacing: 8,
                           children: [
-                            StyledText(
+                            Text(
                               'Reset Password',
                               style: LoginPageStyler.textStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            StyledText(
+                            Text(
                               'Enter your new password',
                               style: LoginPageStyler.textStyle(
                                 fontSize: 14,
@@ -164,7 +162,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                             newPassword: _passwordController.text,
                                           );
                                         }
-                                        ;
                                       },
                                     ),
                                     child: state.maybeWhen(

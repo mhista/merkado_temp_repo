@@ -1280,22 +1280,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  mix:
-    dependency: transitive
-    description:
-      name: mix
-      sha256: "3b782f1d706d3276f7aa54ef6df39d3363d5e8c603a5cc109221aa690f0fe86f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0-rc.1"
-  mix_annotations:
-    dependency: transitive
-    description:
-      name: mix_annotations
-      sha256: a8387e680134f3f0dbe260e77dd6d4093906a3d626007a02a2efd60656f78a88
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0-rc.1"
   mockito:
     dependency: transitive
     description:

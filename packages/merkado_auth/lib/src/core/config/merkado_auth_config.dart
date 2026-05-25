@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'auth_features.dart';
 import 'custom_auth_screens.dart';
 import 'merkado_platform.dart';

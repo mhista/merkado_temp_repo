@@ -11,10 +11,8 @@ import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_auth/src/features/auth/presentation/screens/otp/otp_timer.dart';
-import 'package:mix/mix.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../cubit/auth_cubit.dart';
 import '../styles.dart';
 
 /// OtpScreen
@@ -94,19 +92,21 @@ class _OtpScreenState extends State<OtpScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     // mainAxisSize: MainAxisSize.min ,
                     children: [
-                      StyledText(
+                      Text(
                         'Verify Your Email',
+                        textAlign: TextAlign.center,
                         style: LoginPageStyler.textStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
-                        ).textAlign(TextAlign.center),
+                        ),
                       ),
-                      StyledText(
+                      Text(
                         'We emailed you a 6 digit code to ${widget.email}',
+                        textAlign: TextAlign.center,
                         style: LoginPageStyler.textStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                        ).textAlign(TextAlign.center),
+                        ),
                       ),
                       Pinput(
                         length: 6,

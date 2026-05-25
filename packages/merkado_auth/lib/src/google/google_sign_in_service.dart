@@ -143,7 +143,7 @@ class GoogleSignInService {
       var auth = await authClient.authorizationForScopes(scopes);
       auth ??= await authClient.authorizeScopes(scopes);
 
-      return auth?.accessToken;
+      return auth.accessToken;
     } catch (e) {
       debugPrint('❌ Scope authorization failed: $e');
       return null;

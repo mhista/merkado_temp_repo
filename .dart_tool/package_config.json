@@ -968,18 +968,6 @@
       "languageVersion": "3.2"
     },
     {
-      "name": "mix",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/mix-2.0.0-rc.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
-      "name": "mix_annotations",
-      "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/mix_annotations-2.0.0-rc.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
       "name": "mockito",
       "rootUri": "file:///C:/Users/user/AppData/Local/Pub/Cache/hosted/pub.dev/mockito-5.6.4",
       "packageUri": "lib/",

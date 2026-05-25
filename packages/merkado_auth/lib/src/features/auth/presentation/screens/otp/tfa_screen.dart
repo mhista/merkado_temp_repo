@@ -15,10 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/merkado_auth.dart';
-import 'package:mix/mix.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../cubit/auth_cubit.dart';
 import '../styles.dart';
 
 class TwoFactorScreen extends StatefulWidget {
@@ -75,14 +73,14 @@ class _TwoFactorScreenState extends State<TwoFactorScreen> {
                 spacing: AppSpacing.sm,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  StyledText(
+                  Text(
                     'Two-Factor Auth',
                     style: LoginPageStyler.textStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  StyledText(
+                  Text(
                     widget.message,
                     style: LoginPageStyler.textStyle(
                       fontSize: 14,

@@ -5,7 +5,6 @@ import 'package:common_utils2/common_utils2.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:merkado_auth/merkado_auth.dart';
-import '../../../../core/events/token_refresh_bus.dart';
 import '../../domain/usecases/auth_usecases.dart';
 
 part 'auth_state.dart';

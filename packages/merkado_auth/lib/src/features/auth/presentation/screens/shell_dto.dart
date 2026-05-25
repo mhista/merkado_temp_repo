@@ -7,11 +7,9 @@ import '../../../../core/config/merkado_auth_config.dart';
 import '../cubit/auth_cubit.dart';
 import 'account_picker_screen.dart';
 import 'login/login_screen.dart';
-import 'mycut_theme.dart';
 import 'onboarding/onboarding_screen.dart';
 import 'otp/otp_screen.dart';
 import 'otp/tfa_screen.dart';
-import 'password/forgot_password_screen.dart';
 
 /// AuthShell
 /// =========

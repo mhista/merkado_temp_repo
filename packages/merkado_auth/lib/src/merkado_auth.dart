@@ -3,16 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_auth/src/features/auth/data/auth_repo_impl/auth_repository_implementation.dart';
-import 'package:merkado_auth/src/features/auth/presentation/screens/otp/otp_screen.dart';
-import 'core/events/token_refresh_bus.dart';
 import 'core/interceptors/merkado_auth_interceptor.dart';
 import 'features/auth/data/datasource/auth_remote_datasource.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/domain/usecases/auth_usecases.dart';
-import 'features/auth/presentation/cubit/auth_cubit.dart';
 import 'features/auth/presentation/screens/auth_shell.dart';
-import 'google/google_sign_in_config.dart';
-import 'google/google_sign_in_service.dart';
 
 class MerkadoAuth {
   MerkadoAuth._();

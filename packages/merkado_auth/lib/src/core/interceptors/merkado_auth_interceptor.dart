@@ -4,7 +4,6 @@ import 'package:common_utils2/common_utils2.dart';
 import 'package:dio/dio.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 
-import '../events/token_refresh_bus.dart';
 
 class MerkadoAuthInterceptor extends Interceptor {
  final AuthSecureStorageService _storage = AuthSecureStorageService.instance;

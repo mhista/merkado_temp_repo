@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_ds/merkado_ds.dart';
-import 'package:mix/mix.dart';
 
-import '../../cubit/auth_cubit.dart';
 import '../styles.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -88,7 +86,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             height: 52.74,
                             imageType: ImagesType.asset,
                           ),
-                          StyledText(
+                          Text(
                             widget.config.appName,
                             style: LoginPageStyler.textStyle(
                               fontSize: 24,
@@ -101,14 +99,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       Column(
                         spacing: 8,
                         children: [
-                          StyledText(
+                          Text(
                             'Forgot Password',
                             style: LoginPageStyler.textStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          StyledText(
+                          Text(
                             'Enter your email to receive a password reset link',
                             style: LoginPageStyler.textStyle(
                               fontSize: 14,
@@ -168,7 +166,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              StyledText(
+                              Text(
                                 'Remember your password?',
                                 style: LoginPageStyler.textStyle(
                                   fontSize: 14,
@@ -185,7 +183,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 //     ),
                                 //   ),
                                 // ),
-                                child: StyledText(
+                                child: Text(
                                   'Back to Login',
                                   style: LoginPageStyler.textStyle(
                                     fontSize: 14,
