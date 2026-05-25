@@ -237,13 +237,13 @@ static InputDecorationTheme _buildInputDecoration(
   // is behind it. In dark mode that means a dark scaffold with a white-ish
   // system default overlay → visually "white box, black text".
   // Pinning fillColor here fixes it for every TextField in the app.
-  final fillColor = isDark
-      ? colors.backgroundSurface   // dark surface — e.g. 0xFF12161B
-      : colors.backgroundPrimary;  // light background
+  // final fillColor = isDark
+  //     ? colors.backgroundSurface   // dark surface — e.g. 0xFF12161B
+  //     : colors.backgroundPrimary;  // light background
 
   return InputDecorationTheme(
     filled: true,           // ← NEW
-    fillColor: fillColor,   // ← NEW
+    // fillColor: fillColor,   // ← NEW
     errorMaxLines: 3,
     prefixIconColor: colors.textSecondary,
     suffixIconColor: colors.textSecondary,

@@ -56,7 +56,7 @@ class _TextFieldFormState extends State<TextFieldForm> {
       enabled: widget.enabled,
       style: Theme.of(
         context,
-      ).textTheme.titleMedium!.apply(fontWeightDelta: -1, color: Colors.black),
+      ).textTheme.titleMedium!.apply(fontWeightDelta: -1,),
       decoration:
           widget.decoration ??
           InputDecoration(
@@ -64,15 +64,15 @@ class _TextFieldFormState extends State<TextFieldForm> {
             hintText: widget.hintText,
             hintStyle: Theme.of(context).textTheme.titleMedium!.apply(
               fontWeightDelta: -1,
-              color: Colors.black, //PColors.accent.withValues(alpha: 0.9),
+              // color: Colors.black, //PColors.accent.withValues(alpha: 0.9),
             ),
             labelStyle: Theme.of(context).textTheme.titleMedium!.apply(
               fontWeightDelta: -1,
-              color: Colors.black, //PColors.accent.withValues(alpha: 0.9),
+              // color: Colors.black, //PColors.accent.withValues(alpha: 0.9),
             ),
             floatingLabelStyle: Theme.of(context).textTheme.titleMedium!.apply(
               fontWeightDelta: -1,
-              color: Colors.black, //PColors.accent.withValues(alpha: 0.9),
+              // color: Colors.black, //PColors.accent.withValues(alpha: 0.9),
             ),
 
             prefixIcon: widget.icon != null ? Icon(widget.icon!) : null,
