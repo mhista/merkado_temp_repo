@@ -17,6 +17,8 @@ class WalletHttpClient {
   late final Dio _dio;
   String? _accessToken;
 
+  static bool get isInitialized => _instance != null;
+
   static void init({required String baseUrl}) {
     _instance = WalletHttpClient._();
     _instance!._dio = Dio(

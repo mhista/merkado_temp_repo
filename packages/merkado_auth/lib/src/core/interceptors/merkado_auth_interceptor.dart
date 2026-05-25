@@ -4,6 +4,8 @@ import 'package:common_utils2/common_utils2.dart';
 import 'package:dio/dio.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 
+import '../events/token_refresh_bus.dart';
+
 class MerkadoAuthInterceptor extends Interceptor {
  final AuthSecureStorageService _storage = AuthSecureStorageService.instance;
   LoggerService? _log;
@@ -144,6 +146,14 @@ Future<bool> _attemptRefresh() async {
           );
         }
       }
+              // ── KEY FIX ──────────────────────────────────────────────────────
+        // Broadcast the new token so every HTTP client singleton in the app
+        // updates its in-memory copy immediately — no BuildContext needed.
+        TokenRefreshBus.instance.emit(newAccessToken);
+        // ─────────────────────────────────────────────────────────────────
+ 
+        _log?.info('[Interceptor] Token refreshed and broadcast to all clients');
+
       return true;
     }
     return false;

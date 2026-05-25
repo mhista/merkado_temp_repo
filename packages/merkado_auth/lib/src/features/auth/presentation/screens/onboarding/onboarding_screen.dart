@@ -102,7 +102,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ? Icons.arrow_back_ios_new
                             : Icons.arrow_back,
                         size: 20,
-                        color: Colors.black,
+                        color: context.authOnSurface,
                       ),
                     ),
                     Column(

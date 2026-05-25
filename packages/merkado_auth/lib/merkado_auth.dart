@@ -48,6 +48,7 @@ export 'src/core/storage/auth_storage_keys.dart';
 // Events (cross-app session bus)
 export 'src/core/events/re_login_event_bus.dart';
 export 'src/core/events/auth_event_bus.dart';
+export 'src/core/events/token_refresh_bus.dart';
 
 // Auth media service
 export 'src/service/auth_media_service.dart';

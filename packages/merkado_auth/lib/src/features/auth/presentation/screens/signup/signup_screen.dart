@@ -99,7 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             ? Icons.arrow_back_ios_new
                             : Icons.arrow_back,
                         size: 20,
-                        color: Colors.black,
+                        color: context.authOnSurface,
                       ),
                     ),
                     Column(

@@ -113,6 +113,13 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  // things to fix, access token not saving and refreshing properly, also need to add platform id to all requests, and add device info to login and register
+  // also need to work om the darkmode variant for auth screens and onboarding screens, and add the onboarding flow to the app, also need to add the forgot password flow to the app, 
+  //and add the 2fa flow to the app, also need to add the social login flow to the app, also need to add the refresh token flow to the app, also need to add error handling and loading states to the app, 
+  //also need to add unit tests and integration tests for all auth features, also need to add analytics tracking for all auth events, also need to add localization support for all auth screens and messages, 
+  //also need to add accessibility support for all auth screens and features, also need to add CI/CD pipeline for automated testing and deployment of auth features.
+  
+
   /// POST /auth/forgot-password
   // @override
   // Future<Result<Map<String, dynamic>>> forgotPassword({

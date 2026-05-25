@@ -7,6 +7,7 @@ import 'package:common_designs/common_designs.dart';
 import 'package:common_utils2/common_utils2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_auth/src/features/auth/presentation/screens/otp/otp_timer.dart';
@@ -78,7 +79,9 @@ class _OtpScreenState extends State<OtpScreen> {
                 spacing: AppSpacing.huge + AppSpacing.xxs,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).canPop() ? Navigator.of(context).pop() : context.go('/');
+                    },
                     icon: Icon(
                       DeviceInfoHelper.instance.isIOS
                           ? Icons.arrow_back_ios_new

@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:merkado_auth/merkado_auth.dart';
 import 'package:merkado_auth/src/features/auth/data/auth_repo_impl/auth_repository_implementation.dart';
 import 'package:merkado_auth/src/features/auth/presentation/screens/otp/otp_screen.dart';
+import 'core/events/token_refresh_bus.dart';
 import 'core/interceptors/merkado_auth_interceptor.dart';
 import 'features/auth/data/datasource/auth_remote_datasource.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
@@ -35,6 +36,7 @@ class MerkadoAuth {
     _instance!._config = config;
     _log = logger;
     AuthEventBus.setLogger(logger);
+    TokenRefreshBus.setLogger(logger);
     ReLoginEventBus.setLogger(logger);
 
     _log?.info('[MerkadoAuth] Initializing — platform: ${config.platformName}');
@@ -62,7 +64,11 @@ class MerkadoAuth {
     }
 
     HttpClient.instance.addInterceptor(
-      MerkadoAuthInterceptor(logger: logger, authBaseUrl: config.authUrl, platformId: config.platformId),
+      MerkadoAuthInterceptor(
+        logger: logger,
+        authBaseUrl: config.authUrl,
+        platformId: config.platformId,
+      ),
     );
   }
 
@@ -182,8 +188,7 @@ class MerkadoAuth {
     );
   }
 
-
-    /// Pushes the 2fa screen for 2fa
+  /// Pushes the 2fa screen for 2fa
   // Future<void> pushOtp(BuildContext context) async {
   //   _log?.info('[MerkadoAuth] Pushing auth shell');
   //   await Navigator.of(context).push(
@@ -215,6 +220,31 @@ class MerkadoAuth {
       builder: (_) => _AccountSwitcherSheet(cubit: _cubit, config: _config),
     );
   }
+
+  // Inside MerkadoAuth class
+
+  /// Notifier that AuthShell subscribes to for live theme updates.
+  /// Seeded with a plain fallback; overwritten by main.dart before runApp
+  /// and by App.build() on every theme change.
+  static final ValueNotifier<({ThemeData theme, Brightness brightness})>
+  _themeNotifier = ValueNotifier((
+    theme: ThemeData.light(),
+    brightness: Brightness.light,
+  ));
+
+  /// Called by the host app whenever its effective theme changes.
+  /// Safe to call on every frame — ValueNotifier skips listeners if unchanged.
+  static void updateTheme(ThemeData theme, Brightness brightness) {
+    final next = (theme: theme, brightness: brightness);
+    // Only notify if something actually changed to avoid redundant rebuilds.
+    final current = _themeNotifier.value;
+    if (current.brightness != next.brightness || current.theme != next.theme) {
+      _themeNotifier.value = next;
+    }
+  }
+
+  static ValueNotifier<({ThemeData theme, Brightness brightness})>
+  get themeNotifier => _themeNotifier;
 
   void dispose() {
     _log?.info('[MerkadoAuth] Disposing');

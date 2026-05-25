@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:merkado_auth/src/features/auth/presentation/screens/password/reset_password_screen.dart';
 
-import '../../../../../merkado_auth.dart';
 import '../../../../core/config/merkado_auth_config.dart';
 import '../cubit/auth_cubit.dart';
 import 'account_picker_screen.dart';
@@ -94,66 +93,65 @@ class _AuthShellState extends State<AuthShell> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: MerkadoAuth.themeNotifier,
-      builder:(context, themeState, _)=> MediaQuery(
-        // ✅ Force light brightness regardless of device setting.
-        // This ensures system-derived colors (input decorations, overlays)
-        // also respect your forced light theme inside the auth shell.
-        data: MediaQuery.of(
-          context,
-        ).copyWith(platformBrightness: widget.config.brightness),
-        child: Theme(
-         data: themeState.theme,
-      
-          child: BlocProvider.value(
-            value: widget.cubit,
-            child: BlocConsumer<AuthCubit, AuthState>(
-              listener: (context, state) {
-                state.maybeWhen(
-                  authenticated: () => Navigator.of(context).pop(),
-                  orElse: () {},
-                );
-              },
-              builder: (context, state) {
-                final screen = _buildScreen(context, state);
-      
-                // Cache the screen if this is a stable state
-                if (_isStableState(state)) {
-                  _lastStableScreen = screen;
-                }
-      
-                // PopScope wraps each rebuild so it always has the current state.
-                //
-                // Back button behaviour:
-                //   • Root screens (login, account pickers) — canPop: false.
-                //     onPopInvokedWithResult fires but we DON'T pop the shell.
-                //     Instead we let the OS handle it (minimise the app) by
-                //     calling Navigator.of(context).pop() only when on a
-                //     sub-screen so the user can go BACK to login, not exit auth.
-                //   • Sub-screens (OTP, onboarding, 2FA, forgot password) —
-                //     canPop: false + pop the shell back to login/account picker
-                //     so the user can correct their email or choose differently.
-                //     We never allow a raw pop that would land on splash/_LoginGate.
-                return PopScope(
-                  canPop: false,
-                  onPopInvokedWithResult: (didPop, _) {
-                    if (didPop) return;
-                    if (_isRootScreen(state)) {
-                      // On root screen — user wants to leave the auth flow entirely.
-                      // Pop the shell so the app goes to whatever is below
-                      // (splash/login gate handles it from there).
-                      SystemNavigator.pop();
-                    } else {
-                      // On a sub-screen — go back to login/account picker
-                      // without popping the shell.
-                      widget.cubit.emit(const AuthState.unauthenticated());
-                    }
-                  },
-                  child: screen,
-                );
-              },
-            ),
+    return MediaQuery(
+      // ✅ Force light brightness regardless of device setting.
+      // This ensures system-derived colors (input decorations, overlays)
+      // also respect your forced light theme inside the auth shell.
+      data: MediaQuery.of(
+        context,
+      ).copyWith(platformBrightness: widget.config.brightness),
+      child: Theme(
+        data:
+            widget.config.theme ??
+            ThemeData.fallback(), // wrap in our custom theme
+
+        child: BlocProvider.value(
+          value: widget.cubit,
+          child: BlocConsumer<AuthCubit, AuthState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                authenticated: () => Navigator.of(context).pop(),
+                orElse: () {},
+              );
+            },
+            builder: (context, state) {
+              final screen = _buildScreen(context, state);
+
+              // Cache the screen if this is a stable state
+              if (_isStableState(state)) {
+                _lastStableScreen = screen;
+              }
+
+              // PopScope wraps each rebuild so it always has the current state.
+              //
+              // Back button behaviour:
+              //   • Root screens (login, account pickers) — canPop: false.
+              //     onPopInvokedWithResult fires but we DON'T pop the shell.
+              //     Instead we let the OS handle it (minimise the app) by
+              //     calling Navigator.of(context).pop() only when on a
+              //     sub-screen so the user can go BACK to login, not exit auth.
+              //   • Sub-screens (OTP, onboarding, 2FA, forgot password) —
+              //     canPop: false + pop the shell back to login/account picker
+              //     so the user can correct their email or choose differently.
+              //     We never allow a raw pop that would land on splash/_LoginGate.
+              return PopScope(
+                canPop: false,
+                onPopInvokedWithResult: (didPop, _) {
+                  if (didPop) return;
+                  if (_isRootScreen(state)) {
+                    // On root screen — user wants to leave the auth flow entirely.
+                    // Pop the shell so the app goes to whatever is below
+                    // (splash/login gate handles it from there).
+                    SystemNavigator.pop();
+                  } else {
+                    // On a sub-screen — go back to login/account picker
+                    // without popping the shell.
+                    widget.cubit.emit(const AuthState.unauthenticated());
+                  }
+                },
+                child: screen,
+              );
+            },
           ),
         ),
       ),

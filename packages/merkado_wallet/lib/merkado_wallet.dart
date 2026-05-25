@@ -86,3 +86,6 @@ export 'src/core/errors/wallet_result.dart';
 
 // widget temporayr exposure
 export 'src/shared/wallet_widgets.dart';
+
+// expose the wallet http client
+export 'src/core/http/wallet_http_client.dart';

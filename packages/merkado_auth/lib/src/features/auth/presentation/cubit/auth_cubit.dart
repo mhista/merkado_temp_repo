@@ -5,6 +5,7 @@ import 'package:common_utils2/common_utils2.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:merkado_auth/merkado_auth.dart';
+import '../../../../core/events/token_refresh_bus.dart';
 import '../../domain/usecases/auth_usecases.dart';
 
 part 'auth_state.dart';
@@ -278,6 +279,10 @@ class AuthCubit extends Cubit<AuthState> {
         }
 
         final newToken = data['accessToken'] as String;
+
+        // ── Broadcast so all HTTP client singletons get the fresh token ──
+        TokenRefreshBus.instance.emit(newToken);
+
         _emit(const AuthState.authenticated());
         _eventBus.emit(AuthSuccess(accessToken: newToken));
       },
@@ -502,6 +507,7 @@ class AuthCubit extends Cubit<AuthState> {
       final message = data['message'] as String? ?? 'Enter your 2FA code';
       _log?.info('[AuthCubit] 2FA required for userId: $userId');
       _emit(AuthState.mfaRequired(userId: userId, message: message));
+      
       _eventBus.emit(AuthMfaRequired(userId: userId, message: message));
       return;
     }
@@ -549,6 +555,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     _log?.info('[AuthCubit] Auth successful — emitting AuthSuccess');
     _emit(const AuthState.authenticated());
+    TokenRefreshBus.instance.emit(accessToken);
     _eventBus.emit(AuthSuccess(accessToken: accessToken));
   }
 

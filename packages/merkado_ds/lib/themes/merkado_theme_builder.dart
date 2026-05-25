@@ -32,9 +32,7 @@ class MerkadoThemeBuilder {
           config.appBarThemeOverride ?? _buildAppBarTheme(colors, isDark),
       elevatedButtonTheme:
           config.elevatedButtonOverride ?? _buildElevatedButton(colors, radius),
-      inputDecorationTheme:
-          config.inputDecorationOverride ??
-          _buildInputDecoration(colors, inputRadius),
+  inputDecorationTheme: config.inputDecorationOverride ?? _buildInputDecoration(colors, inputRadius, isDark),
       bottomSheetTheme:
           config.bottomSheetOverride ??
           _buildBottomSheet(colors, bottomSheetRadius),
@@ -230,46 +228,57 @@ class MerkadoThemeBuilder {
     );
   }
 
-  static InputDecorationTheme _buildInputDecoration(
-    AppColorScheme colors,
-    double inputRadius,
-  ) {
-    return InputDecorationTheme(
-      errorMaxLines: 3,
-      prefixIconColor: colors.textSecondary,
-      suffixIconColor: colors.textSecondary,
-      labelStyle: TextStyle(
-        fontFamily: SemanticTypography.bodyFontFamily,
-        fontSize: SemanticTypography.bodyFontSize,
-        color: colors.textSecondary,
-      ),
-      hintStyle: TextStyle(
-        fontFamily: SemanticTypography.bodyFontFamily,
-        fontSize: SemanticTypography.bodyFontSize,
-        color: colors.textDisabled,
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(inputRadius),
-        borderSide: BorderSide(color: colors.borderDefault),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(inputRadius),
-        borderSide: BorderSide(color: colors.borderDefault),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(inputRadius),
-        borderSide: BorderSide(color: colors.borderFocused, width: 1.5),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(inputRadius),
-        borderSide: BorderSide(color: colors.stateError),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(inputRadius),
-        borderSide: BorderSide(color: colors.stateError, width: 1.5),
-      ),
-    );
-  }
+static InputDecorationTheme _buildInputDecoration(
+  AppColorScheme colors,
+  double inputRadius,
+  bool isDark,          // ← NEW
+) {
+  // In Material 2, TextField has no fill by default, so the box shows whatever
+  // is behind it. In dark mode that means a dark scaffold with a white-ish
+  // system default overlay → visually "white box, black text".
+  // Pinning fillColor here fixes it for every TextField in the app.
+  final fillColor = isDark
+      ? colors.backgroundSurface   // dark surface — e.g. 0xFF12161B
+      : colors.backgroundPrimary;  // light background
+
+  return InputDecorationTheme(
+    filled: true,           // ← NEW
+    fillColor: fillColor,   // ← NEW
+    errorMaxLines: 3,
+    prefixIconColor: colors.textSecondary,
+    suffixIconColor: colors.textSecondary,
+    labelStyle: TextStyle(
+      fontFamily: SemanticTypography.bodyFontFamily,
+      fontSize: SemanticTypography.bodyFontSize,
+      color: colors.textSecondary,
+    ),
+    hintStyle: TextStyle(
+      fontFamily: SemanticTypography.bodyFontFamily,
+      fontSize: SemanticTypography.bodyFontSize,
+      color: colors.textDisabled,
+    ),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(inputRadius),
+      borderSide: BorderSide(color: colors.borderDefault),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(inputRadius),
+      borderSide: BorderSide(color: colors.borderDefault),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(inputRadius),
+      borderSide: BorderSide(color: colors.borderFocused, width: 1.5),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(inputRadius),
+      borderSide: BorderSide(color: colors.stateError),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(inputRadius),
+      borderSide: BorderSide(color: colors.stateError, width: 1.5),
+    ),
+  );
+}
 
   static BottomSheetThemeData _buildBottomSheet(
     AppColorScheme colors,
